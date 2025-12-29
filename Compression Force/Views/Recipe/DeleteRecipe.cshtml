@@ -1,0 +1,559 @@
+﻿<div class="container-fluid">
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-4">
+            <!-- Recipe Code -->
+            <div class="card mb-3">
+                <div class="card-header bgcol-215ED6 text-white text-center font-size-18px fw-semibold">Recipe Code</div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="input-group input-group-sm bord-D2D2D2 bord-rad-4px overflow-hidden w-100 p-0">
+                            <input type="text" id="awcAr"
+                                   class="form-control bg-white border-0 font-size-16px col-242424 fw-normal" value="4444" readonly />
+                            <button class="btn bgcol-215ED6 text-white border-0 dropdown-toggle font-size-14px" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false"></button>
+                            <ul class="dropdown-menu dropdown-menu-end font-size-14px">
+                                <li><a class="dropdown-item" href="#">4444</a></li>
+                                <li><a class="dropdown-item" href="#">trial 2</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn col-215ED6 bord-215ED6 fw-semibold font-size-16px">Cancel</button>
+                        <button class="btn bgcol-215ED6 text-white fw-semibold font-size-16px">Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parameter Table -->
+            <div class="card">
+                <div class="card-body p-0">
+                    <table class="table table-bordered table-sm mb-0 font-size-12px">
+                        <thead class="thead-light text-center">
+                            <tr>
+                                <th class="fw-semibold font-size-16px bgcol-215ED6 text-white">Parameter</th>
+                                <th class="fw-semibold font-size-16px bgcol-215ED6 text-white">Min. Limit</th>
+                                <th class="fw-semibold font-size-16px bgcol-215ED6 text-white">Max. Limit</th>
+                                <th class="fw-semibold font-size-16px bgcol-215ED6 text-white">Units</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Tablet Thickness</td><td>1</td><td>10</td><td>mm</td></tr>
+                            <tr><td>Tablet Hardness</td><td>1</td><td>500</td><td>N</td></tr>
+                            <tr><td>Tablet Weight</td><td>1</td><td>2000</td><td>mg</td></tr>
+                            <tr><td>Turret RPM</td><td>10</td><td>35</td><td>rpm</td></tr>
+                            <tr><td>Pre Fill Depth</td><td>1</td><td>20</td><td>mm</td></tr>
+                            <tr><td>Main Fill Depth</td><td>1</td><td>20</td><td>mm</td></tr>
+                            <tr><td>Main Thickness Position</td><td>3.5</td><td>16</td><td>mm</td></tr>
+                            <tr><td>Pre Thickness Position</td><td>3.5</td><td>16</td><td>mm</td></tr>
+                            <tr><td>Max Main Comp. Force</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>Max Pre Comp. Force</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>Max Rejection Comp. Force</td><td>0.01</td><td>1.8</td><td>kN</td></tr>
+                            <tr><td>Rej Pre Comp. Limit Max</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>AWC Pre Comp. Limit Max</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>AWC Pre Comp. Set Point</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>AWC Pre Comp. Limit Min</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>Rej Pre Comp. Limit Max</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>AWC Main Comp. Limit Max</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>AWC Main Comp. Set Point</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>AWC Main Comp. Limit Min</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>Rej Main Comp. Limit Min</td><td>0.1</td><td>80</td><td>kN</td></tr>
+                            <tr><td>Sample Interval Rev</td><td>1</td><td>100000</td><td>rev</td></tr>
+                            <tr><td>Sample Rev Qty</td><td>1</td><td>10</td><td>rev</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-8">
+
+            <div class="card bord-D2D2D2 bord-rad-4px shadow-custom mb-3">
+                <div class="card-header bgcol-215ED6 text-white text-center font-size-18px fw-semibold">
+                    Common Product Parameter
+                </div>
+
+                <div class="card-body px-3 py-3">
+                    <div class="d-flex justify-content-between gap-2 mb-3">
+                        <!-- Tool Type -->
+                        <div class="d-flex align-items-center gap-2">
+                            <label for="toolType" class="fw-semibold font-size-16px col-242424 mb-0">Tool Type</label>
+                            <div class="input-group input-group-sm bord-D2D2D2 bord-rad-4px overflow-hidden w-100px p-0">
+                                <input type="text" id="toolType"
+                                       class="form-control bg-white border-0 font-size-14px col-242424 fw-semibold" readonly />
+                                <button class="btn bgcol-215ED6 text-white border-0 dropdown-toggle font-size-14px" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                <ul class="dropdown-menu dropdown-menu-end font-size-14px">
+                                    <li><a class="dropdown-item" href="#">D</a></li>
+                                    <li><a class="dropdown-item" href="#">A</a></li>
+                                    <li><a class="dropdown-item" href="#">B</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- AWC & AR -->
+                        <div class="d-flex align-items-center gap-2">
+                            <label for="awcAr" class="fw-semibold font-size-16px col-242424 mb-0">AWC &amp; AR</label>
+                            <div class="input-group input-group-sm bord-D2D2D2 bord-rad-4px overflow-hidden w-120px p-0">
+                                <input type="text" id="awcAr"
+                                       class="form-control bg-white border-0 font-size-14px col-242424 fw-semibold" readonly />
+                                <button class="btn bgcol-215ED6 text-white border-0 dropdown-toggle font-size-14px" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                <ul class="dropdown-menu dropdown-menu-end font-size-14px">
+                                    <li><a class="dropdown-item" href="#">Required</a></li>
+                                    <li><a class="dropdown-item" href="#">Optional</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Recipe -->
+                        <div class="d-flex align-items-center gap-2">
+                            <label class="fw-semibold font-size-16px col-242424 mb-0">Recipe</label>
+                            <div class="input-group input-group-sm bord-D2D2D2 bord-rad-4px overflow-hidden w-120px p-0">
+                                <input type="text"
+                                       class="form-control bg-white border-0 font-size-14px col-242424 fw-semibold" readonly />
+                                <button class="btn bgcol-215ED6 text-white border-0 dropdown-toggle font-size-14px" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                <ul class="dropdown-menu dropdown-menu-end font-size-14px">
+                                    <li><a class="dropdown-item" href="#">Product</a></li>
+                                    <li><a class="dropdown-item" href="#">Batch</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between gap-4">
+
+                        <!-- S1 Column -->
+                        <div class="flex-grow-1 me-2">
+                            <div class="flex-grow-1 me-2">
+                                <div class="d-flex flex-column gap-2">
+
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="fw-semibold font-size-14px col-242424" style="min-width: 120px;">Recipe Code</div>
+                                        <input type="text" value="4444"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 flex-grow-1 shadow-custom" />
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="fw-semibold font-size-14px col-242424" style="min-width: 120px;">Product Name</div>
+                                        <input type="text" value="rrt"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 flex-grow-1 shadow-custom" />
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="fw-semibold font-size-14px col-242424" style="min-width: 120px;">Shape</div>
+                                        <input type="text" value="5"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 flex-grow-1 shadow-custom" />
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="fw-semibold font-size-14px col-242424" style="min-width: 120px;">Size</div>
+                                        <input type="text" value="8"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 flex-grow-1 shadow-custom" />
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- S2 Column -->
+                        <div class="flex-grow-1 ms-2">
+                            <div class="d-flex flex-column gap-2">
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Table Thickness</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="0.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-60px text-center" />
+                                        <span class="ms-1 align-self-center font-size-12px fw-semibold col-242424">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Table Hardness</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="0.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-60px text-center" />
+                                        <span class="ms-1 align-self-center font-size-12px fw-semibold col-242424">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Table Weight</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="0.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-60px text-center" />
+                                        <span class="ms-1 align-self-center font-size-12px fw-semibold col-242424">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Max Turret RPM</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="0.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-60px text-center" />
+                                        <span class="ms-1 align-self-center font-size-12px fw-semibold col-242424">mm</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card bord-D2D2D2 bord-rad-4px shadow-custom mb-3">
+                <div class="card-header bgcol-215ED6 text-white d-flex justify-content-between align-items-center">
+                    <span class="font-size-18px fw-semibold">S1 Product Parameter</span>
+                    <span class="font-size-18px fw-semibold">S2 Product Parameter</span>
+                </div>
+
+                <div class="card-body px-3 py-3">
+                    <div class="d-flex justify-content-between gap-4">
+
+                        <!-- S1 Column -->
+                        <div class="flex-grow-1 me-2">
+                            <div class="d-flex flex-column gap-2">
+
+                                <!-- Row -->
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Force Feeder Ratio S1</div>
+                                    <div class="d-flex align-items-center">
+                                        <select class="form-select form-select-sm font-size-12px fw-semibold col-242424 w-63px text-center">
+                                            <option selected>1.0</option>
+                                            <option>0.5</option>
+                                            <option>2.0</option>
+                                        </select>
+                                        <span class="ms-1 font-size-12px fw-semibold col-242424 vis-hidden" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+
+                                <!-- Repeatable Pattern -->
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Fill Depth S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Main Penetration Position S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Main Thickness Position S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Pre Penetration Position S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Pre Thickness Position S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Sample Interval S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="10"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">rev</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Sample Revolution Qty. S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="1"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">rev</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Max Main Comp. Force S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="50.00"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Max Pre Comp. Force S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="60.00"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Max Ejection Comp. Force S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="1.00"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">kN</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- S2 Column -->
+                        <div class="flex-grow-1 me-2">
+                            <div class="d-flex flex-column gap-2">
+
+                                <!-- Row -->
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Force Feeder Ratio S1</div>
+                                    <div class="d-flex align-items-center">
+                                        <select class="form-select form-select-sm font-size-12px fw-semibold col-242424 w-63px text-center">
+                                            <option selected>1.0</option>
+                                            <option>0.5</option>
+                                            <option>2.0</option>
+                                        </select>
+                                        <span class="ms-1 font-size-12px fw-semibold col-242424 vis-hidden" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+
+                                <!-- Repeatable Pattern -->
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Fill Depth S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Main Penetration Position S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Main Thickness Position S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Pre Penetration Position S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Pre Thickness Position S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">mm</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Sample Interval S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="10"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">rev</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Sample Revolution Qty. S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="1"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">rev</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Max Main Comp. Force S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="50.00"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Max Pre Comp. Force S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="60.00"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Max Ejection Comp. Force S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="1.00"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-63px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424" style="min-width: 30px;">kN</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card bord-D2D2D2 bord-rad-4px shadow-custom mb-3">
+                <div class="card-header bgcol-215ED6 text-white d-flex justify-content-between align-items-center">
+                    <span class="font-size-18px fw-semibold">S1 AWC & AR Set Parameter</span>
+                    <span class="font-size-18px fw-semibold">S2 AWC & AR Set Parameter</span>
+                </div>
+                <div class="card-body px-3 py-3">
+                    <div class="d-flex justify-content-between gap-4">
+
+                        <!-- S1 -->
+                        <div class="flex-grow-1 me-2">
+                            <div class="d-flex flex-column gap-2">
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Rejection Limit Max S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-65px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">AWC Limit Max S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="4.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-65px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">AWC Set Point S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="3.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-65px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">AWC Limit Min S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="2.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-65px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Rejection Limit Min S1</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="1.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-65px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424">kN</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- S2 -->
+                        <div class="flex-grow-1 ms-2">
+                            <div class="d-flex flex-column gap-2">
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Rejection Limit Max S2</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="5.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-65px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">AWC Limit Max S2</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="4.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-65px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">AWC Set Point S2</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="3.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-65px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">AWC Limit Min S2</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="2.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-65px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424">kN</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="fw-semibold font-size-14px col-242424">Rejection Limit Min S2</div>
+                                    <div class="d-flex">
+                                        <input type="number" value="1.00" step="0.01"
+                                               class="form-control form-control-sm font-size-12px fw-semibold col-242424 w-65px text-center" />
+                                        <span class="align-self-center ms-1 font-size-12px fw-semibold col-242424">kN</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

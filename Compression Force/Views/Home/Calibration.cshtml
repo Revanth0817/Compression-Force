@@ -1,0 +1,428 @@
+﻿@{
+    ViewData["Title"] = "Calibration";
+}
+
+<div class="card border-0 mx-4 ps-0 pt-4 min-height-78vh">
+    <ul class="nav nav-tabs row-gap-3" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active col-242424 fw-semibold" id="" data-bs-toggle="tab" data-bs-target="#loadcellCali" type="button" role="tab" aria-controls="loadcellCali" aria-selected="true">Loadcell Calibration</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link col-242424 fw-semibold" id="" data-bs-toggle="tab" data-bs-target="#servoCali" type="button" role="tab" aria-controls="servoCali" aria-selected="false">Servo Calibration</button>
+        </li>
+
+    </ul>
+
+    <div class="tab-content">
+
+        <!--Load Calibration-->
+        <div class="tab-pane pt-3 fade show active" id="loadcellCali" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+            <div class="card shadow-sm p-5">
+                <div class="mb-4 row align-items-center">
+                    <label class="col-md-2 col-form-label font-size-18px fw-semibold">Sensor Name:</label>
+                    <div class="col-md-10">
+                        <div class="d-flex RecipeCodeDropdown flex-grow-1 batchDropdown position-relative">
+                            <input type="text" class="form-control dropdownInput bg-white bord-D2D2D2" id="selectedItem" value="S1 MAIN COMP LOAD CELL">
+                            <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">4444</a></li>
+                                <li><a class="dropdown-item" href="#">2432</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+               
+
+
+                <!--Buttons row-->
+                <div class="row align-items-center text-center fw-semibold mb-3">
+                    <div class="col-md-12 col-lg-4 font-size-20 text-lg-start ">
+                        <label class="form-label font-size-20">Calibrated Value</label>
+                        <div class="d-flex align-items-center justify-content-center justify-content-lg-start gap-2 mb-4">
+                            <input type="text" class="form-control bord-215ED6 text-center w-25 min-width-40p" value="0.000">
+                            <span class="fw-semibold font-size-20">kN</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4 font-size-20">
+                        <label class="form-label font-size-20">Sensor Voltage</label>
+                        <div class="d-flex align-items-center justify-content-center gap-2 mb-4">
+                            <input type="text" class="form-control bord-215ED6 text-center w-25 min-width-40p" value="0.000">
+                            <span class="fw-semibold font-size-20">V</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4 text-lg-end">
+                        <button class="btn btn-primary bgcol-215ED6">Calibrate</button>
+                    </div>
+                </div>
+
+
+                <!--Second row-->
+                <div class="row mb-lg-4 mb-0 justify-content-between">
+                    
+                        <div class="cali-row col-lg-3 col-12">
+                            <div class="d-flex mb-3 gap-2 justify-content-start align-items-center position-relative justify-content-between counter-comp min-width-18p">
+                                <label for="colFormLabelSm" class="col-auto col-form-label col-form-label-sm fw-semibold">Set Min. Volt.</label>
+                                <div class="d-flex gap-1 align-items-center min-width-95px ">
+                                    <div class="col-sm-3 h-30px d-flex align-items-center bord-D2D2D2 rounded px-2 w-70px py-1">
+                                        <div class="d-flex flex-column me-2 row-gap-1">
+                                            <button class="btn btn-sm arrow-btns p-0">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                                    <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="btn btn-sm arrow-btns p-0">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                                    <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <input type="" id="" class="form-control arrows-text font-size-12px h-16px border-0 p-0 ps-1 text-start fw-semibold" value="10">
+                                    </div>
+                                    <span class="font-size-16px fw-semibold clr-242424">V</span>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="cali-row col-lg-3 col-12">
+                            <div class="d-flex mb-3 gap-2 justify-content-start align-items-center position-relative justify-content-between counter-comp">
+                                <label for="colFormLabelSm" class="col-auto col-form-label col-form-label-sm fw-semibold">Set Max. Volt.</label>
+                                <div class="d-flex gap-1 align-items-center min-width-95px ">
+                                    <div class="col-sm-3 h-30px d-flex align-items-center bord-D2D2D2 rounded px-2 w-70px py-1">
+                                        <div class="d-flex flex-column me-2 row-gap-1">
+                                            <button class="btn btn-sm arrow-btns p-0">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                                    <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="btn btn-sm arrow-btns p-0">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                                    <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <input type="" id="" class="form-control arrows-text font-size-12px h-16px border-0 p-0 ps-1 text-start fw-semibold" value="10">
+                                    </div>
+                                    <span class="font-size-16px fw-semibold clr-242424">V</span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cali-row col-lg-3 col-12">
+                            <div class="d-flex mb-3 gap-2 justify-content-start align-items-center position-relative justify-content-between counter-comp">
+                                <label for="colFormLabelSm" class="col-auto col-form-label col-form-label-sm fw-semibold">Set Min. Value</label>
+                                <div class="d-flex gap-1 align-items-center">
+                                    <div class="col-sm-3 h-30px d-flex align-items-center bord-D2D2D2 rounded px-2 w-70px py-1">
+                                        <div class="d-flex flex-column me-2 row-gap-1">
+                                            <button class="btn btn-sm arrow-btns p-0">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                                    <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="btn btn-sm arrow-btns p-0">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                                    <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <input type="" id="" class="form-control arrows-text font-size-12px h-16px border-0 p-0 ps-1 text-start fw-semibold" value="10">
+                                    </div>
+                                    <span class="font-size-16px fw-semibold clr-242424">kN</span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+                        
+                    
+
+                    <!--Last row-->
+                    <div class="row justify-content-between">
+
+                        <div class="cali-row col-lg-3 col-12">
+                        <div class="d-flex mb-3 gap-2 justify-content-start align-items-center position-relative justify-content-between counter-comp min-width-18p">
+                            <label for="colFormLabelSm" class="col-auto col-form-label col-form-label-sm fw-semibold">Set Min. Value</label>
+                            <div class="d-flex gap-1 align-items-center">
+                                <div class="col-sm-3 h-30px d-flex align-items-center bord-D2D2D2 rounded px-2 w-70px py-1">
+                                    <div class="d-flex flex-column me-2 row-gap-1">
+                                        <button class="btn btn-sm arrow-btns p-0">
+                                            <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                                <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-sm arrow-btns p-0">
+                                            <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                                <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <input type="" id="" class="form-control arrows-text font-size-12px h-16px border-0 p-0 ps-1 text-start fw-semibold" value="10">
+                                </div>
+                                <span class="font-size-16px fw-semibold clr-242424">kN</span>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                        <div class="cali-row col-lg-3 col-12">
+                        <div class="d-flex mb-3 gap-2 justify-content-start align-items-center position-relative justify-content-between counter-comp">
+                            <label for="colFormLabelSm" class="col-auto col-form-label col-form-label-sm fw-semibold">Set Max. Value</label>
+                            <div class="d-flex gap-1 align-items-center min-width-95px ">
+                                <div class="col-sm-3 h-30px d-flex align-items-center bord-D2D2D2 rounded px-2 w-70px py-1">
+                                    <div class="d-flex flex-column me-2 row-gap-1">
+                                        <button class="btn btn-sm arrow-btns p-0">
+                                            <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                                <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-sm arrow-btns p-0">
+                                            <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                                <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <input type="" id="" class="form-control arrows-text font-size-12px h-16px border-0 p-0 ps-1 text-start fw-semibold" value="10">
+                                </div>
+                                <span class="font-size-16px fw-semibold clr-242424">V</span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="cali-row col-lg-3 col-12">
+                        <div class="d-flex mb-3 gap-2 justify-content-start align-items-center position-relative justify-content-between counter-comp">
+                            <label for="colFormLabelSm" class="col-auto col-form-label col-form-label-sm fw-semibold">(C offset)</label>
+                            <div class="d-flex gap-1 align-items-center min-width-95px ">
+                                <div class="col-sm-3 h-30px d-flex align-items-center bord-D2D2D2 rounded px-2 w-70px py-1">
+                                    <div class="d-flex flex-column me-2 row-gap-1">
+                                        <button class="btn btn-sm arrow-btns p-0">
+                                            <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                                <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-sm arrow-btns p-0">
+                                            <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                                <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <input type="" id="" class="form-control arrows-text font-size-12px h-16px border-0 p-0 ps-1 text-start fw-semibold" value="10">
+                                </div>
+                                <span class="font-size-16px fw-semibold clr-242424">V</span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                        
+
+                        
+                    </div>
+                    
+
+                    
+
+                
+            </div>
+
+
+        </div>
+
+        <!--Servo Calibration-->
+        <div class="tab-pane pt-3 fade" id="servoCali" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+            <div class="servo-container">
+
+                @{
+                    // List of titles for the servo management cards
+                    var titles = new List<string>
+                                {
+                                "S1 Fill Depth Servo-1",
+                                "S1 Main Penetration Servo-4",
+                                "S2 Main Penetration Servo-8",
+                                "S1 Pre Penetration Servo-6",
+                                "S2 Pre Penetration Servo-10",
+                                "S2 Fill Depth Servo-2",
+                                "S1 Main Lower Servo-3",
+                                "S2 Main Lower Servo-7",
+                                "S1 Pre Lower Servo-5",
+                                "S1 Pre Lower Servo-9"
+                                };
+                }
+                @foreach (var title in titles)
+                {
+                    <!--Cards 1 to 10-->
+                    <div class="col">
+                        <div class="card h-100 box-shadow-1">
+
+
+                            <h5 class="card-title col-FFFFFF bord-top-rad-4px mb-0">@title</h5>
+                            <div class="card-body p-3 bord-rad-4px">
+
+                                <!--1st row-->
+                                <div class="d-flex gap-2 mb-3">
+                                    <button class="btn btn-primary bgcol-8434C6 me-auto fw-semibold w-100px" type="button">Jog Up</button>
+                                    <button class="btn btn-primary bgcol-8434C6 fw-semibold w-100px" type="button">Jog Down</button>
+                                </div>
+
+                                <!--Counter component-->
+                                <div class="row mb-3 justify-content-start w-100 position-relative counter-comp">
+                                    <label for="colFormLabelSm" class="col-auto col-form-label me-auto col-form-label-sm fw-semibold">Jog Speed</label>
+
+                                    <div class="col-sm-3 d-flex align-items-center bord-D2D2D2 rounded px-2 w-70px py-1">
+                                        <div class="d-flex flex-column me-2 row-gap-1">
+
+                                            <button class="btn btn-sm arrow-btns p-0">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                                    <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424" />
+                                                </svg>
+                                            </button>
+
+
+
+                                            <button class="btn btn-sm arrow-btns p-0">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                                    <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424" />
+                                                </svg>
+                                            </button>
+
+
+                                        </div>
+                                        <input type="" id="" class="form-control arrows-text font-size-12px h-16px border-0 p-0 ps-1 text-start fw-semibold" value="10">
+                                    </div>
+                                </div>
+
+                                <!--3rd and 4th rows-->
+                                <div class="row mb-3 justify-content-start w-100 position-relative counter-comp align-items-center">
+                                    <label for="colFormLabelSm" class="col-4 col-form-label me-auto text-nowrap col-form-label-sm fw-semibold">Act Torque</label>
+                                    <input type="text" class="form-control form-control-sm me-auto col-4 text-center w-60px bord-col-215ED6 fw-semibold" value="0">
+                                    <div class="form-check col-4 form-check-reverse">
+                                        <input class="form-check-input servo-radio" type="radio" name="radioDefault" id="">
+                                        <label class="form-check-label pe-2 fw-semibold" for="radioDefault1">
+                                            Ready
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3 justify-content-end w-100 position-relative counter-comp align-items-center">
+                                    
+                                    <div class="form-check col-4 form-check-reverse">
+                                        <input class="form-check-input servo-radio" type="radio" name="radioDefault" id="">
+                                        <label class="form-check-label pe-2 fw-semibold" for="radioDefault1">
+                                            Alarm
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!--Buttons-->
+                                <div class="d-flex gap-2 mb-3">
+                                    <button class="btn btn-primary bgcol-34C63B me-auto fw-semibold col-242424 w-100px" type="button">Run</button>
+                                    <button class="btn btn-primary bgcol-FF441F  fw-semibold w-100px col-242424" type="button">Stop</button>
+                                </div>
+
+                                <div class="d-flex gap-2 mb-3">
+                                    <button class="btn btn-primary bgcol-81D4FA me-auto fw-semibold w-100px col-242424" type="button">Set</button>
+                                    <button class="btn btn-primary bgcol-FFAB36 fw-semibold w-100px col-242424" type="button">Reset</button>
+                                </div>
+
+                                <!--Last rows-->
+                                <div class="row mb-3 justify-content-start w-100 position-relative counter-comp">
+                                    <label for="colFormLabelSm" class="col-auto col-form-label me-auto col-form-label-sm fw-semibold">Set</label>
+
+                                    <div class="col-sm-3 d-flex align-items-center bord-D2D2D2 rounded px-2 w-70px py-1">
+                                        <div class="d-flex flex-column me-2 row-gap-1">
+
+                                            <button class="btn btn-sm arrow-btns p-0 arrows-text-dis">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                                    <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424" />
+                                                </svg>
+                                            </button>
+
+
+
+                                            <button class="btn btn-sm arrow-btns p-0 arrows-text-dis">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                                    <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424" />
+                                                </svg>
+                                            </button>
+
+
+                                        </div>
+                                        <input type="" id="" class="form-control arrows-text arrows-text-dis font-size-12px h-16px border-0 p-0 ps-1 text-start fw-semibold" value="10.15">
+                                    </div>
+                                </div>
+
+
+                                <div class="row mb-3 justify-content-start w-100 position-relative counter-comp">
+                                    <label for="colFormLabelSm" class="col-auto col-form-label me-auto col-form-label-sm fw-semibold">Set Pos.</label>
+
+                                    <div class="col-sm-3 d-flex align-items-center bord-D2D2D2 rounded px-2 w-70px py-1">
+                                        <div class="d-flex flex-column me-2 row-gap-1">
+
+                                            <button class="btn btn-sm arrow-btns p-0 arrows-text-dis">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                                    <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424" />
+                                                </svg>
+                                            </button>
+
+
+
+                                            <button class="btn btn-sm arrow-btns p-0 arrows-text-dis">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                                    <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424" />
+                                                </svg>
+                                            </button>
+
+
+                                        </div>
+                                        <input type="" id="" class="form-control arrows-text arrows-text-dis font-size-12px h-16px border-0 p-0 ps-1 text-start fw-semibold" value="10.15">
+                                    </div>
+                                </div>
+
+
+                                <div class="row justify-content-start w-100 position-relative counter-comp">
+                                    <label for="colFormLabelSm" class="col-auto col-form-label me-auto col-form-label-sm fw-semibold">Set Speed</label>
+
+                                    <div class="col-sm-3 d-flex align-items-center bord-D2D2D2 rounded px-2 w-70px py-1">
+                                        <div class="d-flex flex-column me-2 row-gap-1">
+
+                                            <button class="btn btn-sm arrow-btns p-0 arrows-text-dis">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                                    <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424" />
+                                                </svg>
+                                            </button>
+
+
+
+                                            <button class="btn btn-sm arrow-btns p-0 arrows-text-dis">
+                                                <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                                    <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424" />
+                                                </svg>
+                                            </button>
+
+
+                                        </div>
+                                        <input type="" id="" class="form-control arrows-text arrows-text-dis font-size-12px h-16px border-0 p-0 ps-1 text-start fw-semibold" value="30">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+
+            </div>
+        </div>
+    </div>
+
+</div>

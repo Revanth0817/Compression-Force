@@ -1,0 +1,78 @@
+﻿<div class="container-fluid p-4 d-flex flex-column min-vh-75">
+    <div class="flex-grow-1">
+        <!-- Header + Buttons -->
+        <div class="row align-items-center mb-4 mb-md-4">
+            <div class="col-md-4 col-12">
+                <h5 class="font-size-20px col-215ED6 fw-semibold mb-3 mb-md-0">Alarm Summary</h5>
+            </div>
+            <div class="col-md-8 col-12 d-flex flex-wrap justify-content-md-end gap-2">
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-primary btn-sm">
+                        Fetch Report
+                    </button>
+                    <button type="button" class="btn btn-outline-primary btn-sm">
+                        Print Report
+                    </button>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="fw-semibold col-242424 font-size-14px mb-0">Total Event</label>
+                    <input type="text" class="form-control form-control-sm shadow-custom bg-white max-w-63px fw-semibold col-242424 font-size-14px" value="56" readonly>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters Row -->
+        <div class="row gy-2 mb-4 mb-md-4">
+            <!-- From Date Time -->
+            <div class="col-md-6 col-12 d-flex align-items-center gap-2">
+                <label class="fw-semibold font-size-14px col-242424 mb-0 text-nowrap min-w-100px">From Date Time</label>
+                <div class="input-group w-100 w-md-50">
+                    <input type="text" class="form-control form-control-sm fw-normal col-242424 font-size-13px" placeholder="00:00:00 PM MM/DD/YYYY" />
+                    <span class="input-group-text calendar-btn bgcol-215ED6">
+                        <img src="~/images/bx_calendar.png" alt="calendar-icon" class="w-18px h-18px" />
+                    </span>
+                </div>
+            </div>
+
+            <!-- To Date Time -->
+            <div class="col-md-6 col-12 d-flex align-items-center gap-2">
+                <label class="fw-semibold font-size-14px col-242424 mb-0 text-nowrap min-w-85px">To Date Time</label>
+                <div class="input-group w-100 w-md-50">
+                    <input type="text" class="form-control form-control-sm fw-normal col-242424 font-size-12px" placeholder="00:00:00 PM MM/DD/YYYY" />
+                    <span class="input-group-text calendar-btn bgcol-215ED6">
+                        <img src="~/images/bx_calendar.png" alt="calendar-icon" class="w-18px h-18px" />
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm mb-0 font-size-12px col-242424 fw-normal text-nowrap table-striped-blue min-w-800px">
+                <thead class="text-center">
+                    <tr>
+                        <th class="text-center fw-semibold font-size-16px bgcol-215ED6 text-white text-start">Alarm Code</th>
+                        <th class="text-center fw-semibold font-size-16px bgcol-215ED6 text-white">Alarm Created Time</th>
+                        <th class="text-center fw-semibold font-size-16px bgcol-215ED6 text-white">Alarm Description</th>
+                        <th class="text-center fw-semibold font-size-16px bgcol-215ED6 text-white">User Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="text-center fw-normal col-242424 font-size-13px">
+                        <td>199</td>
+                        <td class="text-center">29-10-2024 16:34:14</td>
+                        <td>Safety Door Switch Alarm</td>
+                        <td></td>
+                    </tr>
+                    <tr class="text-center fw-normal col-242424 font-size-13px">
+                        <td>200</td>
+                        <td class="text-center">29-10-2024 16:34:14</td>
+                        <td>Energy PB Activated</td>
+                        <td></td>
+                    </tr>
+                    <!-- Add more rows dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

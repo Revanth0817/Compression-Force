@@ -1,0 +1,324 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="accountManagementContainer">
+        <h4 class="clr-215ED6 fw-semibold mb-4 mt-0">Account Management</h4>
+        <div class="d-flex flex-wrap gap-3 pb-3">
+            <button type="button" class="bord-D2D2D2 clr-242424 boxshadow font-size-14px fw-semibold rounded-2 py-2 px-3 bg-white">Change Password</button>
+            <button class="bord-D2D2D2 clr-242424 boxshadow font-size-14px fw-semibold rounded-2 py-2 px-3 bg-white" data-bs-toggle="modal" data-bs-target="#exampleModalToggle2" href="" role="button">Change Access</button>
+            <button class="bord-D2D2D2 clr-242424 boxshadow font-size-14px fw-semibold rounded-2 py-2 px-3 bg-white" data-bs-toggle="modal" data-bs-target="#exampleModalToggle" href="" role="button">Create Account</button>
+            <button type="button" class="bord-D2D2D2 clr-242424 boxshadow font-size-14px fw-semibold rounded-2 py-2 px-3 bg-white">Account Deactivate</button>
+            <button type="button" class="bord-D2D2D2 clr-242424 boxshadow font-size-14px fw-semibold rounded-2 py-2 px-3 bg-white">Account Activate</button>
+            <button type="button" class="bord-D2D2D2 clr-242424 boxshadow font-size-14px fw-semibold rounded-2 py-2 px-3 bg-white">Expiry Time</button>
+            <button type="button" class="bord-D2D2D2 clr-242424 boxshadow font-size-14px fw-semibold rounded-2 py-2 px-3 bg-white" data-bs-toggle="modal" data-bs-target="#exampleModalToggle3" href="" role="button">Previlege</button>
+            <button type="button" class="bord-D2D2D2 clr-242424 boxshadow font-size-14px fw-semibold rounded-2 py-2 px-3 bg-white" data-bs-toggle="modal" data-bs-target="#exampleModalToggle4" href="" role="button">Security Settings</button>
+        </div>
+        <div class="table-wrapper">
+            <table class="table table-bordered bord-D2D2D2 boxshadow bord-rad-4px">
+                <thead>
+                    <tr>
+                        <th scope="col" class="fw-semibold">User Name</th>
+                        <th scope="col" class="fw-semibold">Access</th>
+                        <th scope="col" class="fw-semibold">Expires On</th>
+                        <th scope="col" class="fw-semibold">Activate/Deactivate</th>
+                        <th scope="col" class="fw-semibold">Last Login</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-size-14">Prabhu</td>
+                        <td class="font-size-14">Administrator</td>
+                        <td class="font-size-14">02/11/2024  14:31:16</td>
+                        <td class="font-size-14">Active</td>
+                        <td class="font-size-14">02/11/2024  14:31:16</td>
+                    </tr>
+                    <tr>
+                        <td class="font-size-14">Prabhu</td>
+                        <td class="font-size-14">Administrator</td>
+                        <td class="font-size-14">02/11/2024  14:31:16</td>
+                        <td class="font-size-14">Active</td>
+                        <td class="font-size-14">02/11/2024  14:31:16</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--User create Popup-->
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bgcol-215ED6 text-white justify-content-between  font-size-18px">
+                <h5 class="fw-semibold modal-title" id="exampleModalToggleLabel">
+                    User Creaion
+                </h5>
+                <button type="button" class="bg-transparent border-0" data-bs-dismiss="modal" aria-label="Close"><img src="~/icons/closeicon.svg" /></button>
+            </div>
+            <div class="modal-body p-lg-4 p-md-4 p-sm-3 p-3 userCreationScroll">
+                 <div class="d-flex gap-4 flex-lg-row flex-md-column flex-sm-column flex-column">
+                        <div class="userCreationlefContainer">
+                            <div class="position-relative w-60">
+                                <div class="camera-preview d-flex align-items-center justify-content-center mb-3 rounded">
+                                    Preview
+                                </div>
+                                <label class="btn btn-take-picture bord-D2D2D2 font-size-14 fw-semibold mb-3 boxshadow w-100">
+                                    Take Picture
+                                    <input type="file" accept="image/*" capture="user" hidden>
+                                </label>
+                            </div>
+                            <p class="font-size-14 fw-semibold">Note: Make sure your password follows these rules to keep your account safe.</p>
+                            <ul>
+                                <li class="font-size-14 mb-3 clr-242424">At least 8-15 characters</li>
+                                <li class="font-size-14 mb-3 clr-242424">Mix of upper and lower case letters</li>
+                                <li class="font-size-14 mb-0 clr-242424">At least 1 number and 1 special Character</li>
+                            </ul>
+                            <p class="font-size-14"><span class="fw-semibold">Example:</span> Admin@1234</p>
+                        </div>
+                        <div class="flex-grow-1">
+                            <form>
+                                <div class="mb-2">
+                                    <label for="userName" class="form-label font-size-14 fw-semibold">User Name</label>
+                                    <input type="email" class="form-control" id="userName" aria-describedby="userName">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="password" class="form-label font-size-14 fw-semibold">Password</label>
+                                    <input type="password" class="form-control" id="password">
+                                </div>
+
+                                <div class="mb-2">
+                                    <label for="confirmPassword" class="form-label font-size-14 fw-semibold">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword">
+                                </div>
+
+                                <div class="mb-2">
+                                    <label for="exampleInputPassword1" class="form-label font-size-14 fw-semibold">Choose from Dropdown</label>
+                                    <div class="d-flex RecipeCodeDropdown flex-grow-1 batchDropdown position-relative">
+                                        <input type="text" class="form-control dropdownInput bord-D2D2D2" id="selectedItem" value="4321" readonly>
+                                        <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span class="visually-hidden">Toggle Dropdown</span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#">Maintenance</a></li>
+                                            <li><a class="dropdown-item" href="#">2432</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end border-top-0 mt-4 pt-0 gap-3">
+                                    <button type="button" class="btn col-215ED6 bord-215ED6 fw-semibold font-size-16px px-4 clr-215ED6" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn bgcol-215ED6 text-white fw-semibold font-size-16px px-4">Create User</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Change Access-->
+<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bgcol-215ED6 text-white justify-content-between  font-size-18px">
+                <h5 class="fw-semibold modal-title" id="exampleModalToggleLabel">
+                    Change Access
+                </h5>
+                <button type="button" class="bg-transparent border-0" data-bs-dismiss="modal" aria-label="Close"><img src="~/icons/closeicon.svg" /></button>
+            </div>
+            <div class="modal-body px-4 pt-4 pb-3">
+                <form>
+                    <div class="d-md-flex d-block mb-3 align-items-center">
+                        <label for="userName" class="form-label font-size-14 w-md-50 w-100 mb-2 mb-md-0 fw-semibold">User Name</label>
+                        <div class="d-flex flex-grow-1 w-md-50 w-100 batchDropdown position-relative">
+                            <input type="text" class="form-control dropdownInput bord-D2D2D2" id="userName" value="Ramesh" readonly>
+                            <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">Jeeshnu</a></li>
+                                <li><a class="dropdown-item" href="#">Praveen</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-md-flex d-block mb-3 align-items-center">
+                        <label for="userGroup" class="form-label font-size-14 w-50 mb-2 mb-md-0 fw-semibold">Current User Group</label>
+                        <input type="text" class="form-control w-226px bord-D2D2D2" id="">
+                    </div>
+                    <div class="d-md-flex d-block mb-3 align-items-center">
+                        <label for="exampleInputPassword1" class="form-label font-size-14 w-md-50 w-100 mb-2 mb-md-0 fw-semibold">New Group</label>
+                        <div class="d-flex RecipeCodeDropdown flex-grow-1 w-md-50 w-100 batchDropdown position-relative">
+                            <input type="text" class="form-control dropdownInput bord-D2D2D2" id="selectedItem" value="4321" readonly>
+                            <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">Maintenance</a></li>
+                                <li><a class="dropdown-item" href="#">2432</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end border-top-0 mt-3 pt-0 gap-3">
+                        <button type="button" class="btn col-215ED6 bord-215ED6 fw-semibold font-size-16px px-4 clr-215ED6" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn bgcol-215ED6 text-white fw-semibold font-size-16px px-4">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Privilages Settings-->
+<div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bgcol-215ED6 text-white justify-content-between  font-size-18px">
+                <h5 class="fw-semibold modal-title" id="exampleModalToggleLabel">
+                    Privileges Settings
+                </h5>
+                <button type="button" class="bg-transparent border-0" data-bs-dismiss="modal" aria-label="Close"><img src="~/icons/closeicon.svg" /></button>
+            </div>
+            <div class="modal-body px-4 pt-4 pb-3">
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                        <label for="userName" class="form-label font-size-14 fw-semibold mb-0">Group</label>
+                        <div class="d-flex flex-grow-1 batchDropdown position-relative">
+                            <input type="text" class="form-control dropdownInput bord-D2D2D2" id="userName" value="Ramesh" readonly>
+                            <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">Jeeshnu</a></li>
+                                <li><a class="dropdown-item" href="#">Praveen</a></li>
+                            </ul>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="previlageSettingsList">
+                        <div class="mb-3 font-size-16 fw-semibold">
+                           <input class="form-check-input bord-D2D2D2 me-1" type="checkbox" value="">
+                           Recipe
+                        </div>
+                       <div class="mb-3 font-size-16 fw-semibold">
+                        <input class="form-check-input bord-D2D2D2 me-1" type="checkbox" value="">
+                           Operation
+                        </div>
+                    <div class="mb-3 font-size-16 fw-semibold">
+                        <input class="form-check-input bord-D2D2D2 me-1" type="checkbox" value="">
+                           Diagnostic
+                        </div>
+                    <div class="mb-3 font-size-16 fw-semibold">
+                        <input class="form-check-input bord-D2D2D2 me-1" type="checkbox" value="">
+                           Signal Monitoring
+                        </div>
+                    <div class="mb-3 font-size-16 fw-semibold">
+                        <input class="form-check-input bord-D2D2D2 me-1" type="checkbox" value="">
+                           Reports
+                        </div>
+                    <div class="mb-3 font-size-16 fw-semibold">
+                        <input class="form-check-input bord-D2D2D2 me-1" type="checkbox" value="">
+                           Backup
+                        </div>
+                    <div class="mb-3 font-size-16 fw-semibold">
+                        <input class="form-check-input bord-D2D2D2 me-1" type="checkbox" value="">
+                           Alarms
+                        </div>
+                    <div class="mb-3 font-size-16 fw-semibold">
+                        <input class="form-check-input bord-D2D2D2 me-1" type="checkbox" value="">
+                           Batch
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end border-top-0 mt-3 pt-0 gap-3">
+                        <button type="button" class="btn col-215ED6 bord-215ED6 fw-semibold font-size-16px px-4 clr-215ED6" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn bgcol-215ED6 text-white fw-semibold font-size-16px px-4">Save</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Security configuration-->
+<div class="modal fade" id="exampleModalToggle4" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bgcol-215ED6 text-white justify-content-between  font-size-18px">
+                <h5 class="fw-semibold modal-title" id="exampleModalToggleLabel">
+                    Security Configuration
+                </h5>
+                <button type="button" class="bgcol-215ED6 bord-215ED6" data-bs-dismiss="modal" aria-label="Close"><img src="~/icons/closeicon.svg" /></button>
+            </div>
+            <div class="modal-body px-4 pt-4 pb-3">
+               <div class="d-flex align-items-center gap-2 justify-content-between mb-3">
+                  <label for="applicationTimeout" class="mb-0 font-size-14 fw-semibold">Application Timeout</label>
+                    <div class="d-flex align-items-center gap-2 min-width-26">
+                        <div class="d-flex align-items-center bord-D2D2D2 rounded px-2 w-60px py-1">
+                            <div class="d-flex flex-column me-2 row-gap-1">
+                                <button class="btn btn-sm arrow-btns p-0">
+                                    <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                        <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424"></path>
+                                    </svg>
+                                </button>
+                                <button class="btn btn-sm arrow-btns p-0">
+                                    <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                        <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <input type="number" id="" class="form-control arrows-text font-size-14 border-0 p-0 ps-1 text-start fw-semibold" value="10">
+                        </div>
+                        <span class="font-size-14 fw-semibold">Minutes</span>
+                    </div>
+               </div>
+               <div class="d-flex align-items-center gap-2 justify-content-between mb-3">
+                    <label for="applicationTimeout" class="mb-0 font-size-14 fw-semibold">Password Expiry Days</label>
+                    <div class="d-flex align-items-center gap-2 min-width-26">
+                        <div class="d-flex align-items-center bord-D2D2D2 rounded px-2 w-60px py-1">
+                            <div class="d-flex flex-column me-2 row-gap-1">
+                                <button class="btn btn-sm arrow-btns p-0">
+                                    <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                        <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424"></path>
+                                    </svg>
+                                </button>
+                                <button class="btn btn-sm arrow-btns p-0">
+                                    <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                        <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <input type="number" id="" class="form-control arrows-text font-size-14 border-0 p-0 ps-1 text-start fw-semibold" value="10">
+                        </div>
+                        <span class="font-size-14 fw-semibold">Days</span>
+                    </div>
+               </div>
+               <div class="d-flex align-items-center gap-2 justify-content-between">
+                    <label for="applicationTimeout" class="mb-0 font-size-14 fw-semibold">No. of Wrong Attempt</label>
+                    <div class="d-flex align-items-center gap-2 min-width-26">
+                        <div class="d-flex align-items-center bord-D2D2D2 rounded px-2 w-60px py-1">
+                            <div class="d-flex flex-column me-2 row-gap-1">
+                                <button class="btn btn-sm arrow-btns p-0">
+                                    <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(1)">
+                                        <path d="M0.706446 3.13825L2.50994 0.318397C2.57436 0.217467 2.65088 0.137392 2.73512 0.0827573C2.81936 0.0281225 2.90966 0 3.00086 0C3.09206 0 3.18236 0.0281225 3.2666 0.0827573C3.35083 0.137392 3.42735 0.217467 3.49177 0.318397L5.29527 3.13825C5.73396 3.82416 5.42061 5 4.80088 5H1.19388C0.574143 5 0.267758 3.82416 0.706446 3.13825Z" fill="#242424"></path>
+                                    </svg>
+                                </button>
+                                <button class="btn btn-sm arrow-btns p-0">
+                                    <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="changeValue(-1)">
+                                        <path d="M5.29355 1.86175L3.49006 4.6816C3.42564 4.78253 3.34912 4.86261 3.26488 4.91724C3.18064 4.97188 3.09034 5 2.99914 5C2.90794 5 2.81764 4.97188 2.7334 4.91724C2.64917 4.86261 2.57265 4.78253 2.50823 4.6816L0.70473 1.86175C0.266041 1.17584 0.57939 0 1.19912 0H4.80612C5.42586 0 5.73224 1.17584 5.29355 1.86175Z" fill="#242424"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <input type="number" id="" class="form-control arrows-text font-size-14 border-0 p-0 ps-1 text-start fw-semibold" value="10">
+                        </div>
+                    </div>
+               </div>
+                <div class="d-flex justify-content-end border-top-0 mt-4 pt-0 gap-3">
+                    <button type="button" class="btn col-215ED6 bord-215ED6 fw-semibold font-size-16px px-4 clr-215ED6" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn bgcol-215ED6 text-white fw-semibold font-size-16px px-4">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
