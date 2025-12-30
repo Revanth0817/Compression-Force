@@ -3,8 +3,8 @@ using Compression_Force.Domain.Entities;
 using Compression_Force.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System;
+using System.Linq;
 
 namespace Compression_Force.Controllers
 {
@@ -17,140 +17,127 @@ namespace Compression_Force.Controllers
             _context = context;
         }
 
-        /*Recipe Pages*/
+        /* =======================
+           Recipe Pages
+           ======================= */
+
         [HttpGet]
         public IActionResult AddRecipe()
         {
             return View();
         }
-        //public IActionResult AddRecipe2()
-        //{
-        //    return View();
-        //}
 
-        /*Delete Recipe page*/
         public IActionResult DeleteRecipe()
         {
             return View();
         }
 
-        /*Edit Recipe*/
         public IActionResult EditRecipe()
         {
             return View();
         }
 
+        /* =======================
+           Recipe Parameter Page
+           ======================= */
+
         [HttpGet]
         public IActionResult RecipeParameter()
         {
-            var allCodes = _context.Recipes.Select(r => r.RecipeCode).Distinct().OrderBy(c => c).ToList();
+            var allCodes = _context.Recipes
+                .Where(r => r.RecipeCode != null)
+                .Select(r => r.RecipeCode!)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToList();
 
-            // Get the first recipe in the list as the default display
-            var initialCode = allCodes.FirstOrDefault();
-            var firstRecipe = _context.Recipes.FirstOrDefault(r => r.RecipeCode == initialCode);
+            string? initialCode = allCodes.FirstOrDefault();
+
+            Recipe? firstRecipe = null;
+
+            if (!string.IsNullOrEmpty(initialCode))
+            {
+                firstRecipe = _context.Recipes
+                    .AsNoTracking()
+                    .FirstOrDefault(r => r.RecipeCode == initialCode);
+            }
 
             var viewModel = new RecipeParameterViewModel
             {
                 AllRecipeCodes = allCodes,
-                SelectedRecipe = firstRecipe
+                SelectedRecipe = firstRecipe   // ✅ NO WARNING
             };
 
             return View(viewModel);
         }
 
+        /* =======================
+           AJAX APIs
+           ======================= */
+
         [HttpGet]
         public IActionResult GetRecipeDetails(string code)
         {
-            var recipe = _context.Recipes.FirstOrDefault(r => r.RecipeCode == code);
-            if (recipe == null) return NotFound();
+            if (string.IsNullOrWhiteSpace(code))
+                return BadRequest("Invalid recipe code");
 
-            // Returns the full database row as a JSON object
+            var recipe = _context.Recipes
+                .AsNoTracking()
+                .FirstOrDefault(r => r.RecipeCode == code);
+
+            if (recipe == null)
+                return NotFound();
+
             return Json(recipe);
         }
 
         [HttpGet]
         public IActionResult CheckCodeExists(string code)
         {
+            if (string.IsNullOrWhiteSpace(code))
+                return Json(new { exists = false });
+
             var exists = _context.Recipes.Any(r => r.RecipeCode == code);
-            return Json(new { exists = exists });
+            return Json(new { exists });
         }
 
-        /// <summary>
-        /// Logic for the "Add Recipe" Modal submission
-        /// </summary>
+        /* =======================
+           Add Recipe Logic
+           ======================= */
+
         [HttpPost]
         public IActionResult PrepareAdd(string code)
         {
             if (string.IsNullOrWhiteSpace(code))
             {
                 TempData["ErrorMessage"] = "Recipe code cannot be empty.";
-                return RedirectToAction("RecipeParameter");
+                return RedirectToAction(nameof(RecipeParameter));
             }
 
-            // Check database for existing Recipe_code
             var exists = _context.Recipes.Any(r => r.RecipeCode == code);
 
             if (exists)
             {
                 TempData["ErrorMessage"] = $"Recipe code '{code}' already exists.";
-                return RedirectToAction("RecipeParameter");
+                return RedirectToAction(nameof(RecipeParameter));
             }
 
-            // Success: Pass the code to the Add page via TempData
             TempData["NewRecipeCode"] = code;
-            return RedirectToAction("AddRecipe");
+            return RedirectToAction(nameof(AddRecipe));
         }
-
-/*
-        [HttpGet]
-        public IActionResult AddRecipe()
-        {
-            var code = TempData["NewRecipeCode"] as string;
-
-            if (string.IsNullOrEmpty(code))
-            {
-                return RedirectToAction("RecipeParameter");
-            }
-
-            // Initialize model with the code and current timestamp
-            var model = new Recipe
-            {
-                RecipeCode = code,
-                DateTime = DateTime.Now
-            };
-
-            return View(model);
-        }
-*/
-       /* [HttpGet]
-        public IActionResult AddRecipe(string code)
-        {
-            if (string.IsNullOrEmpty(code))
-            {
-                return RedirectToAction("RecipeParameter");
-            }
-
-            // Initialize the model with the code provided from the modal
-            var model = new Recipe
-            {
-                RecipeCode = code,
-                DateTime = DateTime.Now
-            };
-
-            return View(model);
-        }*/
 
         [HttpPost]
         public IActionResult SaveNewRecipe(Recipe model)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Recipes.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction("RecipeParameter");
-            }
+            if (!ModelState.IsValid)
+                return View("AddRecipe", model);
 
-            return View("AddRecipe", model);
+            model.DateTime = DateTime.Now;
+
+            _context.Recipes.Add(model);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(RecipeParameter));
         }
     }
 }
