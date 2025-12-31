@@ -13,16 +13,16 @@
     }
 
     // Pre-calculate the data to avoid calling methods inside the HTML attributes
-    var toolTypes = GetItems(Model.SelectedRecipe?.ToolType);
-    var awcList = GetItems(new[] { "Item1", "1111" });
-    var recipeList = GetItems(Model.SelectedRecipe?.RecipeName);
+    var toolTypes = ViewData["toolTypes"] as IEnumerable<string>;
+    var awcList = ViewData["awcList"] as IEnumerable<string>;
+    var recipeList = ViewData["recipeList"] as IEnumerable<string>;
 
     // Get display values safely
-    string toolTypeDisplay = toolTypes.Cast<object>().FirstOrDefault()?.ToString() ?? "";
-    string awcDisplay = awcList.Cast<object>().FirstOrDefault()?.ToString() ?? "";
-    string recipeDisplay = recipeList.Cast<object>().FirstOrDefault()?.ToString() ?? "";
+    string toolTypeDisplay = ViewData["toolTypeDisplay"].ToString();
+    string awcDisplay = ViewData["awcDisplay"].ToString();
+    string recipeDisplay = ViewData["recipeDisplay"].ToString();
 }
-@{   ViewData["Title"] = "RecipeParameter";}
+@*@{   ViewData["Title"] = "RecipeParameter";}*@
 <div class="BatchContainer p-3">
     <div class="w-100 BatchHeader">
         <div class="d-flex flex-wrap batchPageTabHeader gap-4">
@@ -83,12 +83,12 @@
                                 <div class="d-flex gap-3 align-items-center">
                                     <label class="font-size-16px fw-semibold clr-242424">Tool Type</label>
                                     <div class="d-flex toolTypeDropdown batchDropdown position-relative">
-                                        <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2"
+                                        <input type="text" id="toolTypeInput" class="form-control flex-grow-1 dropdownInput bord-D2D2D2"
                                                value="@toolTypeDisplay" readonly>
                                         <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="visually-hidden">Toggle Dropdown</span>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end">
+                                        <ul id="toolTypeDropdown" class="dropdown-menu dropdown-menu-end">
                                             @foreach (var item in toolTypes)
                                             {
                                                 <li><a class="dropdown-item readonly-item" href="javascript:void(0)">@item</a></li>
@@ -100,12 +100,12 @@
                                 <div class="d-flex gap-3 align-items-center">
                                     <label class="font-size-16px fw-semibold clr-242424">AWC & AR</label>
                                     <div class="d-flex commonProductDropdown batchDropdown position-relative">
-                                        <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2"
+                                        <input type="text" id="awcInput" class="form-control flex-grow-1 dropdownInput bord-D2D2D2"
                                                value="@awcDisplay" readonly>
                                         <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="visually-hidden">Toggle Dropdown</span>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end">
+                                        <ul id="awcListDropdown" class="dropdown-menu dropdown-menu-end">
                                             @foreach (var item in awcList)
                                             {
                                                 <li><a class="dropdown-item readonly-item" href="javascript:void(0)">@item</a></li>
@@ -117,12 +117,12 @@
                                 <div class="d-flex gap-3 align-items-center">
                                     <label class="font-size-16px fw-semibold clr-242424">Recipe</label>
                                     <div class="d-flex commonProductDropdown batchDropdown position-relative">
-                                        <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2"
+                                        <input type="text" id="recipeInput" class="form-control flex-grow-1 dropdownInput bord-D2D2D2"
                                                value="@recipeDisplay" readonly>
                                         <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="visually-hidden">Toggle Dropdown</span>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end">
+                                        <ul id="recipeListDropdown" class="dropdown-menu dropdown-menu-end">
                                             @foreach (var item in recipeList)
                                             {
                                                 <li><a class="dropdown-item readonly-item" href="javascript:void(0)">@item</a></li>
@@ -405,40 +405,51 @@
                                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                                     <label class="font-size-16px w-60 fw-semibold clr-242424">Rejection Limit Max S1</label>
                                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                                        <input type="text" id="rejectionForceLimitMaxS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" value="@Model.SelectedRecipe?.RejectionForceLimitMaxS1" placeholder="5.00" readonly />
+                                        <input type="text" id="rejectionForceLimitMaxS1"
+                                               class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
+                                               value="@Model.SelectedRecipe?.RejectionForceLimitMaxS1" placeholder="5.00" readonly />
                                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                                     <label class="font-size-16px w-60 fw-semibold clr-242424">AWC Limit Max S1</label>
                                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                                        <input type="text" id="awcForceLimitMaxS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" value="@Model.SelectedRecipe?.AwcForceLimitMaxS1" placeholder="4.00" readonly />
+                                        <input type="text" id="awcForceLimitMaxS1"
+                                               class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
+                                               value="@Model.SelectedRecipe?.AwcForceLimitMaxS1" placeholder="4.00" readonly />
                                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                                     <label class="font-size-16px w-60 fw-semibold clr-242424">AWC Set Point S1</label>
                                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                                        <input type="text" id="awcForceSetPointS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" value="@Model.SelectedRecipe?.AwcForceSetPointS1" placeholder="3.00" readonly />
+                                        <input type="text" id="awcForceSetPointS1"
+                                               class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
+                                               value="@Model.SelectedRecipe?.AwcForceSetPointS1" placeholder="3.00" readonly />
                                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                                     <label class="font-size-16px w-60 fw-semibold clr-242424">AWC Limit Min S1</label>
                                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                                        <input type="text" id="awcForceLimitMinS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" value="@Model.SelectedRecipe?.AwcForceLimitMinS1" placeholder="2.00" readonly />
+                                        <input type="text" id="awcForceLimitMinS1"
+                                               class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
+                                               value="@Model.SelectedRecipe?.AwcForceLimitMinS1" placeholder="2.00" readonly />
                                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                                     <label class="font-size-16px w-60 fw-semibold clr-242424">Rejection Limit Min S1</label>
                                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                                        <input type="text" id="rejectionForceLimitMinS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" value="@Model.SelectedRecipe?.RejectionForceLimitMinS1" placeholder="1.00" readonly />
+                                        <input type="text" id="rejectionForceLimitMinS1"
+                                               class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
+                                               value="@Model.SelectedRecipe?.RejectionForceLimitMinS1" placeholder="1.00" readonly />
                                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="emptyParamerDiv col-sm-0 order-md-3 order-lg-2 col-md-0 col-lg-2 px-0">
                             <div class="productParameterHeader bgcol-215ED6 clr-215ED6 text-center font-size-18px p-10px">
@@ -454,40 +465,51 @@
                                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                                     <label class="font-size-16px w-60 fw-semibold clr-242424">Rejection Limit Max S2</label>
                                     <div class="d-flex align-items-center gap-3 max-width-115px">
-                                        <input type="text" id="rejectionForceLimitMaxS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" value="@Model.SelectedRecipe?.RejectionForceLimitMaxS2" placeholder="5.00" readonly />
+                                        <input type="text" id="rejectionForceLimitMaxS2"
+                                               class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
+                                               value="@Model.SelectedRecipe?.RejectionForceLimitMaxS2" placeholder="5.00" readonly />
                                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                                     <label class="font-size-16px w-60 fw-semibold clr-242424">AWC Limit Max S2</label>
                                     <div class="d-flex align-items-center gap-3 max-width-115px">
-                                        <input type="text" id="awcForceLimitMaxS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" value="@Model.SelectedRecipe?.AwcForceLimitMaxS2" placeholder="4.00" readonly />
+                                        <input type="text" id="awcForceLimitMaxS2"
+                                               class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
+                                               value="@Model.SelectedRecipe?.AwcForceLimitMaxS2" placeholder="4.00" readonly />
                                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                                     <label class="font-size-16px w-60 fw-semibold clr-242424">AWC Set Point S2</label>
                                     <div class="d-flex align-items-center gap-3 max-width-115px">
-                                        <input type="text" id="awcForceSetPointS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" value="@Model.SelectedRecipe?.AwcForceSetPointS2" placeholder="3.00" readonly />
+                                        <input type="text" id="awcForceSetPointS2"
+                                               class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
+                                               value="@Model.SelectedRecipe?.AwcForceSetPointS2" placeholder="3.00" readonly />
                                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                                     <label class="font-size-16px w-60 fw-semibold clr-242424">AWC Limit Min S2</label>
                                     <div class="d-flex align-items-center gap-3 max-width-115px">
-                                        <input type="text" id="awcForceLimitMinS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" value="@Model.SelectedRecipe?.AwcForceLimitMinS2" placeholder="2.00" readonly />
+                                        <input type="text" id="awcForceLimitMinS2"
+                                               class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
+                                               value="@Model.SelectedRecipe?.AwcForceLimitMinS2" placeholder="2.00" readonly />
                                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                                     <label class="font-size-16px w-60 fw-semibold clr-242424">Rejection Limit Min S2</label>
                                     <div class="d-flex align-items-center gap-3 max-width-115px">
-                                        <input type="text" id="rejectionForceLimitMinS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" value="@Model.SelectedRecipe?.RejectionForceLimitMinS2" placeholder="1.00" readonly />
+                                        <input type="text" id="rejectionForceLimitMinS2"
+                                               class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
+                                               value="@Model.SelectedRecipe?.RejectionForceLimitMinS2" placeholder="1.00" readonly />
                                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -528,26 +550,137 @@
 </div>
 
 <script>
-    function updateRecipeSelection(code) {
-        // Updates the main display box
-        document.getElementById('currentRecipeCode').value = code;
+     function updateRecipeSelection(code) {
+         // Keep the top display box as-is
+         var currentCodeEl = document.getElementById('currentRecipeCode');
+         if (currentCodeEl) currentCodeEl.value = code;
 
-        // Optional: If you want to automatically fill the "Recipe Code"
-        // box inside the "Common Product Parameter" section:
-        const recipeInput = document.querySelector('input[placeholder="4444"]');
-        if(recipeInput) recipeInput.value = code;
+         // Fetch recipe details and update fields (excluding Tool Type, AWC & AR, Recipe dropdowns, and ForceFeederRatioS1/S2)
+         fetch('/Recipe/GetRecipeDetails?code=' + encodeURIComponent(code))
+             .then(function (response) { return response.json(); })
+             .then(function (data) {
+                 if (!data) return;
 
-        console.log("Selected Recipe: " + code);
+
+                     updateDropdownList('toolTypeDropdown', data.toolTypes,'toolTypeInput', data.toolTypeDisplay.toString());
+                      updateDropdownList('awcListDropdown', data.awcList,'awcInput', data.awcDisplay.toString());
+                      updateDropdownList('recipeListDropdown', data.recipeList, 'recipeInput', data.recipeDisplay.toString());
+                 // Common Product Parameter
+                 var recipeCode = document.getElementById('recipeCode'); if (recipeCode) recipeCode.value = data.recipeCode ?? '';
+                 var productName = document.getElementById('productName'); if (productName) productName.value = data.productName ?? '';
+                 var shape = document.getElementById('shape'); if (shape) shape.value = data.shape ?? '';
+                 var size = document.getElementById('size'); if (size) size.value = data.size ?? '';
+                 var tabletThickness = document.getElementById('tabletThickness'); if (tabletThickness) tabletThickness.value = data.tabletThickness ?? '';
+                 var tabletHardness = document.getElementById('tabletHardness'); if (tabletHardness) tabletHardness.value = data.tabletHardness ?? '';
+                 var tabletWeight = document.getElementById('tabletWeight'); if (tabletWeight) tabletWeight.value = data.weight ?? '';
+                 var maxTurretRpm = document.getElementById('maxTurretRpm'); if (maxTurretRpm) maxTurretRpm.value = data.maxTurretRpm ?? '';
+
+                 // S1 Product Parameter (ForceFeederRatioS1 intentionally not updated)
+                    updateSelectList('forceFeederRatioS1',data.forceFeederRatioS1, data.forceFeederRatioS1Display);
+                 var fillDepthS1 = document.getElementById('fillDepthS1'); if (fillDepthS1) fillDepthS1.value = data.fillDepthS1 ?? '';
+                 var mainPenetrationPositionS1 = document.getElementById('mainPenetrationPositionS1'); if (mainPenetrationPositionS1) mainPenetrationPositionS1.value = data.mainPenetrationPositionS1 ?? '';
+                 var mainThicknessPositionS1 = document.getElementById('mainThicknessPositionS1'); if (mainThicknessPositionS1) mainThicknessPositionS1.value = data.mainThicknessPositionS1 ?? '';
+                 var prePenetrationPositionS1 = document.getElementById('prePenetrationPositionS1'); if (prePenetrationPositionS1) prePenetrationPositionS1.value = data.prePenetrationPositionS1 ?? '';
+                 var preThicknessPositionS1 = document.getElementById('preThicknessPositionS1'); if (preThicknessPositionS1) preThicknessPositionS1.value = data.preThicknessPositionS1 ?? '';
+                 var sampleIntervalS1 = document.getElementById('sampleIntervalS1'); if (sampleIntervalS1) sampleIntervalS1.value = data.sampleIntervalS1 ?? '';
+                 var sampleRevolutionQtyS1 = document.getElementById('sampleRevolutionQtyS1'); if (sampleRevolutionQtyS1) sampleRevolutionQtyS1.value = data.sampleRevolutionQtyS1 ?? '';
+                 var maxMainCompForceS1 = document.getElementById('maxMainCompForceS1'); if (maxMainCompForceS1) maxMainCompForceS1.value = data.maxMainCompForceS1 ?? '';
+                 var maxPreCompForceS1 = document.getElementById('maxPreCompForceS1'); if (maxPreCompForceS1) maxPreCompForceS1.value = data.maxPreCompForceS1 ?? '';
+                 var maxEjectionForceS1 = document.getElementById('maxEjectionForceS1'); if (maxEjectionForceS1) maxEjectionForceS1.value = data.maxEjectionForceS1 ?? '';
+
+                 // S2 Product Parameter (ForceFeederRatioS2 intentionally not updated)
+                 updateSelectList('forceFeederRatioS2',data.forceFeederRatioS2, data.forceFeederRatioS2Display);
+                 var fillDepthS2 = document.getElementById('fillDepthS2'); if (fillDepthS2) fillDepthS2.value = data.fillDepthS2 ?? '';
+                 var mainPenetrationPositionS2 = document.getElementById('mainPenetrationPositionS2'); if (mainPenetrationPositionS2) mainPenetrationPositionS2.value = data.mainPenetrationPositionS2 ?? '';
+                 var mainThicknessPositionS2 = document.getElementById('mainThicknessPositionS2'); if (mainThicknessPositionS2) mainThicknessPositionS2.value = data.mainThicknessPositionS2 ?? '';
+                 var prePenetrationPositionS2 = document.getElementById('prePenetrationPositionS2'); if (prePenetrationPositionS2) prePenetrationPositionS2.value = data.prePenetrationPositionS2 ?? '';
+                 var preThicknessPositionS2 = document.getElementById('preThicknessPositionS2'); if (preThicknessPositionS2) preThicknessPositionS2.value = data.preThicknessPositionS2 ?? '';
+                 var sampleIntervalS2 = document.getElementById('sampleIntervalS2'); if (sampleIntervalS2) sampleIntervalS2.value = data.sampleIntervalS2 ?? '';
+                 var sampleRevolutionQtyS2 = document.getElementById('sampleRevolutionQtyS2'); if (sampleRevolutionQtyS2) sampleRevolutionQtyS2.value = data.sampleRevolutionQtyS2 ?? '';
+                 var maxMainCompForceS2 = document.getElementById('maxMainCompForceS2'); if (maxMainCompForceS2) maxMainCompForceS2.value = data.maxMainCompForceS2 ?? '';
+                 var maxPreCompForceS2 = document.getElementById('maxPreCompForceS2'); if (maxPreCompForceS2) maxPreCompForceS2.value = data.maxPreCompForceS2 ?? '';
+                 var maxEjectionForceS2 = document.getElementById('maxEjectionForceS2'); if (maxEjectionForceS2) maxEjectionForceS2.value = data.maxEjectionForceS2 ?? '';
+
+                 // S1 AWC & AR Set Parameter
+                 var rejectionForceLimitMaxS1 = document.getElementById('rejectionForceLimitMaxS1'); if (rejectionForceLimitMaxS1) rejectionForceLimitMaxS1.value = data.rejectionForceLimitMaxS1 ?? '';
+                 var awcForceLimitMaxS1 = document.getElementById('awcForceLimitMaxS1'); if (awcForceLimitMaxS1) awcForceLimitMaxS1.value = data.awcForceLimitMaxS1 ?? '';
+                 var awcForceSetPointS1 = document.getElementById('awcForceSetPointS1'); if (awcForceSetPointS1) awcForceSetPointS1.value = data.awcForceSetPointS1 ?? '';
+                 var awcForceLimitMinS1 = document.getElementById('awcForceLimitMinS1'); if (awcForceLimitMinS1) awcForceLimitMinS1.value = data.awcForceLimitMinS1 ?? '';
+                 var rejectionForceLimitMinS1 = document.getElementById('rejectionForceLimitMinS1'); if (rejectionForceLimitMinS1) rejectionForceLimitMinS1.value = data.rejectionForceLimitMinS1 ?? '';
+
+                 // S2 AWC & AR Set Parameter
+                 var rejectionForceLimitMaxS2 = document.getElementById('rejectionForceLimitMaxS2'); if (rejectionForceLimitMaxS2) rejectionForceLimitMaxS2.value = data.rejectionForceLimitMaxS2 ?? '';
+                 var awcForceLimitMaxS2 = document.getElementById('awcForceLimitMaxS2'); if (awcForceLimitMaxS2) awcForceLimitMaxS2.value = data.awcForceLimitMaxS2 ?? '';
+                 var awcForceSetPointS2 = document.getElementById('awcForceSetPointS2'); if (awcForceSetPointS2) awcForceSetPointS2.value = data.awcForceSetPointS2 ?? '';
+                 var awcForceLimitMinS2 = document.getElementById('awcForceLimitMinS2'); if (awcForceLimitMinS2) awcForceLimitMinS2.value = data.awcForceLimitMinS2 ?? '';
+                 var rejectionForceLimitMinS2 = document.getElementById('rejectionForceLimitMinS2'); if (rejectionForceLimitMinS2) rejectionForceLimitMinS2.value = data.rejectionForceLimitMinS2 ?? '';
+             })
+             .catch(function (err) {
+                 console.error('Error:', err);
+             });
+     }
+
+     // Auto-show modal if there's an error from the Controller
+     document.addEventListener("DOMContentLoaded", function () {
+         var error = '@TempData["ErrorMessage"]';
+         if (error && error.length > 0) {
+             var myModal = new bootstrap.Modal(document.getElementById('addRecipeModal'));
+             myModal.show();
+         }
+     });
+
+      //Helper to rebuild dropdown list - ul/li version
+      function updateDropdownList(listId, items, inputId, Display)
+      { var ul = document.getElementById(listId); if (!ul) return;
+          var input = document.getElementById(inputId); if (!input) return;
+           input.value = Display;
+
+          // Clear existing items
+         ul.innerHTML = '';
+          console.log("Cleared existing items for:", listId);
+         // Add new items
+         (items || []).forEach(function (item) {
+             var li = document.createElement('li');
+             var a = document.createElement('a');
+             a.className = 'dropdown-item readonly-item';
+             a.href = 'javascript:void(0)';
+             a.textContent = item;
+             li.appendChild(a);
+             ul.appendChild(li);
+         });
     }
 
-    // Auto-show modal if there's an error from the Controller
-    document.addEventListener("DOMContentLoaded", function () {
-        var error = '@TempData["ErrorMessage"]';
-        if (error && error.length > 0) {
-            var myModal = new bootstrap.Modal(document.getElementById('addRecipeModal'));
-            myModal.show();
-        }
-    });
+        //Helper to rebuild dropdown list - select element version
+        function updateSelectList(selectId, items, selectedValue) {
+         var select = document.getElementById(selectId);
+         if (!select) {
+             console.warn("Select not found: " + selectId);
+             return;
+         }
+
+         console.log("Updating select:", selectId, "with items:", items, "selected:", selectedValue);
+
+         // Clear existing options
+         select.innerHTML = '';
+
+         // Add new options
+         (items || []).forEach(function (item) {
+             var option = document.createElement('option');
+             option.value = item;
+             option.textContent = item;
+
+             // Mark selected if it matches
+             if (item == selectedValue) {
+                 option.selected = true;
+             }
+
+             select.appendChild(option);
+             console.log("Added option:", item);
+         });
+
+         console.log("Finished updating select:", selectId);
+     }
+
 </script>
 
 <script>
