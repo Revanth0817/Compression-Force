@@ -84,7 +84,7 @@ namespace Compression_Force.Controllers
         {
             return View();
         }
-        
+
         /*Calibration page*/
         public IActionResult Calibration()
         {
