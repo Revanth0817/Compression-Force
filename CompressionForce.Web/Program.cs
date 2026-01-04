@@ -1,4 +1,8 @@
 ﻿using CompressionForce.Data;
+using CompressionForce.Domain.Validation;
+using CompressionForce.Services.Lookups;
+using CompressionForce.Services.Recipes;
+using CompressionForce.Services.Validation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +15,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
+
+// Domain validation
+builder.Services.AddScoped<IRecipeValidator, RecipeRulesValidator>();
+
+// Services
+builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddScoped<ILookupService, LookupService>();
+builder.Services.AddScoped<LookupRecipeValidator>();
 
 // Add Session services
 builder.Services.AddSession(options =>
