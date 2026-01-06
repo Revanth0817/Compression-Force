@@ -3,6 +3,7 @@ using System;
 using Compression_Force.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Compression_Force.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260103071122_AddERemail")]
+    partial class AddERemail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,30 +24,6 @@ namespace Compression_Force.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Compression_Force.Domain.Entities.GroupPrivilege", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsAllowed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("PrivilegeKey")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GroupPrivileges");
-                });
 
             modelBuilder.Entity("Compression_Force.Domain.Entities.Recipe", b =>
                 {
@@ -363,46 +342,6 @@ namespace Compression_Force.Data.Migrations
                     b.ToTable("RecipeHistroys");
                 });
 
-            modelBuilder.Entity("Compression_Force.Domain.Entities.SecuritySettings", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApplicationTimeoutMinutes")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MaxWrongAttempts")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PasswordExpiryDays")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SecuritySettings");
-                });
-
-            modelBuilder.Entity("Compression_Force.Domain.Entities.UserGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserGroups");
-                });
-
             modelBuilder.Entity("Compression_Force.Domain.Entities.UserManagement", b =>
                 {
                     b.Property<int>("Id")
@@ -429,21 +368,6 @@ namespace Compression_Force.Data.Migrations
                     b.Property<string>("ERpassword")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("ExpiryDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("FailedLoginAttempts")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("LastLoginDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("LockedUntil")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

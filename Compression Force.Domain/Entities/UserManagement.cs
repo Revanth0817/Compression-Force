@@ -1,27 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Compression_Force.Domain.Entities;
-
-public partial class UserManagement
+namespace Compression_Force.Domain.Entities
 {
-    public int Id { get; set; }
+    public class UserManagement
+    {
+        public int Id { get; set; }
 
-    public int? ERid { get; set; }
+        public string ERname { get; set; }
+        public string ERemail { get; set; }
+        public string ERpassword { get; set; }
+        public string ERlevel { get; set; }
 
-    public string? ERname { get; set; }
+        public bool IsActive { get; set; }           // ✅ FIX 1
+        public DateTime CreatedDate { get; set; }
+        public DateTime? ExpiryDate { get; set; }    // ✅ FIX 3
+        public DateTime? LastLoginDate { get; set; } // ✅ FIX 2
+        public int FailedLoginAttempts { get; set; }
+        public DateTime? LockedUntil { get; set; }
 
-    public DateTime? ERdate { get; set; }
-
-    public string? ERlevel { get; set; }
-
-    public string? ERpassword { get; set; }
-
-    public string? ERimage { get; set; }
-
-    public DateTime? ERexpiryDate { get; set; }
-
-    public bool? UserStatus { get; set; }
-
-    public string? ChangePw { get; set; }
+    }
 }

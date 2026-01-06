@@ -4,13 +4,16 @@ namespace Compression_Force.Models
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "User Name is required")]
-        public string Email { get; set; } // We will treat this as eRName from your DB
+        // ✅ Can accept Username OR Email
+        [Required(ErrorMessage = "Username or Email is required")]
+        [Display(Name = "Username or Email")]
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
+        // Optional (UI only)
         public bool RememberMe { get; set; }
     }
 }

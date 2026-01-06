@@ -6,18 +6,21 @@ namespace Compression_Force.Models
     {
         [Required(ErrorMessage = "Old password is required")]
         [DataType(DataType.Password)]
-        public string OldPassword { get; set; }
+        [Display(Name = "Old Password")]
+        public string OldPassword { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "New password is required")]
-        [StringLength(15, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 15 characters")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).+$",
-            ErrorMessage = "Password must have upper, lower, number, and special character.")]
+        [StringLength(15, ErrorMessage = "New password cannot exceed 15 characters.", MinimumLength = 8)]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$",
+            ErrorMessage = "Password must be 8-15 characters with uppercase, lowercase, number, and special character")]
         [DataType(DataType.Password)]
-        public string NewPassword { get; set; }
+        [Display(Name = "New Password")]
+        public string NewPassword { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Please confirm your password")]
-        [Compare("NewPassword", ErrorMessage = "Passwords do not match")]
+        [Required(ErrorMessage = "Confirm password is required")]
         [DataType(DataType.Password)]
-        public string ConfirmPassword { get; set; }
+        [Display(Name = "Confirm Password")]
+        [Compare("NewPassword", ErrorMessage = "New password and confirmation do not match.")]
+        public string ConfirmPassword { get; set; } = string.Empty;
     }
 }

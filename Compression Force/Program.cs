@@ -3,45 +3,95 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// To use @inject IHttpContextAccessor in your view
+// ================= SERVICES =================
+
+// IHttpContextAccessor (used in controllers + middleware)
 builder.Services.AddHttpContextAccessor();
 
-// ✅ CHANGE HERE: SQL Server → PostgreSQL
+// PostgreSQL DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 
-// Add services to the container.
+// MVC
 builder.Services.AddControllersWithViews();
 
-// Add Session services
+// Session (fallback timeout – real timeout handled by middleware)
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.IdleTimeout = TimeSpan.FromDays(1); // keep large
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ================= PIPELINE =================
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
-// Use Session (must be placed before MapControllerRoute)
-app.UseSession();
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+// ✅ SESSION FIRST
+app.UseSession();
+
+// ================= 🔐 APPLICATION TIMEOUT MIDDLEWARE =================
+app.Use(async (context, next) =>
+{
+    var username = context.Session.GetString("UserName");
+
+    if (!string.IsNullOrEmpty(username))
+    {
+        // Resolve DbContext via RequestServices (CORRECT WAY)
+        var db = context.RequestServices.GetRequiredService<ApplicationDbContext>();
+
+        var settings = await db.SecuritySettings.FirstOrDefaultAsync();
+
+        if (settings != null && settings.ApplicationTimeoutMinutes > 0)
+        {
+            var lastActivityStr = context.Session.GetString("LastActivity");
+
+            if (!string.IsNullOrEmpty(lastActivityStr) &&
+                DateTime.TryParse(lastActivityStr, out var lastActivity))
+            {
+                var idleMinutes =
+                    (DateTime.UtcNow - lastActivity).TotalMinutes;
+
+                if (idleMinutes > settings.ApplicationTimeoutMinutes)
+                {
+                    // ⛔ SESSION TIMEOUT
+                    context.Session.Clear();
+                    context.Response.Redirect("/Account/Login");
+                    return;
+                }
+            }
+
+            // ✅ Update activity timestamp
+            context.Session.SetString(
+                "LastActivity",
+                DateTime.UtcNow.ToString("O")
+            );
+        }
+    }
+
+    await next();
+});
+
 app.UseAuthorization();
 
+// ================= ROUTES =================
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Welcome}/{id?}");
+    pattern: "{controller=Home}/{action=Welcome}/{id?}"
+);
 
 app.Run();
