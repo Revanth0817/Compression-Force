@@ -1,4 +1,6 @@
-﻿<div class="container-fluid p-4 d-flex flex-column min-vh-75">
+﻿@model List<Compression_Force.Domain.Entities.AuditTrail>
+
+<div class="container-fluid p-4 d-flex flex-column min-vh-75">
     <div class="flex-grow-1">
         <!-- Header + Buttons -->
         <div class="row align-items-center mb-4 mb-md-4">
@@ -31,10 +33,18 @@
                 <label class="fw-semibold font-size-14px col-242424 mb-0 text-nowrap min-w-120px">
                     From Date Time
                 </label>
-                <div class="input-group w-100">
-                    <input type="text" class="form-control form-control-sm fw-normal col-242424 font-size-13px" value="11/22/2024 10:07:48">
-                    <span class="input-group-text calendar-btn bgcol-215ED6 d-flex align-items-center justify-content-center p-0 w-26px h-32px">
-                        <img src="~/images/bx_calendar.png" alt="calendar-icon" class="w-16px h-16px">
+
+                <div class="input-group w-100 position-relative">
+                    <input type="datetime-local"
+                           id="fromDate"
+                           class="form-control form-control-sm fw-normal col-242424 font-size-13px datetime-input">
+
+                    <span class="input-group-text calendar-btn bgcol-215ED6
+              d-flex align-items-center justify-content-center p-0 w-26px h-32px"
+                          onclick="openCalendar('fromDate')">
+                        <img src="~/images/bx_calendar.png"
+                             alt="calendar-icon"
+                             class="w-16px h-16px">
                     </span>
                 </div>
             </div>
@@ -44,26 +54,87 @@
                 <label class="fw-semibold font-size-14px col-242424 mb-0 text-nowrap min-w-120px">
                     To Date Time
                 </label>
-                <div class="input-group w-100">
-                    <input type="text" class="form-control form-control-sm fw-normal col-242424 font-size-13px" value="11/22/2024 10:07:48">
-                    <span class="input-group-text calendar-btn bgcol-215ED6 d-flex align-items-center justify-content-center p-0 w-26px h-32px">
-                        <img src="~/images/bx_calendar.png" alt="calendar-icon" class="w-16px h-16px">
+
+                <div class="input-group w-100 position-relative">
+                    <input type="datetime-local"
+                           id="toDate"
+                           class="form-control form-control-sm fw-normal col-242424 font-size-13px datetime-input">
+
+                    <span class="input-group-text calendar-btn bgcol-215ED6
+              d-flex align-items-center justify-content-center p-0 w-26px h-32px"
+                          onclick="openCalendar('toDate')">
+                        <img src="~/images/bx_calendar.png"
+                             alt="calendar-icon"
+                             class="w-16px h-16px">
                     </span>
                 </div>
             </div>
 
+
             <!-- User Name -->
             <div class="col-md-6 col-12 d-flex align-items-center gap-2">
-                <label class="fw-semibold font-size-14px col-242424 mb-0 text-nowrap min-w-120px">User Name</label>
-                <div class="input-group input-group-sm bord-D2D2D2 bord-rad-4px overflow-hidden w-100 p-0">
-                    <input type="text" id="UserName" class="form-control bg-white border-0 fw-normal col-242424 font-size-13px" value="None" readonly />
-                    <button class="btn bgcol-215ED6 text-white border-0 dropdown-toggle font-size-14px" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                    <ul class="dropdown-menu dropdown-menu-end font-size-14px">
-                        <li><a class="dropdown-item" href="#">Admin</a></li>
-                        <li><a class="dropdown-item" href="#">Operator</a></li>
+                <label class="fw-semibold font-size-14px min-w-120px">
+                    User Name
+                </label>
+
+                <div class="input-group input-group-sm w-100">
+
+                    <!-- Display selected user -->
+                    <input type="text"
+                           id="UserName"
+                           class="form-control bg-white fw-normal font-size-13px"
+                           value="None"
+                           readonly />
+
+                    <!-- Dropdown button -->
+                    <button class="btn bgcol-215ED6 text-white dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                    </button>
+
+                    <!-- Dropdown menu -->
+                    <ul class="dropdown-menu dropdown-menu-end w-100">
+
+                        <li>
+                            <button class="dropdown-item"
+                                    type="button"
+                                    onclick="setUserName('None')">
+                                None
+                            </button>
+                        </li>
+
+                        @if (ViewBag.Users != null && ViewBag.Users.Count > 0)
+                        {
+                            foreach (string user in ViewBag.Users)
+                            {
+                                <li>
+                                    <button class="dropdown-item"
+                                            type="button"
+                                            onclick="setUserName('@user')">
+                                        @user
+                                    </button>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li>
+                                <span class="dropdown-item text-muted">
+                                    No users found
+                                </span>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>
+
+
+
+
+
 
             <!-- Activity -->
             <div class="col-md-6 col-12 d-flex align-items-center gap-2">
@@ -79,35 +150,78 @@
                 </div>
             </div>
         </div>
-
         <!-- Table Section -->
         <div class="table-responsive">
             <table class="table table-bordered table-sm mb-0 font-size-12px col-242424 fw-normal text-nowrap table-striped-blue min-w-800px">
                 <thead class="text-center">
                     <tr>
-                        <th class="fw-semibold font-size-14px bgcol-215ED6 text-white">Date & Time</th>
-                        <th class="fw-semibold font-size-14px bgcol-215ED6 text-white">User Name</th>
-                        <th class="fw-semibold font-size-14px bgcol-215ED6 text-white">Event Description</th>
-                        <th class="fw-semibold font-size-14px bgcol-215ED6 text-white">Activity</th>
+                        <th class="fw-semibold font-size-14px bgcol-215ED6 text-white">
+                            Date & Time
+                        </th>
+                        <th class="fw-semibold font-size-14px bgcol-215ED6 text-white">
+                            User Name
+                        </th>
+                        <th class="fw-semibold font-size-14px bgcol-215ED6 text-white">
+                            Event Description
+                        </th>
+                        <th class="fw-semibold font-size-14px bgcol-215ED6 text-white">
+                            Activity
+                        </th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    <!-- Sample rows (repeat as needed) -->
-                    <tr class="text-center fw-normal col-242424 font-size-13px">
-                        <td>09/01/2024 22:06:26</td>
-                        <td>ADMIN</td>
-                        <td>Privilege Changed for Administrator</td>
-                        <td>User Management</td>
-                    </tr>
-                    <tr class="text-center fw-normal col-242424 font-size-13px">
-                        <td>09/01/2024 22:06:26</td>
-                        <td>ADMIN</td>
-                        <td>Privilege Changed for Administrator</td>
-                        <td>User Management</td>
-                    </tr>
-                    <!-- Add more rows dynamically -->
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr class="text-center fw-normal col-242424 font-size-13px">
+                                <td>
+                                    @(item.DateTime.HasValue
+                                                                ? item.DateTime.Value.ToString("dd/MM/yyyy HH:mm:ss")
+                                                                : "-")
+
+                                </td>
+                                <td>
+                                    @item.UserName
+                                </td>
+                                <td>
+                                    @item.EventDescription
+                                </td>
+                                <td>
+                                    @item.Activity
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4"
+                                class="text-center text-muted fw-semibold py-3">
+                                No audit records found
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
-    </div>
-</div>
+
+<script>
+    function openCalendar(inputId) {
+        const input = document.getElementById(inputId);
+
+        if (!input) return;
+
+        if (typeof input.showPicker === "function") {
+            input.showPicker(); // Chrome / Edge
+        } else {
+            input.focus(); // fallback
+        }
+    }
+</script>
+<script>
+    function setUserName(name) {
+        document.getElementById("selectedUser").innerText = name;
+    }
+</script>

@@ -1,16 +1,26 @@
+﻿using Compression_Force.Data;
 using Compression_Force.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Compression_Force.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            ILogger<HomeController> logger,
+            ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -18,25 +28,24 @@ namespace Compression_Force.Controllers
             return View();
         }
 
-        /*Diagnostics Page*/
+        /* Diagnostics Page */
         public IActionResult Diagnostics()
         {
             return View();
         }
 
-        /*Report Pages*/
+        /* Report Pages */
         public IActionResult Table()
         {
             return View();
-
         }
+
         public IActionResult Graph()
         {
             return View();
-
         }
 
-        /*Auto Tare*/
+        /* Auto Tare */
         public IActionResult AutoTare()
         {
             return View();
@@ -47,45 +56,58 @@ namespace Compression_Force.Controllers
             return View();
         }
 
-        /*Access Management*/
+        /* Access Management */
         public IActionResult AccessManagement()
         {
             return View();
         }
 
-
-
-        /*Alarm page*/
+        /* Alarm page */
         public IActionResult Alarm()
         {
             return View();
         }
 
-        /*Audit Trail pages*/
-        public IActionResult AuditTrail()
+        /* ===================== AUDIT TRAIL ===================== */
+        public async Task<IActionResult> AuditTrail()
         {
-            return View();
+            // Dropdown users
+            ViewBag.Users = await _context.UserManagements
+                .Where(u => u.IsActive)
+                .Select(u => u.ERname)
+                .Distinct()
+                .OrderBy(u => u)
+                .ToListAsync();
+
+            // AuditTrail table data
+            var auditLogs = await _context.AuditTrails
+                .OrderByDescending(a => a.DateTime) // ✅ CORRECT PROPERTY
+                .ToListAsync();
+
+            return View(auditLogs);
         }
 
-        /*Auto Mode pages*/
+
+        /* ======================================================= */
+
+        /* Auto Mode pages */
         public IActionResult AutoMode()
         {
             return View();
         }
 
-        /*Operation Mode pages*/
+        /* Operation Mode pages */
         public IActionResult OperationMode()
         {
             return View();
         }
 
-        /*Batch pages*/
+        /* Batch pages */
         public IActionResult Batch()
         {
             return View();
         }
 
-        /*Calibration page*/
         public IActionResult Calibration()
         {
             return View();
@@ -96,16 +118,16 @@ namespace Compression_Force.Controllers
             return View();
         }
 
-        /*Manual Mode*/
+        /* Manual Mode */
         public IActionResult ManualMode()
         {
             return View();
         }
-        /*Signal Page*/
+
+        /* Signal Page */
         public IActionResult Signal()
         {
             return View();
         }
     }
 }
-

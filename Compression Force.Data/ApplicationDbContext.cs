@@ -17,6 +17,9 @@ namespace Compression_Force.Data
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<GroupPrivilege> GroupPrivileges { get; set; }
         public DbSet<SecuritySettings> SecuritySettings { get; set; }
+        public DbSet<AuditTrail> AuditTrails { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -394,3 +394,26 @@ height-18{
 .height-30{
     height:30px !important;
 }
+/* ===============================
+   Hide default datetime calendar icon
+   =============================== */
+
+.datetime-input::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+}
+
+/* Custom calendar icon clickable */
+.calendar-btn {
+    cursor: pointer;
+}
+.bgcol-215ED6 {
+    background-color: #215ED6;
+}
+
+.input-group-sm .dropdown-toggle::after {
+    margin-left: 0;
+}
+
