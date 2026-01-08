@@ -1,0 +1,578 @@
+﻿@using CompressionForce.Domain.Validation
+@using CompressionForce.Domain.Entities
+@model dynamic
+
+@{
+    @*
+    var dict = Model as IDictionary<string, object>;
+
+    Console.WriteLine("-----------------------------------------------------------------------Venkatesh----------------------------------------------------------------------");
+    foreach (var kv in dict)
+    {
+        <li>@kv.Key : @kv.Value</li>
+        Console.WriteLine("Key: " + @kv.Key + " & Value:" + @kv.Value);
+        <li>@kv.Key : @kv.Value</li>
+    }
+    *@
+    Console.WriteLine("-----------------------------------------------------------------------Venkatesh----------------------------------------------------------------------");
+    @foreach (var prop in ((object)Model).GetType().GetProperties())
+    {
+        var val = prop.GetValue(Model);
+
+        if (val is IEnumerable<string> list)
+        {
+            Console.WriteLine(" Param" + @prop.Name);
+        }
+        else
+        {
+            Console.WriteLine(" Param" + @prop.Name);
+        }
+    }
+    var parameters = Model?.Parameters as List<RecipeParameter> ?? new();
+    var toolTypes = Model?.ToolTypes as List<string> ?? new();
+    var treatments = Model?.Treatments as List<string> ?? new();
+    var awc_arTypes = Model?.AWC_ARTypes as List<string> ?? new();
+    var forceFeederRatioS1Types = Model?.ForceFeederRatioS1Types as List<string> ?? new();
+    var forceFeederRatioS2Types = Model?.ForceFeederRatioS1Types as List<string> ?? new();
+    var recipeTypes = Model?.RecipeTypes as List<string> ?? new();
+
+    var enumOptions = new Dictionary<string, IEnumerable<string>>(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Treatment"] = treatments,
+        ["ToolType"] = toolTypes,
+        ["AWC&AR"] = awc_arTypes,
+        ["ForceFeederRatioS1"] = forceFeederRatioS1Types,
+        ["ForceFeederRatioS2"] = forceFeederRatioS2Types,
+        ["Recipe"] = recipeTypes
+    };
+    Console.WriteLine("-----------------------------------------------------------------------Revanth----------------------------------------------------------------------");
+    foreach (var item in enumOptions["Treatment"])
+    {
+        Console.WriteLine(item);
+    }
+    foreach (var item in enumOptions["ToolType"])
+    {
+        Console.WriteLine(item);
+    }
+    foreach (var item in enumOptions["AWC&AR"])
+    {
+        Console.WriteLine(item);
+    }
+    foreach (var item in enumOptions["Recipe"])
+    {
+        Console.WriteLine(item);
+    }
+    var rules = ViewBag.ValidationRules as IEnumerable<ParameterRule> ?? Enumerable.Empty<ParameterRule>();
+
+    ParameterRule? GetRule(string name) =>
+        rules.FirstOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+}
+
+<div class="p-4 bord-rad-4px boxshadow mt-4">
+    <!--Common Product Parameter-->
+    <div class="commonProductParameter boxshadow bord-rad-4px">
+        <div class="commonProductHeader fw-semibold bgcol-215ED6 text-white text-center  font-size-18px p-10px">
+            Common Product Parameter
+        </div>
+        <div class="py-4">
+            <div class="px-lg-4 px-md-4 px-sm-3 px-3">
+                <div class="commonProductHeaderSelectors d-flex flex-wrap gap-3 justify-content-between pb-4">
+                    <div class="d-flex gap-3 align-items-center commonProductDropdownDiv">
+                        <label class="font-size-16px fw-semibold min-width-30 clr-242424">Tool Type</label>
+                        <div class="d-flex toolTypeDropdown batchDropdown position-relative">
+                            <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="selectedItem" value="4321" readonly>
+                            <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">4444</a></li>
+                                <li><a class="dropdown-item" href="#">2432</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center commonProductDropdownDiv">
+                        <label class="font-size-16px fw-semibold min-width-30 clr-242424">AWC & AR</label>
+                        <div class="d-flex commonProductDropdown batchDropdown position-relative">
+                            <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="selectedItem" value="4321" readonly>
+                            <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">4444</a></li>
+                                <li><a class="dropdown-item" href="#">2432</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center commonProductDropdownDiv">
+                        <label class="font-size-16px fw-semibold min-width-30 clr-242424">Recipe</label>
+                        <div class="d-flex commonProductDropdown batchDropdown position-relative">
+                            <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="selectedItem" value="4321" readonly>
+                            <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">4444</a></li>
+                                <li><a class="dropdown-item" href="#">2432</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row px-lg-4 px-md-4 px-sm-3 px-3 commonProductContainer">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="d-flex gap-3 align-items-center pb-2">
+                        <label class="font-size-16px min-width-30 fw-semibold clr-242424">Recipe Code</label>
+                        <input type="text" class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px batchLabelw-60 boxshadow" placeholder="Enter Recipe Code" />
+                    </div>
+                    <div class="d-flex gap-3 align-items-center pb-2">
+                        <label class="font-size-16px min-width-30 fw-semibold clr-242424">Product Name</label>
+                        <input type="text" class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px batchLabelw-60 boxshadow" placeholder="Enter Product Name" />
+                    </div>
+                    <div class="d-flex gap-3 align-items-center pb-2">
+                        <label class="font-size-16px min-width-30 fw-semibold clr-242424">Shape</label>
+                        <input type="text" class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px batchLabelw-60 boxshadow" placeholder="Shape" />
+                    </div>
+                    <div class="d-flex gap-3 align-items-center pb-2">
+                        <label class="font-size-16px min-width-30 fw-semibold clr-242424">Size</label>
+                        <input type="text" class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px batchLabelw-60 boxshadow" placeholder="Size" />
+                    </div>
+                </div>
+                @* <div class="col-sm-0 order-md-3 order-lg-2 col-md-0 col-lg-2"></div> *@
+                <div class="col-sm-12  col-md-6  col-lg-6">
+                    <div class="d-flex justify-content-lg-end flex-column">
+                        <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                            <label class="font-size-16 min-width-30 fw-semibold clr-242424">Table Thickness</label>
+                            <div class="d-flex align-items-center gap-10px width-115px">
+                                <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px  bord-rad-4px" placeholder="" />
+                                <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                            </div>
+
+                        </div>
+                        <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                            <label class="font-size-16px min-width-30 fw-semibold clr-242424">Table Hardness</label>
+                            <div class="d-flex align-items-center gap-10px width-115px">
+                                <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px  bord-rad-4px" placeholder="" />
+                                <span class="font-size-16px fw-semibold clr-242424">kpa</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                            <label class="font-size-16px min-width-30 fw-semibold clr-242424">Table Weight</label>
+                            <div class="d-flex align-items-center gap-10px width-115px">
+                                <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                                <span class="font-size-16px fw-semibold clr-242424">mg</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                            <label class="font-size-16px min-width-30 fw-semibold clr-242424">Max Turret RPM</label>
+                            <div class="d-flex align-items-center gap-10px width-115px">
+                                <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                                <span class="font-size-16px fw-semibold clr-242424">rpm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--S1 & S2 Product Parameters-->
+    <div class="container-fluid mt-4">
+        <div class="row productParameterMainContainer boxshadow bord-rad-4px">
+            <div class="col-sm-12 productParameterContainer col-md-6 col-lg-6 px-0">
+                <div class="productParameterHeader1 fw-semibold bgcol-215ED6 text-white px-lg-4 px-md-4 px-sm-3 font-size-18px p-10px">
+                    S1-Product Parameter
+                </div>
+                <div class="p-lg-4 p-sm-3 p-md-3 p-3">
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Force Feeder Ratio S1</label>
+                        <div class="dropdown">
+                            <button class="btn bg-white bord-D2D2D2 dropdown-toggle w-70px margin-right-45px" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                1.0
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">1.0</a></li>
+                                <li><a class="dropdown-item" href="#">2.0</a></li>
+                                <li><a class="dropdown-item" href="#">3.0</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Fill Depth S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px  bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Main Penetration Position S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px  bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Main Thickness Position S2</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Pre Penetration Position S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Pre Thickness Position S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Sample Interval S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">rev</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Sample revolution Qty. S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">rev</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Max Main Comp. Force S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Max Pre Comp. Force S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Max Ejection Comp. Force S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* <div class="emptyParamerDiv col-sm-0 order-md-3 order-lg-2 col-md-0 col-lg-2 px-0">
+                        <div class="productParamerHeader bgcol-215ED6 clr-215ED6 text-center  font-size-18px p-10px">
+                            Empty
+                        </div>
+                    </div> *@
+            <div class="col-sm-12 productParameterContainer order-lg-3 col-md-6  col-lg-6 px-0">
+                <div class="productParameterHeader2 fw-semibold bgcol-215ED6 text-white pe-4 font-size-18px p-10px px-lg-4 px-md-4 px-sm-3">
+                    S2-Product Parameter
+                </div>
+                <div class=" py-lg-4  py-md-4 px-lg-4 px-md-4 p-sm-3 p-3">
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Force Feeder Ratio S2</label>
+                        <div class="dropdown">
+                            <button class="btn bg-white bord-D2D2D2 dropdown-toggle w-70px margin-right-45px" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                1.0
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                <li><a class="dropdown-item" href="#">1.0</a></li>
+                                <li><a class="dropdown-item" href="#">2.0</a></li>
+                                <li><a class="dropdown-item" href="#">3.0</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Fill Depth S2</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px  bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Main Penetration Position S2</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px  bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Main Thickness Position S2</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Pre Penetration Position S2</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Pre Thickness Position S2</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">mm</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Sample Interval S2</label>
+                        <div class="d-flex align-items-center gap-3 width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">rev</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Sample revolution Qty. S2</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">rev</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Max Main Comp. Force S2</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Max Pre Comp. Force S2</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Max Ejection Comp. Force S2</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--S1 AWC & AR Set Parameter & S2 AWC & AR Set Parameter-->
+    <div class="container-fluid mt-4">
+        <div class="row productParameterMainContainer boxshadow bord-rad-4px">
+            <div class="col-sm-12 productParameterContainer order-md-1 col-md-6 col-lg-6 px-0">
+                <div class="productParameterHeader1 fw-semibold bgcol-215ED6 text-white px-lg-4 px-md-4 px-sm-3  font-size-18px p-10px">
+                    S1 AWC & AR Set Parameter
+                </div>
+                <div class="p-lg-4 p-sm-3 p-md-3 p-3">
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px  batchLabelw-60 fw-semibold clr-242424">Rejection Limit Max S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">AWC Limit Max S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px  bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">AWC Set Point S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px  bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">AWC Limit Min S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Rejection Limit Min S1</label>
+                        <div class="d-flex align-items-center gap-10px width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px form-control w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* <div class="emptyParamerDiv  col-sm-0 order-md-3 order-lg-2 col-md-0 col-lg-2 px-0">
+                        <div class="productParameterHeader bgcol-215ED6 clr-215ED6 text-center  font-size-18px p-10px">
+                            Empty
+                        </div>
+                    </div> *@
+            <div class="col-sm-12 order-md-2 productParameterContainer col-md-6 col-lg-6 px-0">
+                <div class="productParameterHeader2 fw-semibold bgcol-215ED6 text-white pe-4 font-size-18px p-10px px-lg-4 px-md-4 px-sm-3">
+                    S2 AWC & AR Set Parameter
+                </div>
+                <div class=" py-lg-4 px-lg-4 px-md-4 py-md-4  p-sm-3 p-3">
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px  batchLabelw-60 fw-semibold clr-242424">Rejection Limit Max S2</label>
+                        <div class="d-flex align-items-center gap-3 width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">AWC Limit Max S2</label>
+                        <div class="d-flex align-items-center gap-3 width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px w-70px  bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">AWC Set Point S2</label>
+                        <div class="d-flex align-items-center gap-3 width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px w-70px  bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">AWC Limit Min S2</label>
+                        <div class="d-flex align-items-center gap-3 width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
+                        <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Rejection Limit Min S2</label>
+                        <div class="d-flex align-items-center gap-3 width-115px">
+                            <input type="text" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px" placeholder="" />
+                            <span class="font-size-16px fw-semibold clr-242424">kN</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">Recipe Parameters</div>
+    <div class="card-body">
+
+        @if (parameters.Any())
+        {
+            @for (int i = 0; i < parameters.Count; i++)
+            {
+                var p = parameters[i];
+                var rule = GetRule(p.Name);
+                var isRequired = rule?.Required == true;
+
+                <div class="mb-3">
+                    <label class="form-label">@p.Name</label>
+
+                    <input type="hidden" name="Parameters[@i].Name" value="@p.Name" />
+                    <input type="hidden" name="Parameters[@i].Type" value="@p.Type" />
+
+                    @* ENUM *@
+                    @if (p.Type.Equals("enum", StringComparison.OrdinalIgnoreCase)
+                                && enumOptions.TryGetValue(p.Name, out var options))
+                    {
+                        <select name="Parameters[@i].Value"
+                                class="form-select recipe-param"
+                                data-param-name="@p.Name"
+                                data-param-type="enum"
+                                @(isRequired ? "required" : null)>
+                            @foreach (var t in options)
+                            {
+                                @if (Equals(p.Value.ToString(), t.ToString()))
+                                {
+                                    <option value="@t" selected>@t</option>
+                                }
+                                else
+                                {
+                                    <option value="@t">@t</option>
+                                }
+
+                            }
+                        </select>
+                    }
+
+
+                    @* NUMERIC *@
+                    else if (p.Type.Equals("numeric", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var val = p.Value?.ToString() ?? rule?.Min?.ToString() ?? "0";
+                        var min = rule?.Min?.ToString() ?? "0";
+                        var max = rule?.Max?.ToString() ?? "100000";
+
+                        <input type="number"
+                               name="Parameters[@i].Value"
+                               value="@val"
+                               class="form-control recipe-param"
+                               step="any"
+                               min="@min"
+                               max="@max"
+                               data-param-name="@p.Name"
+                               data-param-type="numeric"
+                               @(isRequired ? "required" : null) />
+                    }
+
+                    @* MULTI ENUM *@
+                    else if (p.Type.Equals("multi-enum", StringComparison.OrdinalIgnoreCase)
+                    && p.Name.Equals("Treatment", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var selected = p.Value as IEnumerable<string> ?? Enumerable.Empty<string>();
+
+                        <select name="Parameters[@i].Value"
+                                class="form-select recipe-param"
+                                multiple
+                                data-param-name="@p.Name"
+                                data-param-type="multi-enum"
+                                @(isRequired ? "required" : null)>
+                            @foreach (var t in treatments)
+                            {
+                                <option value="@t" selected="@(selected.Contains(t))">@t</option>
+                            }
+                        </select>
+
+                        <small class="text-muted">
+                            Hold Ctrl (Windows) / Cmd (Mac) to select multiple.
+                        </small>
+                    }
+
+                    @* TEXT *@
+                    else
+                    {
+                        var maxLen = rule?.MaxLength ?? 200;
+                        var pattern = rule?.Regex;
+
+                        <input type="text"
+                               name="Parameters[@i].Value"
+                               value="@(p.Value?.ToString() ?? string.Empty)"
+                               class="form-control recipe-param"
+                               maxlength="@maxLen"
+                               data-param-name="@p.Name"
+                               data-param-type="text"
+                               @(pattern != null ? $"pattern={pattern}" : null)
+                               @(isRequired ? "required" : null) />
+                    }
+
+                    <small class="text-muted">Type: @p.Type</small>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">No parameters available.</div>
+        }
+
+    </div>
+</div>

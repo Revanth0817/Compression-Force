@@ -58,6 +58,7 @@ namespace CompressionForce.Data
             modelBuilder.ApplyConfiguration(new RecipeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RecipeHistoryEntityConfiguration());
             modelBuilder.ApplyConfiguration(new LookupValueEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new RecipeValidationRuleEntityConfiguration());
 
             // ALL YOUR EXISTING MODEL CONFIGURATION CAN STAY AS IS
             OnModelCreatingPartial(modelBuilder);
