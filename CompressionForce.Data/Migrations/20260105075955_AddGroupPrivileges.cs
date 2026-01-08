@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Compression_Force.Data.Migrations
+namespace CompressionForce.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddGroupPrivileges : Migration

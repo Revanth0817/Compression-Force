@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Compression_Force.Controllers
+namespace CompressionForce.Controllers
 {
     public class AccountManagementController : Controller
     {

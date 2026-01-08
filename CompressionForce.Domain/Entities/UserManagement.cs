@@ -1,10 +1,8 @@
 ﻿using System;
 
-namespace Compression_Force.Domain.Entities;
-
-public partial class UserManagement
+namespace CompressionForce.Domain.Entities
 {
-    public class UserManagement
+    public partial class UserManagement
     {
         public int Id { get; set; }
 
@@ -13,12 +11,11 @@ public partial class UserManagement
         public string ERpassword { get; set; }
         public string ERlevel { get; set; }
 
-        public bool IsActive { get; set; }           // ✅ FIX 1
+        public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime? ExpiryDate { get; set; }    // ✅ FIX 3
-        public DateTime? LastLoginDate { get; set; } // ✅ FIX 2
+        public DateTime? ExpiryDate { get; set; }
+        public DateTime? LastLoginDate { get; set; }
         public int FailedLoginAttempts { get; set; }
         public DateTime? LockedUntil { get; set; }
-
     }
 }

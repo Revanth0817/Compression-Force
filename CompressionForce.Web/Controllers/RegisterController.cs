@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Compression_Force.Data;
-using Compression_Force.Domain.Entities;
-using Compression_Force.Models;
+using CompressionForce.Data;
+using CompressionForce.Domain.Entities;
+using CompressionForce.Models;
 
-namespace Compression_Force.Controllers
+namespace CompressionForce.Controllers
 {
     [ApiController]
     [Route("Register")]

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Compression_Force.Data;
+using CompressionForce.Data;
 
-namespace Compression_Force.Controllers
+namespace CompressionForce.Controllers
 {
     [ApiController]
     [Route("User")]

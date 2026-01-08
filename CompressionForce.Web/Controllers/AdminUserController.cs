@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Compression_Force.Data;
-using Compression_Force.Domain.Entities;
+using CompressionForce.Data;
+using CompressionForce.Domain.Entities;
 
-namespace Compression_Force.Controllers
+namespace CompressionForce.Controllers
 {
     [ApiController]
     [Route("AdminUser")]

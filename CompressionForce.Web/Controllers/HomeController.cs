@@ -1,4 +1,5 @@
-﻿using Compression_Force.Models;
+﻿using CompressionForce.Data;
+using CompressionForce.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

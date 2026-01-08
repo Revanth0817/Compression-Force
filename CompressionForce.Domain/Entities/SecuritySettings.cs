@@ -1,4 +1,4 @@
-﻿namespace Compression_Force.Domain.Entities
+﻿namespace CompressionForce.Domain.Entities
 {
     public class SecuritySettings
     {

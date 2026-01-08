@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Compression_Force.Models
+namespace CompressionForce.Models
 {
     public class RegisterViewModel
     {

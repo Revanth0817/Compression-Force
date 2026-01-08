@@ -1,4 +1,4 @@
-﻿namespace Compression_Force.Models
+﻿namespace CompressionForce.Models
 {
     public class UserListViewModel
     {

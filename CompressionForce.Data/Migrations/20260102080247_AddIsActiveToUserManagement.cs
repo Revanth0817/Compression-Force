@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Compression_Force.Data.Migrations
+namespace CompressionForce.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddIsActiveToUserManagement : Migration

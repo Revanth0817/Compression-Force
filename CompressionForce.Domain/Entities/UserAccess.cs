@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Compression_Force.Domain.Entities
+namespace CompressionForce.Domain.Entities
 {
     public class UserAccess
     {
