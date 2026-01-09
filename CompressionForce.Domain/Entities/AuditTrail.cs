@@ -1,15 +1,23 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CompressionForce.Domain.Entities;
-
-public partial class AuditTrail
+namespace CompressionForce.Domain.Entities
 {
-    public int Id { get; set; }   // ✅ PRIMARY KEY
+    [Table("AuditTrails")]
+    public class AuditTrail
+    {
+        public int Id { get; set; }
 
-    public DateTime? DateTime { get; set; }
-    public string? UserName { get; set; }
-    public string? EventDescription { get; set; }
-    public string? Activity { get; set; }
-    public string? BatchNumber { get; set; }
-    public string? Password { get; set; }
+        [Column("UserName")]
+        public string UserName { get; set; }
+
+        [Column("Activity")]
+        public string Activity { get; set; }
+
+        [Column("EventDescription")]
+        public string EventDescription { get; set; }
+
+        [Column("DateTime")]
+        public DateTime DateTime { get; set; }
+    }
 }

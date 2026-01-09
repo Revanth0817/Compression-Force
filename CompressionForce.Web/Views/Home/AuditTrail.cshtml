@@ -138,18 +138,47 @@
 
             <!-- Activity -->
             <div class="col-md-6 col-12 d-flex align-items-center gap-2">
-                <label class="fw-semibold font-size-14px col-242424 mb-0 text-nowrap min-w-120px">Activity</label>
-                <div class="input-group input-group-sm bord-D2D2D2 bord-rad-4px overflow-hidden w-100 p-0">
-                    <input type="text" id="Activity" class="form-control bg-white border-0 fw-normal col-242424 font-size-13px" value="None" readonly />
-                    <button class="btn bgcol-215ED6 text-white border-0 dropdown-toggle font-size-14px" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                    <ul class="dropdown-menu dropdown-menu-end font-size-14px">
-                        <li><a class="dropdown-item" href="#">Login</a></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
-                        <li><a class="dropdown-item" href="#">User Management</a></li>
+                <label class="fw-semibold font-size-14px col-242424 mb-0 text-nowrap min-w-120px">
+                    Activity
+                </label>
+
+                <div class="input-group input-group-sm w-100">
+
+                    <input type="text"
+                           id="Activity"
+                           class="form-control bg-white fw-normal col-242424 font-size-13px"
+                           value="None"
+                           readonly />
+
+                    <button class="btn bgcol-215ED6 text-white dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end font-size-14px w-100">
+                        <li>
+                            <button class="dropdown-item" type="button"
+                                    onclick="setActivity('Login')">
+                                Login
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item" type="button"
+                                    onclick="setActivity('Logout')">
+                                Logout
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item" type="button"
+                                    onclick="setActivity('User Management')">
+                                User Management
+                            </button>
+                        </li>
                     </ul>
                 </div>
             </div>
-        </div>
+
         <!-- Table Section -->
         <div class="table-responsive">
             <table class="table table-bordered table-sm mb-0 font-size-12px col-242424 fw-normal text-nowrap table-striped-blue min-w-800px">
@@ -177,9 +206,8 @@
                         {
                             <tr class="text-center fw-normal col-242424 font-size-13px">
                                 <td>
-                                    @(item.DateTime.HasValue
-                                                                ? item.DateTime.Value.ToString("dd/MM/yyyy HH:mm:ss")
-                                                                : "-")
+                                    @item.DateTime.ToString("dd/MM/yyyy HH:mm:ss")
+
 
                                 </td>
                                 <td>
@@ -220,8 +248,41 @@
         }
     }
 </script>
-<script>
-    function setUserName(name) {
-        document.getElementById("selectedUser").innerText = name;
-    }
-</script>
+        <script>
+            function setUserName(name) {
+                document.getElementById("UserName").value = name;
+            }
+        </script>
+
+        <script>
+            function setActivity(activity) {
+                document.getElementById("Activity").value = activity;
+            }
+        </script>
+            <script>
+                function setUserName(name) {
+                    document.getElementById("UserName").value = name;
+                    applyFilters();
+                }
+
+                function setActivity(activity) {
+                    document.getElementById("Activity").value = activity;
+                    applyFilters();
+                }
+
+                function applyFilters() {
+                    const userName = document.getElementById("UserName").value;
+                    const activity = document.getElementById("Activity").value;
+                    const fromDate = document.getElementById("fromDate").value;
+                    const toDate = document.getElementById("toDate").value;
+
+                    const params = new URLSearchParams({
+                        userName: userName,
+                        activity: activity,
+                        fromDate: fromDate,
+                        toDate: toDate
+                    });
+
+                    window.location.href = `?${params.toString()}`;
+                }
+            </script>
