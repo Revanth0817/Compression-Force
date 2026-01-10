@@ -1,34 +1,41 @@
 ﻿using CompressionForce.Data;
+using CompressionForce.Services.Audit;
 using Microsoft.EntityFrameworkCore;
+using Rotativa.AspNetCore;
+using System.IO;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ================= SERVICES =================
+// ===================== SERVICES =====================
 
-// IHttpContextAccessor (used in controllers + middleware)
+// ✅ IHttpContextAccessor (needed for Session + AuditLogger)
 builder.Services.AddHttpContextAccessor();
 
-// PostgreSQL DbContext
+// ✅ PostgreSQL DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
 
-// MVC
+// ✅ Audit Logger (CRITICAL)
+builder.Services.AddScoped<AuditLogger>();
+
+// ✅ MVC
 builder.Services.AddControllersWithViews();
 
-// Session (fallback timeout – real timeout handled by middleware)
+// ✅ Session
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromDays(1); // keep large
+    options.IdleTimeout = TimeSpan.FromDays(1); // handled by middleware
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
 var app = builder.Build();
 
-// ================= PIPELINE =================
+// ===================== PIPELINE =====================
 
 if (!app.Environment.IsDevelopment())
 {
@@ -41,19 +48,17 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// ✅ SESSION FIRST
+// ✅ SESSION MUST COME BEFORE CUSTOM MIDDLEWARE
 app.UseSession();
 
-// ================= 🔐 APPLICATION TIMEOUT MIDDLEWARE =================
+// ===================== 🔐 APPLICATION TIMEOUT MIDDLEWARE =====================
 app.Use(async (context, next) =>
 {
     var username = context.Session.GetString("UserName");
 
     if (!string.IsNullOrEmpty(username))
     {
-        // Resolve DbContext via RequestServices (CORRECT WAY)
         var db = context.RequestServices.GetRequiredService<ApplicationDbContext>();
-
         var settings = await db.SecuritySettings.FirstOrDefaultAsync();
 
         if (settings != null && settings.ApplicationTimeoutMinutes > 0)
@@ -75,7 +80,7 @@ app.Use(async (context, next) =>
                 }
             }
 
-            // ✅ Update activity timestamp
+            // ✅ Update last activity timestamp (UTC)
             context.Session.SetString(
                 "LastActivity",
                 DateTime.UtcNow.ToString("O")
@@ -88,10 +93,16 @@ app.Use(async (context, next) =>
 
 app.UseAuthorization();
 
-// ================= ROUTES =================
+// ===================== ROUTES =====================
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Welcome}/{id?}"
 );
+
+Rotativa.AspNetCore.RotativaConfiguration.Setup(
+    app.Environment.WebRootPath,
+    "Rotativa"
+);
+
 
 app.Run();

@@ -1,19 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+
 using CompressionForce.Data;
 using CompressionForce.Models;
-using Microsoft.EntityFrameworkCore;
 using CompressionForce.Web.Models;
 using CompressionForce.Domain.Entities;
+using CompressionForce.Services.Audit;
 
 namespace CompressionForce.WebControllers
 {
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly AuditLogger _auditLogger;
 
-        public AccountController(ApplicationDbContext context)
+        // ===================== CONSTRUCTOR =====================
+        public AccountController(
+            ApplicationDbContext context,
+            AuditLogger auditLogger)
         {
             _context = context;
+            _auditLogger = auditLogger;
         }
 
         /* ===================== LOGIN ===================== */
@@ -33,7 +41,6 @@ namespace CompressionForce.WebControllers
 
             var input = model.Email.Trim();
 
-            // 🔍 LOGIN BY USERNAME OR EMAIL
             var user = await _context.UserManagements
                 .FirstOrDefaultAsync(u =>
                     u.ERemail == input.ToLower() ||
@@ -46,23 +53,18 @@ namespace CompressionForce.WebControllers
                 return View(model);
             }
 
-            // 🔴 DEACTIVATED USER
             if (!user.IsActive)
             {
                 ModelState.AddModelError("", "Your account is deactivated. Contact administrator.");
                 return View(model);
             }
 
-            // 🔐 ACCOUNT LOCKED → SHOW REMAINING TIME
-            if (user.LockedUntil != null && user.LockedUntil > DateTime.UtcNow)
+            if (user.LockedUntil.HasValue && user.LockedUntil > DateTime.UtcNow)
             {
                 var remaining = user.LockedUntil.Value - DateTime.UtcNow;
 
-                var minutes = Math.Max(0, remaining.Minutes);
-                var seconds = Math.Max(0, remaining.Seconds);
-
                 ModelState.AddModelError("",
-                    $"Account locked due to multiple failed attempts. Try again after {minutes} min {seconds} sec.");
+                    $"Account locked. Try again after {remaining.Minutes} min {remaining.Seconds} sec.");
 
                 return View(model);
             }
@@ -78,17 +80,14 @@ namespace CompressionForce.WebControllers
                 return View(model);
             }
 
-            // ❌ WRONG PASSWORD
             if (!passwordValid)
             {
                 var settings = await _context.SecuritySettings.FirstOrDefaultAsync();
-
                 user.FailedLoginAttempts++;
 
                 if (settings != null &&
                     user.FailedLoginAttempts >= settings.MaxWrongAttempts)
                 {
-                    // 🔒 LOCK ACCOUNT (30 MINUTES)
                     user.LockedUntil = DateTime.UtcNow.AddMinutes(30);
                 }
 
@@ -98,14 +97,14 @@ namespace CompressionForce.WebControllers
                 return View(model);
             }
 
-            // 🔁 PASSWORD EXPIRED → FORCE CHANGE
-            if (user.ExpiryDate != null && user.ExpiryDate < DateTime.UtcNow)
+            // 🔁 PASSWORD EXPIRED
+            if (user.ExpiryDate.HasValue && user.ExpiryDate < DateTime.UtcNow)
             {
                 HttpContext.Session.SetString("UserName", user.ERname);
                 return RedirectToAction("ChangePassword");
             }
 
-            // ✅ SUCCESS LOGIN
+            // ===================== SUCCESS LOGIN =====================
             user.FailedLoginAttempts = 0;
             user.LockedUntil = null;
             user.LastLoginDate = DateTime.UtcNow;
@@ -114,11 +113,12 @@ namespace CompressionForce.WebControllers
 
             HttpContext.Session.SetString("UserName", user.ERname);
             HttpContext.Session.SetString("UserLevel", user.ERlevel ?? "User");
+            HttpContext.Session.SetString("LastActivity", DateTime.UtcNow.ToString("O"));
 
-            // 🔑 REQUIRED FOR APPLICATION TIMEOUT
-            HttpContext.Session.SetString(
-                "LastActivity",
-                DateTime.UtcNow.ToString("O")
+            // 🔥 AUDIT LOG
+            _auditLogger.Log(
+                "Login",
+                $"User '{user.ERname}' logged into the system"
             );
 
             return RedirectToAction("Welcome", "Home");
@@ -164,15 +164,19 @@ namespace CompressionForce.WebControllers
                 ERlevel = string.IsNullOrWhiteSpace(model.Role) ? "User" : model.Role,
                 IsActive = true,
                 CreatedDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddDays(
-                    settings?.PasswordExpiryDays ?? 90
-                ),
+                ExpiryDate = DateTime.UtcNow.AddDays(settings?.PasswordExpiryDays ?? 90),
                 FailedLoginAttempts = 0,
                 LockedUntil = null
             };
 
             _context.UserManagements.Add(user);
             await _context.SaveChangesAsync();
+
+            // 🔥 AUDIT LOG
+            _auditLogger.Log(
+                "User Management",
+                $"New user '{username}' registered"
+            );
 
             TempData["SuccessMessage"] = "Signup successful. Please login.";
             return RedirectToAction("Login");
@@ -215,11 +219,15 @@ namespace CompressionForce.WebControllers
             var settings = await _context.SecuritySettings.FirstOrDefaultAsync();
 
             user.ERpassword = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
-            user.ExpiryDate = DateTime.UtcNow.AddDays(
-                settings?.PasswordExpiryDays ?? 90
-            );
+            user.ExpiryDate = DateTime.UtcNow.AddDays(settings?.PasswordExpiryDays ?? 90);
 
             await _context.SaveChangesAsync();
+
+            // 🔥 AUDIT LOG
+            _auditLogger.Log(
+                "Change Password",
+                $"User '{userName}' changed password"
+            );
 
             TempData["SuccessMessage"] = "Password changed successfully";
             return RedirectToAction("Welcome", "Home");
@@ -229,6 +237,17 @@ namespace CompressionForce.WebControllers
 
         public IActionResult Logout()
         {
+            var userName = HttpContext.Session.GetString("UserName");
+
+            if (!string.IsNullOrEmpty(userName))
+            {
+                // 🔥 AUDIT LOG
+                _auditLogger.Log(
+                    "Logout",
+                    $"User '{userName}' logged out"
+                );
+            }
+
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }

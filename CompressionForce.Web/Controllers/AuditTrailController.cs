@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using CompressionForce.Data;
 using CompressionForce.Domain.Entities;
-using System;
-using System.Linq;
+using Rotativa.AspNetCore;
 
 namespace CompressionForce.Controllers
 {
@@ -10,54 +12,138 @@ namespace CompressionForce.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        // 🔹 Constructor
         public AuditTrailController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // 🔹 Audit Trail Page
-        // URL: /AuditTrail/AuditTrail
-        public IActionResult AuditTrail(string userName, string activity)
+        // ===============================
+        // MAIN PAGE
+        // ===============================
+        public IActionResult AuditTrail(
+            string userName,
+            string activity,
+            string fromDate,
+            string toDate)
         {
-            // 1️⃣ Base query
-            var query = _context.AuditTrails.AsQueryable();
+            var query = _context.AuditTrails
+                .AsNoTracking()
+                .AsQueryable();
 
-            // 2️⃣ Filter by User Name
-            if (!string.IsNullOrEmpty(userName) && userName != "None")
+            // FROM DATE
+            if (!string.IsNullOrWhiteSpace(fromDate) &&
+                DateTime.TryParse(fromDate, out DateTime fromDt))
+            {
+                fromDt = DateTime.SpecifyKind(fromDt, DateTimeKind.Utc);
+                query = query.Where(x => x.DateTime >= fromDt);
+            }
+
+            // TO DATE
+            if (!string.IsNullOrWhiteSpace(toDate) &&
+                DateTime.TryParse(toDate, out DateTime toDt))
+            {
+                var endOfDayUtc = DateTime.SpecifyKind(
+                    toDt.Date.AddDays(1).AddSeconds(-1),
+                    DateTimeKind.Utc
+                );
+
+                query = query.Where(x => x.DateTime <= endOfDayUtc);
+            }
+
+            // USER FILTER
+            if (!string.IsNullOrWhiteSpace(userName) && userName != "None")
             {
                 query = query.Where(x => x.UserName == userName);
             }
 
-            // 3️⃣ Filter by Activity
-            if (!string.IsNullOrEmpty(activity) && activity != "None")
+            // ACTIVITY FILTER
+            if (!string.IsNullOrWhiteSpace(activity) && activity != "None")
             {
                 query = query.Where(x => x.Activity == activity);
             }
 
-            // 4️⃣ Fetch filtered audit data
             var auditList = query
-                            .OrderByDescending(x => x.DateTime)
-                            .ToList();
+                .OrderByDescending(x => x.DateTime)
+                .ToList();
 
-            // 5️⃣ Fetch distinct User Names for dropdown
-            ViewBag.Users = _context.AuditTrails
-                                    .Where(x => x.UserName != null)
-                                    .Select(x => x.UserName)
-                                    .Distinct()
-                                    .OrderBy(x => x)
-                                    .ToList();
+            // USER DROPDOWN
+            ViewBag.Users = _context.UserManagements
+                .AsNoTracking()
+                .Where(u => u.IsActive)
+                .Select(u => u.ERname)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
 
-            // 6️⃣ Fetch distinct Activities for dropdown
+            // ACTIVITY DROPDOWN (DYNAMIC)
             ViewBag.Activities = _context.AuditTrails
-                                         .Where(x => x.Activity != null)
-                                         .Select(x => x.Activity)
-                                         .Distinct()
-                                         .OrderBy(x => x)
-                                         .ToList();
+                .AsNoTracking()
+                .Where(x => !string.IsNullOrWhiteSpace(x.Activity))
+                .Select(x => x.Activity)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
 
-            // 7️⃣ Send data to View
+            ViewBag.TotalCount = auditList.Count;
+
             return View(auditList);
+        }
+
+        // ===============================
+        // PDF DOWNLOAD / PRINT
+        // ===============================
+        [HttpGet]
+        public IActionResult DownloadPdf(
+            string userName,
+            string activity,
+            string fromDate,
+            string toDate,
+            bool print = false)
+        {
+            var query = _context.AuditTrails
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(fromDate) &&
+                DateTime.TryParse(fromDate, out DateTime fromDt))
+            {
+                fromDt = DateTime.SpecifyKind(fromDt, DateTimeKind.Utc);
+                query = query.Where(x => x.DateTime >= fromDt);
+            }
+
+            if (!string.IsNullOrWhiteSpace(toDate) &&
+                DateTime.TryParse(toDate, out DateTime toDt))
+            {
+                var endOfDayUtc = DateTime.SpecifyKind(
+                    toDt.Date.AddDays(1).AddSeconds(-1),
+                    DateTimeKind.Utc
+                );
+
+                query = query.Where(x => x.DateTime <= endOfDayUtc);
+            }
+
+            if (!string.IsNullOrWhiteSpace(userName) && userName != "None")
+            {
+                query = query.Where(x => x.UserName == userName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(activity) && activity != "None")
+            {
+                query = query.Where(x => x.Activity == activity);
+            }
+
+            var data = query
+                .OrderByDescending(x => x.DateTime)
+                .ToList();
+
+            ViewBag.PrintMode = print;
+
+            return new ViewAsPdf("AuditTrailPdf", data)
+            {
+                FileName = "AuditTrail_Report.pdf",
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
+            };
         }
     }
 }
