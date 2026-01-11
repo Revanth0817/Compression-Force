@@ -26,6 +26,8 @@ namespace CompressionForce.Domain.Validation
 
         // Enum/multi-enum lookup category name (matches LookupValues.Category)
         public string? LookupCategory { get; set; }
+
+        public string? DefaultValue { get; set; }
     }
 }
 

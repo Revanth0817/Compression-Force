@@ -305,7 +305,7 @@ namespace CompressionForce.Web.Controllers
 
             // Pull rules from config
             var rules = _cfgProvider.Get().Parameters;
-            ViewBag.ValidationRules = rules;
+
 
             // Build parameters from rules so types match config
             var parameters = new List<RecipeParameter>();
@@ -358,7 +358,6 @@ namespace CompressionForce.Web.Controllers
             var vm = new AddRecipeVm
             {
                 Code = code,
-                Name = code + "Name",
                 ToolTypes = toolTypes,
                 Treatments = treatments,
                 AWC_ARTypes = awc_arTypes,
@@ -367,6 +366,7 @@ namespace CompressionForce.Web.Controllers
                 RecipeTypes = recipeTypes,
                 Parameters = parameters
             };
+            ViewBag.ValidationRules = rules;
 
             return View(vm);
         }

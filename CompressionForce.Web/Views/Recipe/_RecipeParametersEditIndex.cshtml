@@ -3,31 +3,6 @@
 @model dynamic
 
 @{
-    @*
-    var dict = Model as IDictionary<string, object>;
-
-    Console.WriteLine("-----------------------------------------------------------------------Venkatesh----------------------------------------------------------------------");
-    foreach (var kv in dict)
-    {
-        <li>@kv.Key : @kv.Value</li>
-        Console.WriteLine("Key: " + @kv.Key + " & Value:" + @kv.Value);
-        <li>@kv.Key : @kv.Value</li>
-    }
-    *@
-    Console.WriteLine("-----------------------------------------------------------------------Venkatesh----------------------------------------------------------------------");
-    @foreach (var prop in ((object)Model).GetType().GetProperties())
-    {
-        var val = prop.GetValue(Model);
-
-        if (val is IEnumerable<string> list)
-        {
-            Console.WriteLine(" Param" + @prop.Name);
-        }
-        else
-        {
-            Console.WriteLine(" Param" + @prop.Name);
-        }
-    }
     var parameters = Model?.Parameters as List<RecipeParameter> ?? new();
     var toolTypes = Model?.ToolTypes as List<string> ?? new();
     var treatments = Model?.Treatments as List<string> ?? new();
@@ -45,23 +20,6 @@
         ["ForceFeederRatioS2"] = forceFeederRatioS2Types,
         ["Recipe"] = recipeTypes
     };
-    Console.WriteLine("-----------------------------------------------------------------------Revanth----------------------------------------------------------------------");
-    foreach (var item in enumOptions["Treatment"])
-    {
-        Console.WriteLine(item);
-    }
-    foreach (var item in enumOptions["ToolType"])
-    {
-        Console.WriteLine(item);
-    }
-    foreach (var item in enumOptions["AWC&AR"])
-    {
-        Console.WriteLine(item);
-    }
-    foreach (var item in enumOptions["Recipe"])
-    {
-        Console.WriteLine(item);
-    }
     var rules = ViewBag.ValidationRules as IEnumerable<ParameterRule> ?? Enumerable.Empty<ParameterRule>();
 
     ParameterRule? GetRule(string name) =>
@@ -80,39 +38,66 @@
                     <div class="d-flex gap-3 align-items-center commonProductDropdownDiv">
                         <label class="font-size-16px fw-semibold min-width-30 clr-242424">Tool Type</label>
                         <div class="d-flex toolTypeDropdown batchDropdown position-relative">
-                            <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="selectedItem" value="4321" readonly>
+                            <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="selectedItem" value="@(toolTypes.Any() ? toolTypes.First() : string.Empty)" readonly>
                             <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="visually-hidden">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">4444</a></li>
-                                <li><a class="dropdown-item" href="#">2432</a></li>
+                                @if (toolTypes.Any())
+                                {
+                                    foreach (var toolType in toolTypes)
+                                    {
+                                        <li><a class="dropdown-item" href="#">@toolType</a></li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item disabled" href="#">No ToolTypes Found</a></li>
+                                }
                             </ul>
                         </div>
                     </div>
                     <div class="d-flex gap-3 align-items-center commonProductDropdownDiv">
                         <label class="font-size-16px fw-semibold min-width-30 clr-242424">AWC & AR</label>
                         <div class="d-flex commonProductDropdown batchDropdown position-relative">
-                            <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="selectedItem" value="4321" readonly>
+                            <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="selectedItem" value="@(awc_arTypes.Any() ? awc_arTypes.First() : string.Empty)" readonly>
                             <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="visually-hidden">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">4444</a></li>
-                                <li><a class="dropdown-item" href="#">2432</a></li>
+                                @if (awc_arTypes.Any())
+                                {
+                                    foreach (var awc_arType in awc_arTypes)
+                                    {
+                                        <li><a class="dropdown-item" href="#">@awc_arType</a></li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item disabled" href="#">No awc_arTypes Found</a></li>
+                                }
                             </ul>
                         </div>
                     </div>
                     <div class="d-flex gap-3 align-items-center commonProductDropdownDiv">
                         <label class="font-size-16px fw-semibold min-width-30 clr-242424">Recipe</label>
                         <div class="d-flex commonProductDropdown batchDropdown position-relative">
-                            <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="selectedItem" value="4321" readonly>
+                            <input type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="selectedItem" value="@(recipeTypes.Any() ? recipeTypes.First() : string.Empty)" readonly>
                             <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="visually-hidden">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">4444</a></li>
-                                <li><a class="dropdown-item" href="#">2432</a></li>
+                                @if (recipeTypes.Any())
+                                {
+                                    foreach (var recipeType in recipeTypes)
+                                    {
+                                        <li><a class="dropdown-item" href="#">@recipeType</a></li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item disabled" href="#">No recipeTypes Found</a></li>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -122,7 +107,7 @@
                 <div class="col-sm-12 col-md-6 col-lg-6">
                     <div class="d-flex gap-3 align-items-center pb-2">
                         <label class="font-size-16px min-width-30 fw-semibold clr-242424">Recipe Code</label>
-                        <input type="text" class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px batchLabelw-60 boxshadow" placeholder="Enter Recipe Code" />
+                        <input type="text" class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px batchLabelw-60 boxshadow" value=@Model.Code placeholder ="Enter Recipe Code" readonly />
                     </div>
                     <div class="d-flex gap-3 align-items-center pb-2">
                         <label class="font-size-16px min-width-30 fw-semibold clr-242424">Product Name</label>
@@ -188,12 +173,20 @@
                         <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Force Feeder Ratio S1</label>
                         <div class="dropdown">
                             <button class="btn bg-white bord-D2D2D2 dropdown-toggle w-70px margin-right-45px" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                1.0
+                                @(forceFeederRatioS1Types.Any() ? forceFeederRatioS1Types.First() : string.Empty)
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="#">1.0</a></li>
-                                <li><a class="dropdown-item" href="#">2.0</a></li>
-                                <li><a class="dropdown-item" href="#">3.0</a></li>
+                                @if (forceFeederRatioS1Types.Any())
+                                {
+                                    foreach (var forceFeederRatioS1Type in forceFeederRatioS1Types)
+                                    {
+                                        <li><a class="dropdown-item" href="#">@forceFeederRatioS1Type</a></li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item disabled" href="#">No forceFeederRatioS1Types Found</a></li>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -283,12 +276,20 @@
                         <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Force Feeder Ratio S2</label>
                         <div class="dropdown">
                             <button class="btn bg-white bord-D2D2D2 dropdown-toggle w-70px margin-right-45px" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                1.0
+                                @(forceFeederRatioS2Types.Any() ? forceFeederRatioS2Types.First() : string.Empty)
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                <li><a class="dropdown-item" href="#">1.0</a></li>
-                                <li><a class="dropdown-item" href="#">2.0</a></li>
-                                <li><a class="dropdown-item" href="#">3.0</a></li>
+                                @if (forceFeederRatioS2Types.Any())
+                                {
+                                    foreach (var forceFeederRatioS2Type in forceFeederRatioS2Types)
+                                    {
+                                        <li><a class="dropdown-item" href="#">@forceFeederRatioS2Type</a></li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item disabled" href="#">No forceFeederRatioS2Types Found</a></li>
+                                }
                             </ul>
                         </div>
                     </div>
