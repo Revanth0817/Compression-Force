@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CompressionForce.Web.Controllers
@@ -284,13 +286,14 @@ namespace CompressionForce.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> AddRecipe(string code)
         {
-            if (string.IsNullOrWhiteSpace(code))
-                return RedirectToAction(nameof(Index));
-
-            if (await _recipeService.ExistsByCodeAsync(code))
+            if (string.IsNullOrWhiteSpace(WebUtility.UrlDecode(code)))
             {
-                TempData["Error"] = $"Recipe code '{code}' already exists.";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(RecipeParameter));
+            }
+            if (await _recipeService.ExistsByCodeAsync(WebUtility.UrlDecode(code)))
+            {
+                TempData["Error"] = $"Recipe code '{WebUtility.UrlDecode(code)}' already exists.";
+                return RedirectToAction(nameof(RecipeParameter));
             }
 
             var toolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();

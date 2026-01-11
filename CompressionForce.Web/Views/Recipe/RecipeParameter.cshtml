@@ -46,7 +46,7 @@
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                 <div class="d-flex flex-wrap gap-3 py-4">
-                    <button type="button" class="bord-D2D2D2 clr-242424 boxshadow font-size-14px fw-semibold rounded-2 py-2 px-3 bg-white"
+                    <button type="button"  id="btnAdd" class="bord-D2D2D2 clr-242424 boxshadow font-size-14px fw-semibold rounded-2 py-2 px-3 bg-white"
                             data-bs-toggle="modal"
                             data-bs-target="#addRecipeModal">
                         Add Recipe
@@ -72,7 +72,6 @@
 </div>
 
 <!-- Add Recipe -->
-
 <div class="modal fade" id="addRecipeModal" tabindex="-1" aria-labelledby="addRecipeLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bord-rad-8px shadow">
@@ -100,31 +99,6 @@
 </div>
 
 <script>
-
-function updateRecipeSelection(code) {
-    const currentCodeEl = document.getElementById('currentRecipeCode');
-    if (currentCodeEl) currentCodeEl.value = code;
-        console.log('currentCodeEl:', currentCodeEl);
-    console.log('code:', code);
-    // Fetch partial HTML and replace the wrapper
-    fetch('/Recipe/GetTheRecipe?code=' + encodeURIComponent(code), { method: 'GET' })
-        .then(resp => {
-            if (!resp.ok) throw new Error('Failed to load recipe partial');
-            return resp.text();
-        })
-        .then(html => {
-            const host = document.getElementById('recipeSection');
-            if (host) host.innerHTML = html;
-
-            // Close any open dropdown gracefully
-            document.querySelectorAll('.dropdown.show .dropdown-btn')?.forEach(btn => {
-                bootstrap.Dropdown.getOrCreateInstance(btn).hide();
-            });
-        })
-        .catch(err => console.error('Error:', err));
-}
-
-
      // Auto-show modal if there's an error from the Controller
      document.addEventListener("DOMContentLoaded", function () {
          var error = '@TempData["ErrorMessage"]';
@@ -133,75 +107,6 @@ function updateRecipeSelection(code) {
              myModal.show();
          }
      });
-
-      //Helper to rebuild dropdown list - ul/li version
-      function updateDropdownList(listId, items, inputId, Display)
-      { var ul = document.getElementById(listId); if (!ul) return;
-          var input = document.getElementById(inputId); if (!input) return;
-           input.value = Display;
-
-          // Clear existing items
-         ul.innerHTML = '';
-          console.log("Cleared existing items for:", listId);
-         // Add new items
-         (items || []).forEach(function (item) {
-             var li = document.createElement('li');
-             var a = document.createElement('a');
-             a.className = 'dropdown-item readonly-item';
-             a.href = 'javascript:void(0)';
-             a.textContent = item;
-             li.appendChild(a);
-             ul.appendChild(li);
-         });
-    }
-
-        //Helper to rebuild dropdown list - select element version
-        function updateSelectList(selectId, items, selectedValue) {
-         var select = document.getElementById(selectId);
-         if (!select) {
-             console.warn("Select not found: " + selectId);
-             return;
-         }
-
-         console.log("Updating select:", selectId, "with items:", items, "selected:", selectedValue);
-
-         // Clear existing options
-         select.innerHTML = '';
-
-         // Add new options
-         (items || []).forEach(function (item) {
-             var option = document.createElement('option');
-             option.value = item;
-             option.textContent = item;
-
-             // Mark selected if it matches
-             if (item == selectedValue) {
-                 option.selected = true;
-             }
-
-             select.appendChild(option);
-             console.log("Added option:", item);
-         });
-
-         console.log("Finished updating select:", selectId);
-     }
-
-</script>
-
-
-
-<script>
-    // This single listener handles the common behavior for all three sections
-    document.addEventListener('click', function (e) {
-        if (e.target.classList.contains('readonly-item')) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Just close the dropdown menu without updating any values
-            const btn = e.target.closest('.batchDropdown').querySelector('.dropdown-btn');
-            bootstrap.Dropdown.getOrCreateInstance(btn).hide();
-        }
-    });
 </script>
 
     @section Scripts {
