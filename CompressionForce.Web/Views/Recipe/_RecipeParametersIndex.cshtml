@@ -11,6 +11,8 @@
 
     var parametersDict = parameters?.ToDictionary(p => p.Name, p => p)
         ?? new Dictionary<string, RecipeParameter>();
+
+
 }
 
 
@@ -72,7 +74,7 @@
                     <label class="font-size-16px min-width-30 fw-semibold clr-242424">Recipe Code</label>
                     <input type="text" id="recipeCode"
                            class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px w-60 font-size-14px col-242424 boxshadow"
-                           placeholder="4444" value=@parametersDict["ToolType"].Value readonly />
+                           placeholder="4444" value=@parametersDict["RecipeCode"].Value readonly />
                 </div>
                 <div class="d-flex gap-3 align-items-center pb-2">
                     <label class="font-size-16px min-width-30 fw-semibold clr-242424">Product Name</label>
@@ -373,7 +375,7 @@
                     <div class="d-flex align-items-center gap-10px max-width-115px">
                         <input type="text" id="rejectionForceLimitMinS1"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="1.00" value=@parametersDict["RejectionLimiMinS1"].Value readonly />
+                               placeholder="1.00" value=@parametersDict["RejectionLimitMinS1"].Value readonly />
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -433,7 +435,7 @@
                     <div class="d-flex align-items-center gap-3 max-width-115px">
                         <input type="text" id="rejectionForceLimitMinS2"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="1.00" value=@parametersDict["RejectionLimiMinS2"].Value readonly />
+                               placeholder="1.00" value=@parametersDict["RejectionLimitMinS2"].Value readonly />
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -442,3 +444,5 @@
 
     </div>
 </div>
+
+                        

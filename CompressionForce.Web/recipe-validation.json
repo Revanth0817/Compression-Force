@@ -23,7 +23,7 @@
       "type": "text",
       "required": true,
       "MaxLength": 20,
-      "Regex": "^[A-Za-z0-9_-]+$",
+      "Regex": "^[A-Za-z0-9_\\-]+$",
       "DefaultValue": "RecipeCode"
     },
     {
@@ -31,16 +31,19 @@
       "type": "text",
       "required": true,
       "MaxLength": 20,
-      "Regex": "^[A-Za-z0-9_-]+$",
+      "Regex": "^[A-Za-z0-9_\\-]+$",
       "DefaultValue": "ProductName"
+
     },
     {
       "name": "Shape",
       "type": "text",
       "required": true,
       "MaxLength": 20,
-      "Regex": "^[A-Za-z0-9_-]+$",
-      "DefaultValue": "Shape"
+      "Regex": "^[A-Za-z0-9_\\-]+$",
+      "DefaultValue": "Shape",
+      "ValidationMsg": "Required. Max len 20. alphabets numbers _ - ",
+      "PlaceHolder":"Shape"
     },
     {
       "name": "Size",
@@ -48,7 +51,9 @@
       "required": true,
       "min": 1,
       "max": 10,
-      "DefaultValue": "1"
+      "DefaultValue": "1",
+      "ValidationMsg": "Required. Min 1 Max 20.",
+      "PlaceHolder": "1"
     },
     {
       "name": "TabletThickness",
@@ -287,7 +292,7 @@
       "DefaultValue": "1.5"
     },
     {
-      "name": "RejectionLimiMinS1",
+      "name": "RejectionLimitMinS1",
       "type": "numeric",
       "required": true,
       "min": 1.5,
@@ -327,7 +332,7 @@
       "DefaultValue": "1.5"
     },
     {
-      "name": "RejectionLimiMinS2",
+      "name": "RejectionLimitMinS2",
       "type": "numeric",
       "required": true,
       "min": 1.5,

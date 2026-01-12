@@ -28,6 +28,11 @@ namespace CompressionForce.Domain.Validation
         public string? LookupCategory { get; set; }
 
         public string? DefaultValue { get; set; }
+
+        public string? ValidationMsg { get; set; }
+
+        public string? PlaceHolder { get; set; }
+
     }
 }
 

@@ -13,7 +13,7 @@
                     <button class="nav-link font-size-16px clr-242424 fw-semibold active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Parameter</button>
                     <button class="nav-link font-size-16px clr-242424 fw-semibold" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Records</button>
                 </div>
-            </nav
+            </nav>
             <div class="d-flex gap-3 align-items-center">
                 <label class="font-size-16px fw-semibold clr-242424">Recipe Code</label>
                 <div class="d-flex RecipeCodeDropdown batchDropdown position-relative dropdown">
@@ -29,7 +29,7 @@
                             {
                                 <li>
                                     <a class="dropdown-item" href="javascript:void(0)"
-                                       onclick="updateRecipeSelection('@code')">@code</a>
+                                       onclick="updateRecipeCodeSelection('@code')">@code</a>
                                 </li>
                             }
                         }
@@ -58,7 +58,7 @@
 
             <!-- The wrapper we will replace with partial HTML -->
             <div id="recipeSection" class="card">
-                @Html.Partial("_RecipeParametersIndex", Model.Recipe))
+                @Html.Partial("_RecipeParametersIndex", Model.Recipe)
             </div>
 
 

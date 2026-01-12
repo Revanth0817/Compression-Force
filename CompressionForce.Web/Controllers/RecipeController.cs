@@ -218,7 +218,7 @@ namespace CompressionForce.Web.Controllers
                 }
             }
 
-            var vm = new AddRecipeVm
+            var vm = new AddEditRecipeVm
             {
                 Code = code,
                 Name = code + "Name",
@@ -238,7 +238,7 @@ namespace CompressionForce.Web.Controllers
         // 4 + 5 + 6. Add (client + server validation)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(AddRecipeVm vm)
+        public async Task<IActionResult> Add(AddEditRecipeVm vm)
         {
             //vm.Parameters = NormalizeParametersFromRequest(Request.Form, vm.Parameters);
 
@@ -305,7 +305,8 @@ namespace CompressionForce.Web.Controllers
 
             // Pull rules from config
             var rules = _cfgProvider.Get().Parameters;
-
+            Console.WriteLine(rules.Count);
+            Console.WriteLine("----------------------------------rules.Count in AddRecipe Get----------------------------------");
 
             // Build parameters from rules so types match config
             var parameters = new List<RecipeParameter>();
@@ -355,7 +356,9 @@ namespace CompressionForce.Web.Controllers
                 }
             }
 
-            var vm = new AddRecipeVm
+            Console.WriteLine(parameters.Count);
+            Console.WriteLine("----------------------------------parameters.Count in AddRecipe Get----------------------------------");
+            var vm = new AddEditRecipeVm
             {
                 Code = code,
                 ToolTypes = toolTypes,
@@ -375,12 +378,27 @@ namespace CompressionForce.Web.Controllers
         // 4 + 5 + 6. Add (client + server validation)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddRecipe(AddRecipeVm vm)
+        public async Task<IActionResult> AddRecipe(AddEditRecipeVm vm)
         {
+            Console.WriteLine("----------------------------------Hey Im in AddRecipe post----------------------------------");
             //vm.Parameters = NormalizeParametersFromRequest(Request.Form, vm.Parameters);
-
+            Console.WriteLine(vm.Code);
+            Console.WriteLine("----------------------------------vm.code----------------------------------");
+            Console.WriteLine(vm.Parameters.Count);
+            Console.WriteLine("----------------------------------Parameters.Count in AddRecipe Post----------------------------------");
+            foreach (var item in vm.Parameters)
+                {
+                    Console.WriteLine(item.Name + ": "+item.Value);
+                }
+            Console.WriteLine("----------------------------------Parameter.Values----------------------------------");
             if (!ModelState.IsValid)
             {
+            Console.WriteLine("----------------------------------Printing Modelstate Errors----------------------------------");
+
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
                 vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
                 vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
                 vm.AWC_ARTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
@@ -399,6 +417,12 @@ namespace CompressionForce.Web.Controllers
 
             if (!ModelState.IsValid)
             {
+                Console.WriteLine("----------------------------------Printing Modelstate Errors 2ndTime----------------------------------");
+
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
                 vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
                 vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
                 vm.AWC_ARTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
@@ -411,6 +435,7 @@ namespace CompressionForce.Web.Controllers
 
             try
             {
+                Console.WriteLine("----------------------------------Im trying to AddRecipe----------------------------------");
                 var domain = RecipeViewModelsMapping.ToDomain(vm);
                 await _recipeService.AddAsync(domain, user: User?.Identity?.Name ?? "system");
                 TempData["Success"] = "Recipe added successfully.";
@@ -452,7 +477,7 @@ namespace CompressionForce.Web.Controllers
             var forceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
             var recipeTypes = (await _lookupService.GetCodesAsync("Recipe")).ToList();
 
-            var vm = RecipeViewModelsMapping.ToEditVm(recipe, toolTypes, treatments, awc_arTypes, forceFeederRatioS1Types, forceFeederRatioS2Types, recipeTypes);
+            var vm = RecipeViewModelsMapping.ToAddEditVm(recipe, toolTypes, treatments, awc_arTypes, forceFeederRatioS1Types, forceFeederRatioS2Types, recipeTypes);
             ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
             return View(vm);
         }
@@ -460,7 +485,7 @@ namespace CompressionForce.Web.Controllers
         // 7 + 8 + 9. Update
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditRecipeVm vm)
+        public async Task<IActionResult> Edit(AddEditRecipeVm vm)
         {
             //vm.Parameters = NormalizeParametersFromRequest(Request.Form, vm.Parameters);
 
@@ -507,6 +532,84 @@ namespace CompressionForce.Web.Controllers
             ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
             return View(vm);
         }
+
+        // EDIT
+        [HttpGet]
+        public async Task<IActionResult> EditRecipe(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return RedirectToAction(nameof(Index));
+
+            var recipe = await _recipeService.GetByCodeAsync(code);
+            if (recipe == null)
+            {
+                TempData["Error"] = $"Recipe code '{code}' not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var toolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            var treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+            var awc_arTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
+            var forceFeederRatioS1Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS1")).ToList();
+            var forceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
+            var recipeTypes = (await _lookupService.GetCodesAsync("Recipe")).ToList();
+
+            var vm = RecipeViewModelsMapping.ToAddEditVm(recipe, toolTypes, treatments, awc_arTypes, forceFeederRatioS1Types, forceFeederRatioS2Types, recipeTypes);
+            ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+            return View(vm);
+        }
+
+        // 7 + 8 + 9. Update
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditRecipe(AddEditRecipeVm vm)
+        {
+            //vm.Parameters = NormalizeParametersFromRequest(Request.Form, vm.Parameters);
+
+            if (!ModelState.IsValid)
+            {
+                vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+                vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+                ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+                return View(vm);
+            }
+
+            var current = await _recipeService.GetByCodeAsync(vm.Code);
+            if (current == null)
+                ModelState.AddModelError(nameof(vm.Code), $"Recipe code '{vm.Code}' does not exist.");
+
+            if (await _recipeService.ExistsByNameAsync(vm.Name))
+            {
+                if (!string.Equals(current?.Name, vm.Name, StringComparison.OrdinalIgnoreCase))
+                    ModelState.AddModelError(nameof(vm.Name), $"Recipe name '{vm.Name}' already exists.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+                vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+                ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+                return View(vm);
+            }
+
+            try
+            {
+                var domain = RecipeViewModelsMapping.ToDomain(vm);
+                await _recipeService.UpdateAsync(domain, user: User?.Identity?.Name ?? "system");
+                TempData["Success"] = "Recipe updated successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DomainException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+            ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+            return View(vm);
+        }
+
 
         // DELETE
         [HttpGet]

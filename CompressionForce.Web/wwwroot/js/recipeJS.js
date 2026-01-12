@@ -1,5 +1,5 @@
 ﻿
-function updateRecipeSelection(code) {
+function updateRecipeCodeSelection(code) {
     const currentCodeEl = document.getElementById('currentRecipeCode');
     if (currentCodeEl) currentCodeEl.value = code;
     console.log('currentCodeEl:', currentCodeEl);
@@ -44,7 +44,7 @@ function onIndexReady() {
     $('#btnEdit').on('click', function () {
         const code = $('#currentRecipeCode').val();
         if (!code) { alert('Select a recipe code first.'); return; }
-        window.location.href = `/Recipe/Edit?code=${encodeURIComponent(code)}`;
+        window.location.href = `/Recipe/EditRecipe?code=${encodeURIComponent(code)}`;
     });
 
     $('#btnRemove').on('click', function () {
@@ -94,5 +94,85 @@ function onIndexReady() {
 
 
 }
+
+/*
+function updateDropdownSelection(e, value) {
+    e.preventDefault();  // Prevent the default behavior (e.g., page scroll, form submission)
+    e.stopPropagation();
+
+    // 1. Get the element that was actually clicked
+    const clickedElement = e.currentTarget;
+
+    // 2. Find the closest parent container that holds this specific dropdown
+    // This works for both the "batchDropdown" divs and the Bootstrap "dropdown" divs
+    const container = clickedElement.closest('.batchDropdown') || clickedElement.closest('.dropdown');
+
+    if (container) {
+        // 3. Update the visible text
+        // Check if it's an input field (Tool Type/AWC) or a button (Force Feeder)
+        const textDisplay = container.querySelector('.dropdownInput') || container.querySelector('.dropdown-toggle');
+
+        if (textDisplay) {
+            if (textDisplay.tagName === 'INPUT') {
+                textDisplay.value = value;
+            } else {
+                // If it's a button, we keep the arrow icon/formatting by just changing text
+                textDisplay.childNodes[0].textContent = value + ' ';
+            }
+        }
+
+
+
+        // 4. Update any hidden inputs (for Form Submission)
+        const hiddenInputs = container.querySelectorAll('input[type="hidden"]');
+        hiddenInputs.forEach(input => {
+            // Only update the input meant for the "Value"
+            //if (input.name.includes('.Value') || input.getAttribute('recipe-id')) {
+            if (input.name.includes('.Value')) {
+                input.value = value;
+            }
+        });
+    }
+}
+*/
+
+/**
+ * Updates the dropdown UI and hidden inputs
+ * @param {Event} e - The click event object
+ * @param {string} value - The value selected from the list
+ */
+    function updateDropdownSelection(e, value) {
+    // Prevent the page from jumping/reloading
+        e.preventDefault();
+        console.log(e.currentTarget.firstChild.textContent);
+        console.log(e.currentTarget.textContent);
+    // 1. Get the element that was clicked (the <a> tag)
+    const clickedElement = e.currentTarget;
+
+    // 2. Find the container (supports both your custom and Bootstrap layouts)
+    const container = clickedElement.closest('.batchDropdown') || clickedElement.closest('.dropdown');
+
+    if (container) {
+        // 3. Update the visible text/input
+        const textDisplay = container.querySelector('.dropdownInput') || container.querySelector('.dropdown-toggle');
+
+        if (textDisplay) {
+            if (textDisplay.tagName === 'INPUT') {
+                textDisplay.value = value;
+            } else {
+                // For buttons: Update text while preserving the toggle arrow if it exists
+                textDisplay.firstChild.textContent = value;
+            }
+        }
+
+        // 4. Update hidden inputs for form submission
+        // This targets inputs with name like "Parameters[0].Value"
+        const hiddenValueInput = container.querySelector('input[name$=".Value"]');
+        if (hiddenValueInput) {
+            hiddenValueInput.value = value;
+        }
+    }
+}
+
 
 $(function () { if ($('#currentRecipeCode').length) onIndexReady(); });

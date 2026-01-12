@@ -31,7 +31,7 @@ namespace CompressionForce.Services.Mapping
             return new RecipeEntity
             {
                 RecipeCode = recipe.Code,
-                RecipeName = recipe.Name,
+                RecipeName = string.IsNullOrEmpty(recipe.Name) ? recipe.Code : recipe.Name, //if recipe.Name is either empty or null, set it to recipe.Code,
                 Parameters = JsonSerializer.Serialize(recipe.Parameters)
             };
         }

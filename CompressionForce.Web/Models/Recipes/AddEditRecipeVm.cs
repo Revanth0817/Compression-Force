@@ -5,15 +5,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CompressionForce.Web.Models.Recipes
 {
-    public class AddRecipeVm
+    public class AddEditRecipeVm
     {
-        [Required, MaxLength(50)]
+
         public string Code { get; set; } = string.Empty;
 
-        [Required, MaxLength(200)]
         public string Name { get; set; } = string.Empty;
 
-        [Required]
+
         public List<RecipeParameter> Parameters { get; set; } = new();
 
         public List<string> ToolTypes { get; set; } = new();
