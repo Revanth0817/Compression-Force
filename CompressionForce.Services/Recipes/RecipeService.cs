@@ -82,7 +82,7 @@ namespace CompressionForce.Services.Recipes
 
             var oldParameters = entity.Parameters;
 
-            entity.RecipeName = recipe.Name;
+            entity.RecipeName = string.IsNullOrEmpty(recipe.Name) ? recipe.Code : recipe.Name;
             entity.Parameters = System.Text.Json.JsonSerializer.Serialize(recipe.Parameters);
 
             AddHistory(recipe.Code, "UPDATE", user, oldParameters, entity.Parameters);

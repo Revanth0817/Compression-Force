@@ -1,9 +1,12 @@
-﻿using CompressionForce.Domain.Validation;
+﻿using CompressionForce.Domain.Entities;
+using CompressionForce.Domain.Validation;
 using CompressionForce.Services.Validation;
 using CompressionForce.Web.Models.Recipes;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
@@ -64,6 +67,8 @@ namespace CompressionForce.Web.TagHelpers
             var model = ViewContext.ViewData.Model as AddEditRecipeVm;
             if (model == null) return;
 
+            var parametersDict = model.Parameters?.ToDictionary(p => p.Name, p => p) ?? new Dictionary<string, RecipeParameter>();
+
             var rule = _cfgProvider.Get().Parameters.First(r => r.Name == ParamName);
 
             var index = model.Parameters.FindIndex(p =>
@@ -80,15 +85,50 @@ namespace CompressionForce.Web.TagHelpers
             output.PreElement.AppendHtml(
                 $"<input type='hidden' name='Parameters[{index}].Type' value='{param.Type}' recipe-id='{param.Name}Id' />");
 
-            // Standalone tag → hidden Value
             if (ParamName is "ForceFeederRatioS1" or "ForceFeederRatioS2")
             {
-                // "@(model.recipeTypes.Any() ? recipeTypes.First() : string.Empty)
-                var value = (ParamName == "ForceFeederRatioS1" ? model.ForceFeederRatioS1Types : model.ForceFeederRatioS2Types).FirstOrDefault() ?? string.Empty;
-                //var value = ParamName == "ForceFeederRatioS1" ? (model.ForceFeederRatioS1Types.FirstOrDefault() ?? string.Empty) : ((model.ForceFeederRatioS2Types.FirstOrDefault() ?? string.Empty));
+                var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+                string value = string.Empty;
+                Console.WriteLine("----------------------------------------------Printing for action and Value----------------------------------------------");
+                if (action == "AddRecipe")
+                {
+                    Console.WriteLine("action: " + action + " + ParamName: " + ParamName);
+                    //Console.WriteLine("parametersDict[key].Value Type: " + parametersDict[key]?.Value.GetType().ToString());
+
+                    // Get value from model
+                    value = (ParamName == "ForceFeederRatioS1"
+                                ? model.ForceFeederRatioS1Types?.FirstOrDefault()
+                                : model.ForceFeederRatioS2Types?.FirstOrDefault())
+                            ?? string.Empty;
+
+                    Console.WriteLine("value: " + value);
+                }
+                else if (action == "EditRecipe")
+                {
+                    Console.WriteLine("action: " + action + " + ParamName: " + ParamName);
+                    // Get value from parametersDict
+                    var key = ParamName == "ForceFeederRatioS1"
+                                ? "ForceFeederRatioS1"
+                                : "ForceFeederRatioS2";
+                    Console.WriteLine("parametersDict[key].Value Type: " + parametersDict[key]?.Value.GetType().ToString());
+
+                    value = parametersDict.ContainsKey(key) &&
+                            parametersDict[key]?.Value != null &&
+                            !string.IsNullOrEmpty(parametersDict[key].Value.ToString())
+                            ? parametersDict[key].Value.ToString()
+                            : string.Empty;
+
+                    Console.WriteLine("value: " + value);
+                }
+
+                // Create the hidden input
                 output.PreElement.AppendHtml(
-                    $"<input type='hidden' name='Parameters[{index}].Value' value='{ value}' recipe-id='{param.Name}Id' />");
+                    $"<input type='hidden' name='Parameters[{index}].Value' value='{value.ToString()}' recipe-id='{param.Name}Id' />"
+                );
             }
+
+            ////////////////////////
             // Enhance existing input/select
             output.Attributes.SetAttribute("name", $"Parameters[{index}].Value");
 
