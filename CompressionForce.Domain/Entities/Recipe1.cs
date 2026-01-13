@@ -2,13 +2,12 @@
 
 namespace CompressionForce.Domain.Entities;
 
-public partial class RecipeHistory
+public partial class Recipe1
 {
     public int Id { get; set; }   // ✅ PRIMARY KEY
 
-    public string? EventType { get; set; }
     public DateTime? DateTime { get; set; }
-    public string? RecipeAlteredBy { get; set; }
+    public string? RecipeCreatedBy { get; set; }
     public string? RecipeName { get; set; }
     public string? RecipeCode { get; set; }
     public string? ProductName { get; set; }

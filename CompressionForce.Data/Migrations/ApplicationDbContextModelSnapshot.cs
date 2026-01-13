@@ -22,7 +22,7 @@ namespace CompressionForce.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CompressionForce.Domain.Entities.AlarmLog", b =>
+            modelBuilder.Entity("Compression_Force.Domain.Entities.AlarmLog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,7 +81,7 @@ namespace CompressionForce.Data.Migrations
                     b.ToTable("AuditTrails");
                 });
 
-            modelBuilder.Entity("CompressionForce.Domain.Entities.GroupPrivilege", b =>
+            modelBuilder.Entity("Compression_Force.Domain.Entities.Batch", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,7 +93,202 @@ namespace CompressionForce.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsAllowed")
+                    b.Property<string>("BatchCondition")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BatchNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BatchQty")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BatchSize")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BatchStatus")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("GoodQty")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LeftQty")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProdusedQty")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RecipeCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RejectionQty")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2GoodQty")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2RejectionQty")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TabletQty")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Batches");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.BatchHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BatchCode")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("BatchSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EReventType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RecipeCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BatchHistories");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.CurrentBatch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AwcLower")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AwcUpper")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BatchNumber")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("RejLower")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RejUpper")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1AwcLowerLimit")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1AwcSetLimit")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1AwcUpperLimit")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1FeederRatio")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1FillCam")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1FillDepth")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1MainPenetration")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1MainThickness")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1PrePenetration")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1PreThickness")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1RejLowerLimit")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S1RejUpperLimit")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2AwcLowerLimit")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2AwcSetLimit")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2AwcUpperLimit")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2FeederRatio")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2FillCam")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2FillDepth")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2MainPenetration")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2MainThickness")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2PrePenetration")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2PreThickness")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2RejLowerLimit")
+                        .HasColumnType("text");
+
+                    b.Property<string>("S2RejUpperLimit")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TurretRpm")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CurrentBatches");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.Privilage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool?>("Alarms")
                         .HasColumnType("boolean");
 
                     b.Property<string>("PrivilegeKey")
@@ -105,7 +300,7 @@ namespace CompressionForce.Data.Migrations
                     b.ToTable("GroupPrivileges");
                 });
 
-            modelBuilder.Entity("CompressionForce.Domain.Entities.LoadCellCalibration", b =>
+            modelBuilder.Entity("Compression_Force.Domain.Entities.PrivilageHistory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -144,7 +339,7 @@ namespace CompressionForce.Data.Migrations
                     b.ToTable("LoadCellCalibrations");
                 });
 
-            modelBuilder.Entity("CompressionForce.Domain.Entities.Recipe", b =>
+            modelBuilder.Entity("Compression_Force.Domain.Entities.Recipe", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -301,7 +496,7 @@ namespace CompressionForce.Data.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("CompressionForce.Domain.Entities.RecipeHistory", b =>
+            modelBuilder.Entity("Compression_Force.Domain.Entities.RecipeHistory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -461,7 +656,7 @@ namespace CompressionForce.Data.Migrations
                     b.ToTable("RecipeHistroys");
                 });
 
-            modelBuilder.Entity("CompressionForce.Domain.Entities.SecuritySettings", b =>
+            modelBuilder.Entity("Compression_Force.Domain.Entities.ResultEjectLoadS1B", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -469,13 +664,1022 @@ namespace CompressionForce.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApplicationTimeoutMinutes")
+                    b.Property<double?>("AverageLoad")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("BatchNumber")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double?>("P1")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P10")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P11")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P12")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P13")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P14")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P15")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P16")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P17")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P18")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P19")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P2")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P20")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P21")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P22")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P23")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P24")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P25")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P26")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P27")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P28")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P29")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P3")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P30")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P31")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P32")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P33")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P34")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P35")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P36")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P37")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P38")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P39")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P4")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P40")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P41")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P42")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P43")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P44")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P45")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P46")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P47")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P48")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P49")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P5")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P50")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P51")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P52")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P53")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P54")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P55")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P56")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P57")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P58")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P59")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P6")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P60")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P61")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P62")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P63")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P64")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P65")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P7")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P8")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P9")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("RecipeName")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("Revolution")
+                        .HasColumnType("bigint");
+
+                    b.Property<double?>("S1FeederSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("S2FeederSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("SrelValue")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("TurretSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResultEjectLoadS1Bs");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.ResultEjectLoadS2B", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<int>("MaxWrongAttempts")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("AverageLoad")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("BatchNumber")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double?>("P1")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P10")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P11")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P12")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P13")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P14")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P15")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P16")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P17")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P18")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P19")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P2")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P20")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P21")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P22")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P23")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P24")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P25")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P26")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P27")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P28")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P29")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P3")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P30")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P31")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P32")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P33")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P34")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P35")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P36")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P37")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P38")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P39")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P4")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P40")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P41")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P42")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P43")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P44")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P45")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P46")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P47")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P48")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P49")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P5")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P50")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P51")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P52")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P53")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P54")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P55")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P56")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P57")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P58")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P59")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P6")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P60")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P61")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P62")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P63")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P64")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P65")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P7")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P8")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P9")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("RecipeName")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("Revolution")
+                        .HasColumnType("bigint");
+
+                    b.Property<double?>("S1FeederSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("S2FeederSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("SrelValue")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("TurretSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResultEjectLoadS2Bs");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.ResultMainLoadS1B", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<int>("PasswordExpiryDays")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("AverageLoad")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("BatchNumber")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double?>("P1")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P10")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P11")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P12")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P13")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P14")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P15")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P16")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P17")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P18")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P19")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P2")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P20")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P21")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P22")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P23")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P24")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P25")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P26")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P27")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P28")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P29")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P3")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P30")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P31")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P32")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P33")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P34")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P35")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P36")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P37")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P38")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P39")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P4")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P40")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P41")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P42")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P43")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P44")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P45")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P46")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P47")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P48")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P49")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P5")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P50")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P51")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P52")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P53")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P54")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P55")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P56")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P57")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P58")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P59")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P6")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P60")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P61")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P62")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P63")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P64")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P65")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P7")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P8")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P9")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("RecipeName")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("Revolution")
+                        .HasColumnType("bigint");
+
+                    b.Property<double?>("S1FeederSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("S2FeederSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("SrelValue")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("TurretSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResultMainLoadS1Bs");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.ResultMainLoadS2B", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("AverageLoad")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("BatchNumber")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double?>("P1")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P10")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P11")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P12")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P13")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P14")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P15")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P16")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P17")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P18")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P19")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P2")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P20")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P21")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P22")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P23")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P24")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P25")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P26")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P27")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P28")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P29")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P3")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P30")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P31")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P32")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P33")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P34")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P35")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P36")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P37")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P38")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P39")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P4")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P40")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P41")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P42")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P43")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P44")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P45")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P46")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P47")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P48")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P49")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P5")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P50")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P51")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P52")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P53")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P54")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P55")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P56")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P57")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P58")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P59")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P6")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P60")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P61")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P62")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P63")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P64")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P65")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P7")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P8")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P9")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("RecipeName")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("Revolution")
+                        .HasColumnType("bigint");
+
+                    b.Property<double?>("S1FeederSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("S2FeederSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("SrelValue")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("TurretSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResultMainLoadS2Bs");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.ResultMainSrelS1B", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("AverageS1")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("BatchNumber")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double?>("FeederSpeedS1")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("SrelValueS1")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("TabletQtyS1")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("TurretSpeed")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResultMainSrelS1Bs");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.ResultMainSrelS2B", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("AverageS2")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("BatchNumber")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double?>("FeederSpeedS2")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("SrelValueS2")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("TabletQtyS2")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("TurretSpeed")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResultMainSrelS2Bs");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.ResultPreLoadS1B", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -483,7 +1687,7 @@ namespace CompressionForce.Data.Migrations
                     b.ToTable("SecuritySettings");
                 });
 
-            modelBuilder.Entity("CompressionForce.Domain.Entities.ServoCalibration", b =>
+            modelBuilder.Entity("Compression_Force.Domain.Entities.ResultPreLoadS2B", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -494,8 +1698,252 @@ namespace CompressionForce.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<decimal>("JogSpeed")
-                        .HasColumnType("numeric");
+                    b.Property<double?>("P1")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P10")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P11")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P12")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P13")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P14")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P15")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P16")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P17")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P18")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P19")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P2")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P20")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P21")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P22")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P23")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P24")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P25")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P26")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P27")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P28")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P29")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P3")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P30")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P31")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P32")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P33")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P34")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P35")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P36")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P37")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P38")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P39")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P4")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P40")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P41")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P42")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P43")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P44")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P45")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P46")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P47")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P48")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P49")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P5")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P50")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P51")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P52")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P53")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P54")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P55")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P56")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P57")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P58")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P59")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P6")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P60")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P61")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P62")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P63")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P64")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P65")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P7")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P8")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("P9")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("RecipeName")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("Revolution")
+                        .HasColumnType("bigint");
+
+                    b.Property<double?>("S1FeederSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("S2FeederSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("SrelValue")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("TurretSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResultPreLoadS2Bs");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.ServoCalibration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("Axis10Position")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Axis1Position")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Axis2Position")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Axis3Position")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Axis4Position")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Axis5Position")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("ServoCode")
                         .IsRequired()
@@ -521,7 +1969,7 @@ namespace CompressionForce.Data.Migrations
                     b.ToTable("ServoCalibrations");
                 });
 
-            modelBuilder.Entity("CompressionForce.Domain.Entities.UserGroup", b =>
+            modelBuilder.Entity("Compression_Force.Domain.Entities.UserLogin", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -539,7 +1987,7 @@ namespace CompressionForce.Data.Migrations
                     b.ToTable("UserGroups");
                 });
 
-            modelBuilder.Entity("CompressionForce.Domain.Entities.UserManagement", b =>
+            modelBuilder.Entity("Compression_Force.Domain.Entities.UserLoginHistroy", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -562,8 +2010,23 @@ namespace CompressionForce.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ERpassword")
-                        .IsRequired()
+                    b.Property<bool?>("UserStatus")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserLoginHistroys");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.UserManagement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ChangePw")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ExpiryDate")
@@ -575,7 +2038,20 @@ namespace CompressionForce.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("LastLoginDate")
+                    b.HasKey("Id");
+
+                    b.ToTable("UserManagements");
+                });
+
+            modelBuilder.Entity("Compression_Force.Domain.Entities.UserManagementHistroy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ERdate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("LockedUntil")
@@ -586,7 +2062,7 @@ namespace CompressionForce.Data.Migrations
                     b.ToTable("UserManagements");
                 });
 
-            modelBuilder.Entity("LoadCell", b =>
+            modelBuilder.Entity("Compression_Force.Domain.Entities.UserSetting", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,50 +1,42 @@
-﻿using CompressionForce.Data;
-using CompressionForce.Services.Audit;
+﻿
+using CompressionForce.Data;
 using Microsoft.EntityFrameworkCore;
-using Rotativa.AspNetCore;
-using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ===================== SERVICES =====================
-
-// IHttpContextAccessor
+// To use @inject IHttpContextAccessor in your view
 builder.Services.AddHttpContextAccessor();
 
-// PostgreSQL DbContext
+// ✅ CHANGE HERE: SQL Server → PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
 
-// Audit Logger
-builder.Services.AddScoped<AuditLogger>();
+// Add services to the container.
+builder.Services.AddControllersWithViews();
 
-// ✅ MVC + JSON FIX (CRITICAL)
-builder.Services
-    .AddControllersWithViews()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-    });
-
-// Session
+// Add Session services
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromDays(1);
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
 var app = builder.Build();
 
-// ===================== PIPELINE =====================
-
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Home/Error"); // add Views/Shared/Error.cshtml if needed
     app.UseHsts();
+}
+else
+{
+    // In dev you can also see detailed exceptions:
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
@@ -52,59 +44,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Session BEFORE custom middleware
-app.UseSession();
-
-// ===================== APPLICATION TIMEOUT MIDDLEWARE =====================
-app.Use(async (context, next) =>
-{
-    var username = context.Session.GetString("UserName");
-
-    if (!string.IsNullOrEmpty(username))
-    {
-        var db = context.RequestServices.GetRequiredService<ApplicationDbContext>();
-        var settings = await db.SecuritySettings.FirstOrDefaultAsync();
-
-        if (settings != null && settings.ApplicationTimeoutMinutes > 0)
-        {
-            var lastActivityStr = context.Session.GetString("LastActivity");
-
-            if (!string.IsNullOrEmpty(lastActivityStr) &&
-                DateTime.TryParse(lastActivityStr, out var lastActivity))
-            {
-                var idleMinutes =
-                    (DateTime.UtcNow - lastActivity).TotalMinutes;
-
-                if (idleMinutes > settings.ApplicationTimeoutMinutes)
-                {
-                    context.Session.Clear();
-                    context.Response.Redirect("/Account/Login");
-                    return;
-                }
-            }
-
-            context.Session.SetString(
-                "LastActivity",
-                DateTime.UtcNow.ToString("O")
-            );
-        }
-    }
-
-    await next();
-});
-
 app.UseAuthorization();
 
-// Routes
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Welcome}/{id?}"
-);
-
-// Rotativa
-RotativaConfiguration.Setup(
-    app.Environment.WebRootPath,
-    "Rotativa"
-);
+    pattern: "{controller=Home}/{action=OperationMode}/{id?}");
 
 app.Run();

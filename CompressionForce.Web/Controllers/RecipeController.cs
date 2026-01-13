@@ -1,258 +1,782 @@
-﻿using CompressionForce.Data;
+﻿
 using CompressionForce.Domain.Entities;
-using CompressionForce.Web.Models;
+using CompressionForce.Domain.Exceptions;
+using CompressionForce.Domain.Validation;
+using CompressionForce.Services.DTOs;
+using CompressionForce.Services.Lookups;
+using CompressionForce.Services.Recipes;
+using CompressionForce.Services.Validation;
+using CompressionForce.Web.Models.Recipes;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 
-
-namespace CompressionForce.WebControllers
+namespace CompressionForce.Web.Controllers
 {
     public class RecipeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IRecipeService _recipeService;
+        private readonly ILookupService _lookupService;
+        private readonly IRecipeValidationConfigProvider _cfgProvider;
+        private readonly ILogger<RecipeController> _logger;
 
-        public RecipeController(ApplicationDbContext context)
+        public RecipeController(
+            IRecipeService recipeService,
+            ILookupService lookupService,
+            IRecipeValidationConfigProvider cfgProvider,
+            ILogger<RecipeController> logger)
         {
-            _context = context;
+            _recipeService = recipeService;
+            _lookupService = lookupService;
+            _cfgProvider = cfgProvider;
+            _logger = logger;
         }
 
-        /*Recipe Pages*/
+        // 1. List codes + first recipe + lookups
         [HttpGet]
-        public IActionResult AddRecipe()
+        public async Task<IActionResult> RecipeParameter()
         {
-            return View();
-        }
-        //public IActionResult AddRecipe2()
-        //{
-        //    return View();
-        //}
+            var codes = (await _recipeService.GetRecipeCodesAsync()).ToList();
+            var selected = codes.FirstOrDefault();
 
-        /*Delete Recipe page*/
-        public IActionResult DeleteRecipe()
-        {
-            return View();
-        }
+            Recipe? recipe = null;
+            if (!string.IsNullOrWhiteSpace(selected))
+                recipe = await _recipeService.GetByCodeAsync(selected);
 
-        /*Edit Recipe*/
-        public IActionResult EditRecipe()
-        {
-            return View();
-        }
+            var toolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            var treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList(); // optional multi-enum demo
+            var awc_arTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
+            var forceFeederRatioS1Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS1")).ToList();
+            var forceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
 
-        [HttpGet]
-        public IActionResult RecipeParameter()
-        {
-            var allCodes = _context.Recipes
-                .Select(r => r.RecipeCode)
-                .Distinct()
-                .OrderBy(c => c)
-                .ToList();
-
-            var initialCode = allCodes.FirstOrDefault();
-            var firstRecipe = _context.Recipes.FirstOrDefault(r => r.RecipeCode == initialCode);
-
-            var viewModel = new RecipeParameterViewModel
+            var vm = new RecipeParameterPageVm
             {
-                AllRecipeCodes = allCodes,
-                SelectedRecipe = firstRecipe
+                RecipeCodes = codes,
+                SelectedCode = selected,
+                Recipe = recipe != null ? RecipeViewModelsMapping.ToDto(recipe) : null,
+                ToolTypes = toolTypes,
+                Treatments = treatments,
+                AWC_ARTypes = awc_arTypes,
+                ForceFeederRatioS1Types = forceFeederRatioS1Types,
+                ForceFeederRatioS2Types = forceFeederRatioS1Types
             };
 
-            var dropdownData = BuildDropdownData(firstRecipe);
-            ViewData["toolTypes"] = dropdownData.toolTypes;
-            ViewData["toolTypeDisplay"] = dropdownData.toolTypeDisplay;
-            ViewData["awcList"] = dropdownData.awcList;
-            ViewData["awcDisplay"] = dropdownData.awcDisplay;
-            ViewData["recipeList"] = dropdownData.recipeList;
-            ViewData["recipeDisplay"] = dropdownData.recipeDisplay;
+            return View(vm);
 
-            ViewData["toolTypes"] = dropdownData.toolTypes;
-            ViewData["toolTypeDisplay"] = dropdownData.toolTypeDisplay;
-            ViewData["awcList"] = dropdownData.awcList;
-            ViewData["awcDisplay"] = dropdownData.awcDisplay;
-
-            ViewData["Title"] = "RecipeParameter";
-
-            return View(viewModel);
         }
 
-
+        // 2. Return recipe content (partial)
         [HttpGet]
-        public IActionResult GetRecipeDetails(string code)
+        public async Task<IActionResult> GetTheRecipe(string code)
         {
-            var recipe = _context.Recipes.FirstOrDefault(r => r.RecipeCode == code);
-            if (recipe == null) return Json(null);
-            var dropdownData = BuildDropdownData(recipe);
-            return Json(new
-            {
-                recipeCode = recipe.RecipeCode,
-                toolTypes = dropdownData.toolTypes,
-                toolTypeDisplay = dropdownData.toolTypeDisplay,
-                awcList = dropdownData.awcList,
-                awcDisplay = dropdownData.awcDisplay,
-                recipeList = dropdownData.recipeList,
-                recipeDisplay = dropdownData.recipeDisplay,
+            if (string.IsNullOrWhiteSpace(code))
+                return BadRequest("Recipe code is required.");
 
+            var recipe = await _recipeService.GetByCodeAsync(code);
+            if (recipe == null)
+                return NotFound($"Recipe code '{code}' not found.");
 
-                // Example product parameters (add all you need)
-                forceFeederRatioS1 = dropdownData.forceFeederRatioS1,
-                forceFeederRatioS1Display = dropdownData.forceFeederRatioS1Display,
-                fillDepthS1 = recipe.FillDepthS1,
-                mainPenetrationPositionS1 = recipe.MainPenetrationPositionS1,
-                mainThicknessPositionS1 = recipe.MainThicknessPositionS1,
-                prePenetrationPositionS1 = recipe.PrePenetrationPositionS1,
-                preThicknessPositionS1 = recipe.PreThicknessPositionS1,
-                sampleIntervalS1 = recipe.SampleIntervalS1,
-                sampleRevolutionQtyS1 = recipe.SampleRevolutionQtyS1,
-                maxMainCompForceS1 = recipe.MaxMainCompForceS1,
-                maxPreCompForceS1 = recipe.MaxPreCompForceS1,
-                maxEjectionForceS1 = recipe.MaxEjectionForceS1,
-                // AWC & AR parameters
-                rejectionForceLimitMaxS1 = recipe.RejectionForceLimitMaxS1,
-                awcForceLimitMaxS1 = recipe.AwcForceLimitMaxS1,
-                awcForceSetPointS1 = recipe.AwcForceSetPointS1,
-                awcForceLimitMinS1 = recipe.AwcForceLimitMinS1,
-                rejectionForceLimitMinS1 = recipe.RejectionForceLimitMinS1,
-
-                // Example product parameters (add all you need)
-                forceFeederRatioS2 = dropdownData.forceFeederRatioS2,
-                forceFeederRatioS2Display = dropdownData.forceFeederRatioS2Display,
-                fillDepthS2 = recipe.FillDepthS2,
-                mainPenetrationPositionS2 = recipe.MainPenetrationPositionS2,
-                mainThicknessPositionS2 = recipe.MainThicknessPositionS2,
-                prePenetrationPositionS2 = recipe.PrePenetrationPositionS2,
-                preThicknessPositionS2 = recipe.PreThicknessPositionS2,
-                sampleIntervalS2 = recipe.SampleIntervalS2,
-                sampleRevolutionQtyS2 = recipe.SampleRevolutionQtyS2,
-                maxMainCompForceS2 = recipe.MaxMainCompForceS2,
-                maxPreCompForceS2 = recipe.MaxPreCompForceS2,
-                maxEjectionForceS2 = recipe.MaxEjectionForceS2,
-                // AWC & AR parameters
-                rejectionForceLimitMaxS2 = recipe.RejectionForceLimitMaxS2,
-                awcForceLimitMaxS2 = recipe.AwcForceLimitMaxS2,
-                awcForceSetPointS2 = recipe.AwcForceSetPointS2,
-                awcForceLimitMinS2 = recipe.AwcForceLimitMinS2,
-                rejectionForceLimitMinS2 = recipe.RejectionForceLimitMinS2
-            });
+            var dto = RecipeViewModelsMapping.ToDto(recipe);
+            return PartialView("_RecipeParametersIndex", dto);
         }
 
-        private (IEnumerable<string> toolTypes, IEnumerable<string> awcList, IEnumerable<string> recipeList, IEnumerable<string> forceFeederRatioS1, IEnumerable<string> forceFeederRatioS2, string toolTypeDisplay, string awcDisplay, string recipeDisplay, string forceFeederRatioS1Display, string forceFeederRatioS2Display)
-            BuildDropdownData(Recipe recipe)
+
+        // 2. Return recipe content (partial)
+        [HttpGet]
+        public async Task<IActionResult> GetRecipe(string code)
         {
-            IEnumerable<string> GetItems(object val)
+            if (string.IsNullOrWhiteSpace(code))
+                return BadRequest("Recipe code is required.");
+
+            var recipe = await _recipeService.GetByCodeAsync(code);
+            if (recipe == null)
+                return NotFound($"Recipe code '{code}' not found.");
+
+            var dto = RecipeViewModelsMapping.ToDto(recipe);
+            return PartialView("_RecipeParametersReadOnly", dto);
+        }
+
+
+        // 1. List codes + first recipe + lookups
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var codes = (await _recipeService.GetRecipeCodesAsync()).ToList();
+            var selected = codes.FirstOrDefault();
+
+            Recipe? recipe = null;
+            if (!string.IsNullOrWhiteSpace(selected))
+                recipe = await _recipeService.GetByCodeAsync(selected);
+
+            var toolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            var treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList(); // optional multi-enum demo
+            var awc_arTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
+            var forceFeederRatioS1Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS1")).ToList();
+            var forceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
+
+            var vm = new RecipeParameterPageVm
             {
-                if (val == null) return new List<string> { "" };
-                if (val is string s) return new List<string> { s };
-                if (val is IEnumerable enumerable)
-                {
-                    var list = new List<string>();
-                    foreach (var item in enumerable) list.Add(item?.ToString() ?? "");
-                    return list;
-                }
-                return new List<string> { val.ToString() };
+                RecipeCodes = codes,
+                SelectedCode = selected,
+                Recipe = recipe != null ? RecipeViewModelsMapping.ToDto(recipe) : null,
+                ToolTypes = toolTypes,
+                Treatments = treatments,
+                AWC_ARTypes = awc_arTypes,
+                ForceFeederRatioS1Types = forceFeederRatioS1Types,
+                ForceFeederRatioS2Types = forceFeederRatioS1Types
+            };
+
+            return View(vm);
+        }
+
+
+        // 3. Check if code exists (Add modal)
+        [HttpGet]
+        public async Task<IActionResult> CheckCode(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return Json(new { exists = false, message = "Recipe code is required." });
+
+            var exists = await _recipeService.ExistsByCodeAsync(code);
+            return Json(new { exists, message = exists ? "Recipe code already exists." : "Recipe code is available." });
+        }
+
+        // ADD
+        [HttpGet]
+        public async Task<IActionResult> Add(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return RedirectToAction(nameof(Index));
+
+            if (await _recipeService.ExistsByCodeAsync(code))
+            {
+                TempData["Error"] = $"Recipe code '{code}' already exists.";
+                return RedirectToAction(nameof(Index));
             }
 
-            var toolTypes = GetItems(recipe?.ToolType);
-            var awcList = GetItems(new[] { "Item1", "1111" });
-            var recipeList = GetItems(recipe?.RecipeName);
-            var forceFeederRatioS1 = GetItems(new[] { "0.5", "1.0", "2.0" });
-            var forceFeederRatioS2 = GetItems(new[] { "0.5", "1.0" });
+            var toolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            var treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList(); // optional multi-enum demo
+            var awc_arTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
+            var forceFeederRatioS1Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS1")).ToList();
+            var forceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
+            var recipeTypes = (await _lookupService.GetCodesAsync("Recipe")).ToList();
 
-            return (toolTypes, awcList, recipeList, forceFeederRatioS1, forceFeederRatioS2,
-                    toolTypes.FirstOrDefault() ?? "",
-                    awcList.FirstOrDefault() ?? "",
-                    recipeList.FirstOrDefault() ?? "",
-                    forceFeederRatioS1.FirstOrDefault() ?? "",
-                    forceFeederRatioS2.FirstOrDefault() ?? "");
+            // Pull rules from config
+            var rules = _cfgProvider.Get().Parameters;
+            ViewBag.ValidationRules = rules;
+
+            // Build parameters from rules so types match config
+            var parameters = new List<RecipeParameter>();
+            foreach (var rule in rules)
+            {
+                switch (rule.Type.ToLowerInvariant())
+                {
+                    case "enum":
+                        // default to first lookup code if required; else empty
+                        //var first = rule.LookupCategory == "ToolType" ? toolTypes.FirstOrDefault() : "";
+                        parameters.Add(new RecipeParameter
+                        {
+                            Name = rule.Name,
+                            Type = "enum",
+                            //Value = first ?? ""
+                            Value = ""
+                        });
+                        break;
+                    case "multi-enum":
+                        parameters.Add(new RecipeParameter
+                        {
+                            Name = rule.Name,
+                            Type = "multi-enum",
+                            Value = Array.Empty<string>()
+                        });
+                        break;
+
+                    case "numeric":
+                        // choose a sensible default inside [min,max] or 0/1
+                        var defaultNum = rule.Min ?? 1m;
+                        parameters.Add(new RecipeParameter
+                        {
+                            Name = rule.Name,
+                            Type = "numeric",
+                            Value = defaultNum
+                        });
+                        break;
+
+                    default: // text
+                        parameters.Add(new RecipeParameter
+                        {
+                            Name = rule.Name,
+                            Type = "text",
+                            Value = rule.Name
+                        });
+                        break;
+                }
+            }
+
+            var vm = new AddEditRecipeVm
+            {
+                Code = code,
+                Name = code + "Name",
+                ToolTypes = toolTypes,
+                Treatments = treatments,
+                AWC_ARTypes = awc_arTypes,
+                ForceFeederRatioS1Types = forceFeederRatioS1Types,
+                ForceFeederRatioS2Types = forceFeederRatioS1Types,
+                RecipeTypes = recipeTypes,
+                Parameters = parameters
+            };
+
+            return View(vm);
         }
 
 
-
-        [HttpGet]
-        public IActionResult CheckCodeExists(string code)
+        // 4 + 5 + 6. Add (client + server validation)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(AddEditRecipeVm vm)
         {
-            var exists = _context.Recipes.Any(r => r.RecipeCode == code);
-            return Json(new { exists = exists });
+            //vm.Parameters = NormalizeParametersFromRequest(Request.Form, vm.Parameters);
+
+            if (!ModelState.IsValid)
+            {
+                vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+                vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+                ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+                return View(vm);
+            }
+
+            if (await _recipeService.ExistsByCodeAsync(vm.Code))
+                ModelState.AddModelError(nameof(vm.Code), $"Recipe code '{vm.Code}' already exists.");
+
+            if (await _recipeService.ExistsByNameAsync(vm.Name))
+                ModelState.AddModelError(nameof(vm.Name), $"Recipe name '{vm.Name}' already exists.");
+
+            if (!ModelState.IsValid)
+            {
+                vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+                vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+                ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+                return View(vm);
+            }
+
+            try
+            {
+                var domain = RecipeViewModelsMapping.ToDomain(vm);
+                await _recipeService.AddAsync(domain, user: User?.Identity?.Name ?? "system");
+                TempData["Success"] = "Recipe added successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DomainException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+            ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+            return View(vm);
+        }
+
+        // ADD
+        [HttpGet]
+        public async Task<IActionResult> AddRecipe(string code)
+        {
+            if (string.IsNullOrWhiteSpace(WebUtility.UrlDecode(code)))
+            {
+                return RedirectToAction(nameof(RecipeParameter));
+            }
+            if (await _recipeService.ExistsByCodeAsync(WebUtility.UrlDecode(code)))
+            {
+                TempData["Error"] = $"Recipe code '{WebUtility.UrlDecode(code)}' already exists.";
+                return RedirectToAction(nameof(RecipeParameter));
+            }
+
+            var toolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            var treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList(); // optional multi-enum demo
+            var awc_arTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
+            var forceFeederRatioS1Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS1")).ToList();
+            var forceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
+            var recipeTypes = (await _lookupService.GetCodesAsync("Recipe")).ToList();
+
+            // Pull rules from config
+            var rules = _cfgProvider.Get().Parameters;
+            Console.WriteLine(rules.Count);
+            Console.WriteLine("----------------------------------rules.Count in AddRecipe Get----------------------------------");
+
+            // Build parameters from rules so types match config
+            var parameters = new List<RecipeParameter>();
+            foreach (var rule in rules)
+            {
+                switch (rule.Type.ToLowerInvariant())
+                {
+                    case "enum":
+                        // default to first lookup code if required; else empty
+                        //var first = rule.LookupCategory == "ToolType" ? toolTypes.FirstOrDefault() : "";
+                        parameters.Add(new RecipeParameter
+                        {
+                            Name = rule.Name,
+                            Type = "enum",
+                            //Value = first ?? ""
+                            Value = ""
+                        });
+                        break;
+                    case "multi-enum":
+                        parameters.Add(new RecipeParameter
+                        {
+                            Name = rule.Name,
+                            Type = "multi-enum",
+                            Value = Array.Empty<string>()
+                        });
+                        break;
+
+                    case "numeric":
+                        // choose a sensible default inside [min,max] or 0/1
+                        var defaultNum = rule.Min ?? 1m;
+                        parameters.Add(new RecipeParameter
+                        {
+                            Name = rule.Name,
+                            Type = "numeric",
+                            Value = defaultNum
+                        });
+                        break;
+
+                    default: // text
+                        parameters.Add(new RecipeParameter
+                        {
+                            Name = rule.Name,
+                            Type = "text",
+                            Value = rule.Name
+                        });
+                        break;
+                }
+            }
+
+            Console.WriteLine(parameters.Count);
+            Console.WriteLine("----------------------------------parameters.Count in AddRecipe Get----------------------------------");
+            var vm = new AddEditRecipeVm
+            {
+                Code = code,
+                ToolTypes = toolTypes,
+                Treatments = treatments,
+                AWC_ARTypes = awc_arTypes,
+                ForceFeederRatioS1Types = forceFeederRatioS1Types,
+                ForceFeederRatioS2Types = forceFeederRatioS1Types,
+                RecipeTypes = recipeTypes,
+                Parameters = parameters
+            };
+            ViewBag.ValidationRules = rules;
+
+            return View(vm);
+        }
+
+
+        // 4 + 5 + 6. Add (client + server validation)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddRecipe(AddEditRecipeVm vm)
+        {
+            Console.WriteLine("----------------------------------Hey Im in AddRecipe post----------------------------------");
+            //vm.Parameters = NormalizeParametersFromRequest(Request.Form, vm.Parameters);
+            Console.WriteLine(vm.Code);
+            Console.WriteLine("----------------------------------vm.code----------------------------------");
+            Console.WriteLine(vm.Parameters.Count);
+            Console.WriteLine("----------------------------------Parameters.Count in AddRecipe Post----------------------------------");
+            foreach (var item in vm.Parameters)
+                {
+                    Console.WriteLine(item.Name + ": "+item.Value);
+                }
+            Console.WriteLine("----------------------------------Parameter.Values----------------------------------");
+            if (!ModelState.IsValid)
+            {
+            Console.WriteLine("----------------------------------Printing Modelstate Errors----------------------------------");
+
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+                vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+                vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+                vm.AWC_ARTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
+                vm.ForceFeederRatioS1Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS1")).ToList();
+                vm.ForceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
+                vm.RecipeTypes = (await _lookupService.GetCodesAsync("Recipe")).ToList();
+                ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+                return View(vm);
+            }
+
+            if (await _recipeService.ExistsByCodeAsync(vm.Code))
+                ModelState.AddModelError(nameof(vm.Code), $"Recipe code '{vm.Code}' already exists.");
+
+            if (await _recipeService.ExistsByNameAsync(vm.Name))
+                ModelState.AddModelError(nameof(vm.Name), $"Recipe name '{vm.Name}' already exists.");
+
+            if (!ModelState.IsValid)
+            {
+                Console.WriteLine("----------------------------------Printing Modelstate Errors 2ndTime----------------------------------");
+
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+                vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+                vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+                vm.AWC_ARTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
+                vm.ForceFeederRatioS1Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS1")).ToList();
+                vm.ForceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
+                vm.RecipeTypes = (await _lookupService.GetCodesAsync("Recipe")).ToList();
+                ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+                return View(vm);
+            }
+
+            try
+            {
+                Console.WriteLine("----------------------------------Im trying to AddRecipe----------------------------------");
+                var domain = RecipeViewModelsMapping.ToDomain(vm);
+                await _recipeService.AddAsync(domain, user: User?.Identity?.Name ?? "system");
+                TempData["Success"] = "Recipe added successfully.";
+                return RedirectToAction(nameof(RecipeParameter));
+            }
+            catch (DomainException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+            vm.AWC_ARTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
+            vm.ForceFeederRatioS1Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS1")).ToList();
+            vm.ForceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
+            vm.RecipeTypes = (await _lookupService.GetCodesAsync("Recipe")).ToList();
+            ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+            return View(vm);
+        }
+
+        // EDIT
+        [HttpGet]
+        public async Task<IActionResult> Edit(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return RedirectToAction(nameof(Index));
+
+            var recipe = await _recipeService.GetByCodeAsync(code);
+            if (recipe == null)
+            {
+                TempData["Error"] = $"Recipe code '{code}' not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var toolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            var treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+            var awc_arTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
+            var forceFeederRatioS1Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS1")).ToList();
+            var forceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
+            var recipeTypes = (await _lookupService.GetCodesAsync("Recipe")).ToList();
+
+            var vm = RecipeViewModelsMapping.ToAddEditVm(recipe, toolTypes, treatments, awc_arTypes, forceFeederRatioS1Types, forceFeederRatioS2Types, recipeTypes);
+            ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+            return View(vm);
+        }
+
+        // 7 + 8 + 9. Update
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(AddEditRecipeVm vm)
+        {
+            //vm.Parameters = NormalizeParametersFromRequest(Request.Form, vm.Parameters);
+
+            if (!ModelState.IsValid)
+            {
+                vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+                vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+                ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+                return View(vm);
+            }
+
+            var current = await _recipeService.GetByCodeAsync(vm.Code);
+            if (current == null)
+                ModelState.AddModelError(nameof(vm.Code), $"Recipe code '{vm.Code}' does not exist.");
+
+            if (await _recipeService.ExistsByNameAsync(vm.Name))
+            {
+                if (!string.Equals(current?.Name, vm.Name, StringComparison.OrdinalIgnoreCase))
+                    ModelState.AddModelError(nameof(vm.Name), $"Recipe name '{vm.Name}' already exists.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+                vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+                ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+                return View(vm);
+            }
+
+            try
+            {
+                var domain = RecipeViewModelsMapping.ToDomain(vm);
+                await _recipeService.UpdateAsync(domain, user: User?.Identity?.Name ?? "system");
+                TempData["Success"] = "Recipe updated successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DomainException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+            ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+            return View(vm);
+        }
+
+        // EDIT
+        [HttpGet]
+        public async Task<IActionResult> EditRecipe(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return RedirectToAction(nameof(Index));
+
+            var recipe = await _recipeService.GetByCodeAsync(code);
+            if (recipe == null)
+            {
+                TempData["Error"] = $"Recipe code '{code}' not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var toolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            var treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+            var awc_arTypes = (await _lookupService.GetCodesAsync("AWC&AR")).ToList();
+            var forceFeederRatioS1Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS1")).ToList();
+            var forceFeederRatioS2Types = (await _lookupService.GetCodesAsync("ForceFeederRatioS2")).ToList();
+            var recipeTypes = (await _lookupService.GetCodesAsync("Recipe")).ToList();
+
+            var vm = RecipeViewModelsMapping.ToAddEditVm(recipe, toolTypes, treatments, awc_arTypes, forceFeederRatioS1Types, forceFeederRatioS2Types, recipeTypes);
+            ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+            return View(vm);
+        }
+
+        // 7 + 8 + 9. Update
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditRecipe(AddEditRecipeVm vm)
+        {
+            //vm.Parameters = NormalizeParametersFromRequest(Request.Form, vm.Parameters);
+
+            if (!ModelState.IsValid)
+            {
+                vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+                vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+                ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+                return View(vm);
+            }
+
+            var current = await _recipeService.GetByCodeAsync(vm.Code);
+            if (current == null)
+                ModelState.AddModelError(nameof(vm.Code), $"Recipe code '{vm.Code}' does not exist.");
+
+            if (await _recipeService.ExistsByNameAsync(vm.Name))
+            {
+                if (!string.Equals(current?.Name, vm.Name, StringComparison.OrdinalIgnoreCase))
+                    ModelState.AddModelError(nameof(vm.Name), $"Recipe name '{vm.Name}' already exists.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+                vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+                ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+                return View(vm);
+            }
+
+            try
+            {
+                var domain = RecipeViewModelsMapping.ToDomain(vm);
+                await _recipeService.UpdateAsync(domain, user: User?.Identity?.Name ?? "system");
+                TempData["Success"] = "Recipe updated successfully.";
+                return RedirectToAction(nameof(RecipeParameter));
+            }
+            catch (DomainException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            vm.ToolTypes = (await _lookupService.GetCodesAsync("ToolType")).ToList();
+            vm.Treatments = (await _lookupService.GetCodesAsync("Treatment")).ToList();
+            ViewBag.ValidationRules = _cfgProvider.Get().Parameters;
+            return View(vm);
+        }
+
+
+        // DELETE
+        [HttpGet]
+        public async Task<IActionResult> Delete(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return RedirectToAction(nameof(Index));
+
+            var recipe = await _recipeService.GetByCodeAsync(code);
+            if (recipe == null)
+            {
+                TempData["Error"] = $"Recipe code '{code}' not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var vm = RecipeViewModelsMapping.ToDeleteVm(recipe);
+            return View(vm);
+        }
+
+        // DELETE
+        [HttpGet]
+        public async Task<IActionResult> RemoveRecipe(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return RedirectToAction(nameof(RecipeParameter));
+
+            var recipe = await _recipeService.GetByCodeAsync(code);
+            if (recipe == null)
+            {
+                TempData["Error"] = $"Recipe code '{code}' not found.";
+                return RedirectToAction(nameof(RecipeParameter));
+            }
+
+            var vm = RecipeViewModelsMapping.ToDeleteVm(recipe);
+            return View(vm);
+        }
+
+        // 10 + 11. DeleteConfirmed
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteIsConfirmed(string code, string name)
+        {
+            if (!await _recipeService.ExistsByNameAsync(name))
+            {
+                TempData["Error"] = $"Recipe name '{name}' does not exist.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+                await _recipeService.DeleteAsync(code, user: User?.Identity?.Name ?? "system");
+                TempData["Success"] = "Recipe deleted successfully.";
+            }
+            catch (DomainException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // 10 + 11. DeleteConfirmed
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string code, string name)
+        {
+            if (!await _recipeService.ExistsByNameAsync(name))
+            {
+                TempData["Error"] = $"Recipe name '{name}' does not exist.";
+                return RedirectToAction(nameof(RecipeParameter));
+            }
+
+            try
+            {
+                await _recipeService.DeleteAsync(code, user: User?.Identity?.Name ?? "system");
+                TempData["Success"] = "Recipe deleted successfully.";
+            }
+            catch (DomainException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(RecipeParameter));
+        }
+
+        // 12 + 13. Print
+        [HttpGet]
+        public async Task<IActionResult> Print(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+                return RedirectToAction(nameof(RecipeParameter));
+
+            var recipe = await _recipeService.GetByCodeAsync(code);
+            if (recipe == null)
+            {
+                TempData["Error"] = $"Recipe code '{code}' not found.";
+                return RedirectToAction(nameof(RecipeParameter));
+            }
+
+            var existsByName = await _recipeService.ExistsByNameAsync(recipe.Name);
+            if (!existsByName)
+            {
+                TempData["Error"] = $"Recipe name '{recipe.Name}' does not exist.";
+                return RedirectToAction(nameof(RecipeParameter));
+            }
+
+            var dto = RecipeViewModelsMapping.ToDto(recipe);
+            return View("Print", dto);
         }
 
         /// <summary>
-        /// Logic for the "Add Recipe" Modal submission
+        /// Converts dynamic Parameter.Value to the expected type based on Parameter.Type.
+        /// - numeric -> decimal
+        /// - enum    -> string
+        /// - multi-enum -> string[]
+        /// - text    -> string
         /// </summary>
-        [HttpPost]
-        public IActionResult PrepareAdd(string code)
+        private static List<RecipeParameter> NormalizeParametersFromRequest(
+            Microsoft.AspNetCore.Http.IFormCollection form,
+            List<RecipeParameter> parameters)
         {
-            if (string.IsNullOrWhiteSpace(code))
+            var normalized = new List<RecipeParameter>();
+
+            for (var i = 0; i < parameters.Count; i++)
             {
-                TempData["ErrorMessage"] = "Recipe code cannot be empty.";
-                return RedirectToAction("RecipeParameter");
-            }
+                var name = parameters[i].Name;
+                var type = parameters[i].Type?.ToLowerInvariant() ?? "text";
 
-            // Check database for existing Recipe_code
-            var exists = _context.Recipes.Any(r => r.RecipeCode == code);
-
-            if (exists)
-            {
-                TempData["ErrorMessage"] = $"Recipe code '{code}' already exists.";
-                return RedirectToAction("RecipeParameter");
-            }
-
-            // Success: Pass the code to the Add page via TempData
-            TempData["NewRecipeCode"] = code;
-            return RedirectToAction("AddRecipe");
-        }
-
-        /*
-                [HttpGet]
-                public IActionResult AddRecipe()
+                if (type == "multi-enum")
                 {
-                    var code = TempData["NewRecipeCode"] as string;
-
-                    if (string.IsNullOrEmpty(code))
+                    var key = $"Parameters[{i}].Value";
+                    var values = form[key];
+                    normalized.Add(new RecipeParameter
                     {
-                        return RedirectToAction("RecipeParameter");
-                    }
-
-                    // Initialize model with the code and current timestamp
-                    var model = new Recipe
-                    {
-                        RecipeCode = code,
-                        DateTime = DateTime.Now
-                    };
-
-                    return View(model);
+                        Name = name,
+                        Type = "multi-enum",
+                        Value = values.ToArray()
+                    });
+                    continue;
                 }
-        */
-        /* [HttpGet]
-         public IActionResult AddRecipe(string code)
-         {
-             if (string.IsNullOrEmpty(code))
-             {
-                 return RedirectToAction("RecipeParameter");
-             }
 
-             // Initialize the model with the code provided from the modal
-             var model = new Recipe
-             {
-                 RecipeCode = code,
-                 DateTime = DateTime.Now
-             };
+                var singleKey = $"Parameters[{i}].Value";
+                var raw = form[singleKey].FirstOrDefault() ?? parameters[i].Value?.ToString() ?? string.Empty;
 
-             return View(model);
-         }*/
-
-        [HttpPost]
-        public IActionResult SaveNewRecipe(Recipe model)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Recipes.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction("RecipeParameter");
+                if (type == "numeric")
+                {
+                    if (decimal.TryParse(raw, System.Globalization.NumberStyles.Float,
+                        System.Globalization.CultureInfo.InvariantCulture, out var d))
+                    {
+                        normalized.Add(new RecipeParameter { Name = name, Type = "numeric", Value = d });
+                    }
+                    else
+                    {
+                        normalized.Add(new RecipeParameter { Name = name, Type = "numeric", Value = raw });
+                    }
+                }
+                else if (type == "enum")
+                {
+                    normalized.Add(new RecipeParameter { Name = name, Type = "enum", Value = raw });
+                }
+                else
+                {
+                    normalized.Add(new RecipeParameter { Name = name, Type = "text", Value = raw });
+                }
             }
 
-            return View("AddRecipe", model);
+            return normalized;
         }
     }
 }
