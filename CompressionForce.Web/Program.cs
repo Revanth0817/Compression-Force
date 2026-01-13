@@ -4,31 +4,35 @@ using Microsoft.EntityFrameworkCore;
 using Rotativa.AspNetCore;
 using System.IO;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // ===================== SERVICES =====================
 
-// ✅ IHttpContextAccessor (needed for Session + AuditLogger)
+// IHttpContextAccessor
 builder.Services.AddHttpContextAccessor();
 
-// ✅ PostgreSQL DbContext
+// PostgreSQL DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
 
-// ✅ Audit Logger (CRITICAL)
+// Audit Logger
 builder.Services.AddScoped<AuditLogger>();
 
-// ✅ MVC
-builder.Services.AddControllersWithViews();
+// ✅ MVC + JSON FIX (CRITICAL)
+builder.Services
+    .AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    });
 
-// ✅ Session
+// Session
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromDays(1); // handled by middleware
+    options.IdleTimeout = TimeSpan.FromDays(1);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -48,10 +52,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// ✅ SESSION MUST COME BEFORE CUSTOM MIDDLEWARE
+// Session BEFORE custom middleware
 app.UseSession();
 
-// ===================== 🔐 APPLICATION TIMEOUT MIDDLEWARE =====================
+// ===================== APPLICATION TIMEOUT MIDDLEWARE =====================
 app.Use(async (context, next) =>
 {
     var username = context.Session.GetString("UserName");
@@ -73,14 +77,12 @@ app.Use(async (context, next) =>
 
                 if (idleMinutes > settings.ApplicationTimeoutMinutes)
                 {
-                    // ⛔ SESSION TIMEOUT
                     context.Session.Clear();
                     context.Response.Redirect("/Account/Login");
                     return;
                 }
             }
 
-            // ✅ Update last activity timestamp (UTC)
             context.Session.SetString(
                 "LastActivity",
                 DateTime.UtcNow.ToString("O")
@@ -93,16 +95,16 @@ app.Use(async (context, next) =>
 
 app.UseAuthorization();
 
-// ===================== ROUTES =====================
+// Routes
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Welcome}/{id?}"
 );
 
-Rotativa.AspNetCore.RotativaConfiguration.Setup(
+// Rotativa
+RotativaConfiguration.Setup(
     app.Environment.WebRootPath,
     "Rotativa"
 );
-
 
 app.Run();

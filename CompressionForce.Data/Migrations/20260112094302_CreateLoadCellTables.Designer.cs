@@ -3,6 +3,7 @@ using System;
 using CompressionForce.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CompressionForce.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260112094302_CreateLoadCellTables")]
+    partial class CreateLoadCellTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,45 +106,6 @@ namespace CompressionForce.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("GroupPrivileges");
-                });
-
-            modelBuilder.Entity("CompressionForce.Domain.Entities.LoadCellCalibration", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("Factor")
-                        .HasColumnType("numeric(18,8)");
-
-                    b.Property<string>("LoadCellCode")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<decimal>("MaxValue")
-                        .HasColumnType("numeric(10,4)");
-
-                    b.Property<decimal>("MaxVolt")
-                        .HasColumnType("numeric(10,4)");
-
-                    b.Property<decimal>("MinValue")
-                        .HasColumnType("numeric(10,4)");
-
-                    b.Property<decimal>("MinVolt")
-                        .HasColumnType("numeric(10,4)");
-
-                    b.Property<decimal>("Offset")
-                        .HasColumnType("numeric(18,8)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LoadCellCalibrations");
                 });
 
             modelBuilder.Entity("CompressionForce.Domain.Entities.Recipe", b =>
@@ -483,44 +447,6 @@ namespace CompressionForce.Data.Migrations
                     b.ToTable("SecuritySettings");
                 });
 
-            modelBuilder.Entity("CompressionForce.Domain.Entities.ServoCalibration", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("JogSpeed")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("ServoCode")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("ServoName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<decimal>("SetPosition")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("SetSpeed")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("TorqueLimit")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServoCalibrations");
-                });
-
             modelBuilder.Entity("CompressionForce.Domain.Entities.UserGroup", b =>
                 {
                     b.Property<int>("Id")
@@ -618,6 +544,50 @@ namespace CompressionForce.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("LoadCells");
+                });
+
+            modelBuilder.Entity("LoadCellCalibration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CalibratedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CalibratedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("Factor")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("LoadCellCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<double>("MaxValue")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("MaxVolt")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("MinValue")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("MinVolt")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Offset")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoadCellCalibrations");
                 });
 #pragma warning restore 612, 618
         }

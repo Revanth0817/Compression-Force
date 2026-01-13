@@ -3,6 +3,7 @@ using System;
 using CompressionForce.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CompressionForce.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260113064849_FixLoadCellCalibrationEntity")]
+    partial class FixLoadCellCalibrationEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -481,44 +484,6 @@ namespace CompressionForce.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SecuritySettings");
-                });
-
-            modelBuilder.Entity("CompressionForce.Domain.Entities.ServoCalibration", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("JogSpeed")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("ServoCode")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("ServoName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<decimal>("SetPosition")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("SetSpeed")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("TorqueLimit")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServoCalibrations");
                 });
 
             modelBuilder.Entity("CompressionForce.Domain.Entities.UserGroup", b =>

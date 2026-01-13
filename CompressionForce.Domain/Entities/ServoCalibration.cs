@@ -1,31 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CompressionForce.Domain.Entities;
-
-public partial class ServoCalibration
+namespace CompressionForce.Domain.Entities
 {
-    public int Id { get; set; }
+    public class ServoCalibration
+    {
+        public int Id { get; set; }
 
-    public DateTime? DateTime { get; set; }
+        public string ServoCode { get; set; }
+        public string ServoName { get; set; }
 
-    public double? Axis1Position { get; set; }
+        public decimal JogSpeed { get; set; }
+        public decimal TorqueLimit { get; set; }
 
-    public double? Axis2Position { get; set; }
+        public decimal SetPosition { get; set; }
+        public decimal SetSpeed { get; set; }
 
-    public double? Axis3Position { get; set; }
-
-    public double? Axis4Position { get; set; }
-
-    public double? Axis5Position { get; set; }
-
-    public double? Axis6Position { get; set; }
-
-    public double? Axis7Position { get; set; }
-
-    public double? Axis8Position { get; set; }
-
-    public double? Axis9Position { get; set; }
-
-    public double? Axis10Position { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    }
 }
