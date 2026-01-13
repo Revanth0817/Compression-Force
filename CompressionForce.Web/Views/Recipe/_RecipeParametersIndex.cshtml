@@ -4,13 +4,21 @@
 @using CompressionForce.Domain.Entities;
 @model CompressionForce.Services.DTOs.RecipeDto
 
+@functions {
+    string GetParamValue(Dictionary<string, RecipeParameter> dict, string key)
+    {
+        return dict != null && dict.TryGetValue(key, out var param)
+            ? param?.Value?.ToString() ?? string.Empty
+            : string.Empty;
+    }
+}
+
 @{
     //var parameters = Model.Parameters as IEnumerable<RecipeParameter>;
 
     var parameters = Model?.Parameters as List<RecipeParameter> ?? new();
 
-    var parametersDict = parameters?.ToDictionary(p => p.Name, p => p)
-        ?? new Dictionary<string, RecipeParameter>();
+    var parametersDict = parameters?.ToDictionary(p => p.Name, p => p)  ?? new Dictionary<string, RecipeParameter>();
 
 
 }
@@ -29,7 +37,7 @@
                     <label class="font-size-16px fw-semibold clr-242424">Tool Type</label>
                     <div class="d-flex toolTypeDropdown batchDropdown position-relative">
                         <input type="text" id="toolTypeInput" class="form-control flex-grow-1 dropdownInput bord-D2D2D2"
-                               value=@parametersDict["ToolType"].Value readonly>
+                               value="@GetParamValue(parametersDict, "ToolType")" readonly>
                         <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
@@ -43,7 +51,7 @@
                     <label class="font-size-16px fw-semibold clr-242424">AWC & AR</label>
                     <div class="d-flex commonProductDropdown batchDropdown position-relative">
                         <input type="text" id="awcInput" class="form-control flex-grow-1 dropdownInput bord-D2D2D2"
-                               value=@parametersDict["AWC&AR"].Value readonly>
+                               value="@GetParamValue(parametersDict, "AWC&AR")" readonly>
                         <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
@@ -57,7 +65,7 @@
                     <label class="font-size-16px fw-semibold clr-242424">Recipe</label>
                     <div class="d-flex commonProductDropdown batchDropdown position-relative">
                         <input type="text" id="recipeInput" class="form-control flex-grow-1 dropdownInput bord-D2D2D2"
-                               value=@parametersDict["Recipe"].Value readonly>
+                               value="@GetParamValue(parametersDict, "Recipe")" readonly>
                         <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
@@ -74,25 +82,25 @@
                     <label class="font-size-16px min-width-30 fw-semibold clr-242424">Recipe Code</label>
                     <input type="text" id="recipeCode"
                            class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px w-60 font-size-14px col-242424 boxshadow"
-                           placeholder="4444" value=@parametersDict["RecipeCode"].Value readonly />
+                           placeholder="4444" value="@GetParamValue(parametersDict, "RecipeCode")" readonly>
                 </div>
                 <div class="d-flex gap-3 align-items-center pb-2">
                     <label class="font-size-16px min-width-30 fw-semibold clr-242424">Product Name</label>
                     <input type="text" id="productName"
                            class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px w-60 font-size-14px col-242424 boxshadow"
-                           placeholder="rrt" value=@parametersDict["ProductName"].Value readonly />
+                           placeholder="rrt" value="@GetParamValue(parametersDict, "ProductName")" readonly>
                 </div>
                 <div class="d-flex gap-3 align-items-center pb-2">
                     <label class="font-size-16px min-width-30 fw-semibold clr-242424">Shape</label>
                     <input type="text" id="shape"
                            class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px w-60 font-size-14px col-242424 boxshadow"
-                           placeholder="5" value=@parametersDict["Shape"].Value readonly />
+                           placeholder="5" value="@GetParamValue(parametersDict, "Shape")" readonly>
                 </div>
                 <div class="d-flex gap-3 align-items-center pb-2">
                     <label class="font-size-16px min-width-30 fw-semibold clr-242424">Size</label>
                     <input type="text" id="size"
                            class="bord-D2D2D2 px-12-py-6px form-control bord-rad-4px w-60 font-size-14px col-242424 boxshadow"
-                           value=@parametersDict["Size"].Value placeholder="8" readonly />
+                           value="@GetParamValue(parametersDict, "Size")" placeholder="8" readonly />
                 </div>
             </div>
 
@@ -105,7 +113,7 @@
                         <div class="d-flex align-items-center gap-10px max-width-115px">
                             <input type="text" id="tabletThickness"
                                    class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                                   placeholder="0.00" value=@parametersDict["TabletThickness"].Value readonly />
+                                   placeholder="0.00" value="@GetParamValue(parametersDict, "TabletThickness")" readonly>
                             <span class="font-size-16px fw-semibold clr-242424">mm</span>
                         </div>
                     </div>
@@ -114,7 +122,7 @@
                         <div class="d-flex align-items-center gap-10px max-width-115px">
                             <input type="text" id="tabletHardness"
                                    class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                                   placeholder="0.00" value=@parametersDict["TabletHardness"].Value readonly />
+                                   placeholder="0.00" value="@GetParamValue(parametersDict, "TabletHardness")" readonly>
                             <span class="font-size-16px fw-semibold clr-242424">kpa</span>
                         </div>
                     </div>
@@ -123,7 +131,7 @@
                         <div class="d-flex align-items-center gap-10px max-width-115px">
                             <input type="text" id="tabletWeight"
                                    class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                                   placeholder="0.00" value=@parametersDict["TabletWeight"].Value readonly />
+                                   placeholder="0.00" value="@GetParamValue(parametersDict, "TabletWeight")" readonly>
                             <span class="font-size-16px fw-semibold clr-242424">mg</span>
                         </div>
                     </div>
@@ -132,7 +140,7 @@
                         <div class="d-flex align-items-center gap-10px max-width-115px">
                             <input type="text" id="maxTurretRpm"
                                    class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                                   placeholder="0.00" value=@parametersDict["MaxTurretRpm"].Value readonly />
+                                   placeholder="0.00" value="@GetParamValue(parametersDict, "MaxTurretRpm")" readonly>
                             <span class="font-size-16px fw-semibold clr-242424">rpm</span>
                         </div>
                     </div>
@@ -154,7 +162,7 @@
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Force Feeder Ratio S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
                         <select id="forceFeederRatioS1" class="form-select bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center">
-                            <option value="@parametersDict["ForceFeederRatioS1"].Value" selected>@parametersDict["ForceFeederRatioS1"].Value</option>
+                            <option value="@GetParamValue(parametersDict, "ForceFeederRatioS1")" selected>@GetParamValue(parametersDict, "ForceFeederRatioS1")</option>
                         </select>
                         <span class="font-size-16px fw-semibold clr-242424 vis-hidden">mm</span>
                     </div>
@@ -162,70 +170,70 @@
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Fill Depth S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="fillDepthS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value=@parametersDict["FillDepthS1"].Value readonly />
+                        <input type="text" id="fillDepthS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value="@GetParamValue(parametersDict, "FillDepthS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">mm</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Main Penetration Position S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="mainPenetrationPositionS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value=@parametersDict["MainPenetrationPositionS1"].Value readonly />
+                        <input type="text" id="mainPenetrationPositionS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value="@GetParamValue(parametersDict, "MainPenetrationPositionS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">mm</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Main Thickness Position S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="mainThicknessPositionS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value=@parametersDict["MainThicknessPositionS1"].Value readonly />
+                        <input type="text" id="mainThicknessPositionS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value="@GetParamValue(parametersDict, "MainThicknessPositionS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">mm</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Pre Penetration Position S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="prePenetrationPositionS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value=@parametersDict["PrePenetrationPositionS1"].Value readonly />
+                        <input type="text" id="prePenetrationPositionS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value="@GetParamValue(parametersDict, "PrePenetrationPositionS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">mm</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Pre Thickness Position S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="preThicknessPositionS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value=@parametersDict["PreThicknessPositionS1"].Value readonly />
+                        <input type="text" id="preThicknessPositionS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value="@GetParamValue(parametersDict, "PreThicknessPositionS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">mm</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Sample Interval S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="sampleIntervalS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="10" value=@parametersDict["SampleIntervalS1"].Value readonly />
+                        <input type="text" id="sampleIntervalS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="10" value="@GetParamValue(parametersDict, "SampleIntervalS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">rev</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Sample revolution Qty. S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="sampleRevolutionQtyS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="1" value=@parametersDict["SampleRevolutionQuantityS1"].Value readonly />
+                        <input type="text" id="sampleRevolutionQtyS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="1" value="@GetParamValue(parametersDict, "SampleRevolutionQuantityS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">rev</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Max Main Comp. Force S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="maxMainCompForceS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="50.00" value=@parametersDict["MaxMainCompForceS1"].Value readonly />
+                        <input type="text" id="maxMainCompForceS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="50.00" value="@GetParamValue(parametersDict, "MaxMainCompForceS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Max Pre Comp. Force S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="maxPreCompForceS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="50.00" value=@parametersDict["MaxPreCompForceS1"].Value readonly />
+                        <input type="text" id="maxPreCompForceS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="50.00" value="@GetParamValue(parametersDict, "MaxPreCompForceS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Max Ejection Comp. Force S1</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="maxEjectionForceS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="1.00" value=@parametersDict["MaxEjectionForceS1"].Value readonly />
+                        <input type="text" id="maxEjectionForceS1" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="1.00" value="@GetParamValue(parametersDict, "MaxEjectionForceS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -247,7 +255,7 @@
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Force Feeder Ratio S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
                         <select id="forceFeederRatioS2" class="form-select bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center">
-                            <option value="@parametersDict["ForceFeederRatioS2"].Value" selected>@parametersDict["ForceFeederRatioS2"].Value</option>
+                            <option value="@GetParamValue(parametersDict, "ForceFeederRatioS2")" selected>@GetParamValue(parametersDict, "ForceFeederRatioS2")</option>
                         </select>
                         <span class="font-size-16px fw-semibold clr-242424 vis-hidden">mm</span>
                     </div>
@@ -255,70 +263,70 @@
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Fill Depth S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="fillDepthS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value=@parametersDict["FillDepthS2"].Value readonly />
+                        <input type="text" id="fillDepthS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value="@GetParamValue(parametersDict, "FillDepthS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">mm</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Main Penetration Position S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="mainPenetrationPositionS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value=@parametersDict["MainPenetrationPositionS2"].Value readonly />
+                        <input type="text" id="mainPenetrationPositionS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value="@GetParamValue(parametersDict, "MainPenetrationPositionS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">mm</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Main Thickness Position S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="mainThicknessPositionS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value=@parametersDict["MainThicknessPositionS2"].Value readonly />
+                        <input type="text" id="mainThicknessPositionS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value="@GetParamValue(parametersDict, "MainThicknessPositionS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">mm</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Pre Penetration Position S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="prePenetrationPositionS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value=@parametersDict["PrePenetrationPositionS2"].Value readonly />
+                        <input type="text" id="prePenetrationPositionS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value="@GetParamValue(parametersDict, "PrePenetrationPositionS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">mm</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Pre Thickness Position S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="preThicknessPositionS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value=@parametersDict["PreThicknessPositionS2"].Value readonly />
+                        <input type="text" id="preThicknessPositionS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="5.00" value="@GetParamValue(parametersDict, "PreThicknessPositionS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">mm</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Sample Interval S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="sampleIntervalS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="10" value=@parametersDict["SampleIntervalS2"].Value readonly />
+                        <input type="text" id="sampleIntervalS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="10" value="@GetParamValue(parametersDict, "SampleIntervalS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">rev</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Sample revolution Qty. S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="sampleRevolutionQtyS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="1" value=@parametersDict["SampleRevolutionQuantityS2"].Value readonly />
+                        <input type="text" id="sampleRevolutionQtyS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="1" value="@GetParamValue(parametersDict, "SampleRevolutionQuantityS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">rev</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Max Main Comp. Force S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="maxMainCompForceS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="50.00" value=@parametersDict["MaxMainCompForceS2"].Value readonly />
+                        <input type="text" id="maxMainCompForceS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="50.00" value="@GetParamValue(parametersDict, "MaxMainCompForceS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Max Pre Comp. Force S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="maxPreCompForceS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="50.00" value=@parametersDict["MaxPreCompForceS2"].Value readonly />
+                        <input type="text" id="maxPreCompForceS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="50.00" value="@GetParamValue(parametersDict, "MaxPreCompForceS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
                 <div class="d-flex gap-3 align-items-center justify-content-between pb-2">
                     <label class="font-size-16px w-60 fw-semibold clr-242424">Max Ejection Comp. Force S2</label>
                     <div class="d-flex align-items-center gap-10px max-width-115px">
-                        <input type="text" id="maxEjectionForceS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="1.00" value=@parametersDict["MaxEjectionForceS2"].Value readonly />
+                        <input type="text" id="maxEjectionForceS2" class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center" placeholder="1.00" value="@GetParamValue(parametersDict, "MaxEjectionForceS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -339,7 +347,7 @@
                     <div class="d-flex align-items-center gap-10px max-width-115px">
                         <input type="text" id="rejectionForceLimitMaxS1"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="5.00" value=@parametersDict["RejectionLimitMaxS1"].Value readonly />
+                               placeholder="5.00" value="@GetParamValue(parametersDict, "RejectionLimitMaxS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -348,7 +356,7 @@
                     <div class="d-flex align-items-center gap-10px max-width-115px">
                         <input type="text" id="awcForceLimitMaxS1"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="4.00" value=@parametersDict["AWCLimitMaxS1"].Value readonly />
+                               placeholder="4.00" value="@GetParamValue(parametersDict, "AWCLimitMaxS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -357,7 +365,7 @@
                     <div class="d-flex align-items-center gap-10px max-width-115px">
                         <input type="text" id="awcForceSetPointS1"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="3.00" value=@parametersDict["AWCSetPointS1"].Value readonly />
+                               placeholder="3.00" value="@GetParamValue(parametersDict, "AWCSetPointS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -366,7 +374,7 @@
                     <div class="d-flex align-items-center gap-10px max-width-115px">
                         <input type="text" id="awcForceLimitMinS1"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="2.00" value=@parametersDict["AWCLimitMinS1"].Value readonly />
+                               placeholder="2.00" value="@GetParamValue(parametersDict, "AWCLimitMinS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -375,7 +383,7 @@
                     <div class="d-flex align-items-center gap-10px max-width-115px">
                         <input type="text" id="rejectionForceLimitMinS1"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="1.00" value=@parametersDict["RejectionLimitMinS1"].Value readonly />
+                               placeholder="1.00" value="@GetParamValue(parametersDict, "RejectionLimitMinS1")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -399,7 +407,7 @@
                     <div class="d-flex align-items-center gap-3 max-width-115px">
                         <input type="text" id="rejectionForceLimitMaxS2"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="5.00" value=@parametersDict["RejectionLimitMaxS2"].Value readonly />
+                               placeholder="5.00" value="@GetParamValue(parametersDict, "RejectionLimitMaxS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -408,7 +416,7 @@
                     <div class="d-flex align-items-center gap-3 max-width-115px">
                         <input type="text" id="awcForceLimitMaxS2"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="4.00" value=@parametersDict["AWCLimitMaxS2"].Value readonly />
+                               placeholder="4.00" value="@GetParamValue(parametersDict, "AWCLimitMaxS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -417,7 +425,7 @@
                     <div class="d-flex align-items-center gap-3 max-width-115px">
                         <input type="text" id="awcForceSetPointS2"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="3.00" value=@parametersDict["AWCSetPointS2"].Value readonly />
+                               placeholder="3.00" value="@GetParamValue(parametersDict, "AWCSetPointS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -426,7 +434,7 @@
                     <div class="d-flex align-items-center gap-3 max-width-115px">
                         <input type="text" id="awcForceLimitMinS2"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="2.00" value=@parametersDict["AWCLimitMinS2"].Value readonly />
+                               placeholder="2.00" value="@GetParamValue(parametersDict, "AWCLimitMinS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>
@@ -435,7 +443,7 @@
                     <div class="d-flex align-items-center gap-3 max-width-115px">
                         <input type="text" id="rejectionForceLimitMinS2"
                                class="bord-D2D2D2 px-12-py-6px w-70px bord-rad-4px font-size-12px col-242424 fw-semibold text-center"
-                               placeholder="1.00" value=@parametersDict["RejectionLimitMinS2"].Value readonly />
+                               placeholder="1.00" value="@GetParamValue(parametersDict, "RejectionLimitMinS2")" readonly>
                         <span class="font-size-16px fw-semibold clr-242424">kN</span>
                     </div>
                 </div>

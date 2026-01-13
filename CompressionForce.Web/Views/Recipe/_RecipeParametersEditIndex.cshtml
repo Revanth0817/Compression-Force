@@ -49,7 +49,7 @@
                     <div class="d-flex gap-3 align-items-center commonProductDropdownDiv">
                         <label class="font-size-16px fw-semibold min-width-30 clr-242424">Tool Type</label>
                         <div class="d-flex toolTypeDropdown batchDropdown position-relative">
-                            <input recipe-param param-name="ToolType" type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="ToolType" value="@(toolTypes.Any() ? toolTypes.First() : string.Empty)" readonly />
+                            <input recipe-param param-name="ToolType" type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="ToolType" value="@((!string.IsNullOrEmpty(parametersDict["ToolType"].Value.ToString())) ? parametersDict["ToolType"].Value.ToString() : (toolTypes.Any() ? toolTypes.First() : string.Empty))" readonly />
                             <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="visually-hidden">Toggle Dropdown</span>
                             </button>
@@ -71,7 +71,7 @@
                     <div class="d-flex gap-3 align-items-center commonProductDropdownDiv">
                         <label class="font-size-16px fw-semibold min-width-30 clr-242424">AWC & AR</label>
                         <div class="d-flex commonProductDropdown batchDropdown position-relative">
-                            <input recipe-param param-name="AWC&AR" type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="AWC&AR" value="@(awc_arTypes.Any() ? awc_arTypes.First() : string.Empty)" readonly />
+                            <input recipe-param param-name="AWC&AR" type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="AWC&AR" value="@((!string.IsNullOrEmpty(parametersDict["AWC&AR"].Value.ToString())) ? parametersDict["AWC&AR"].Value.ToString() : (awc_arTypes.Any() ? awc_arTypes.First() : string.Empty))" readonly />
                             <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="visually-hidden">Toggle Dropdown</span>
                             </button>
@@ -93,7 +93,7 @@
                     <div class="d-flex gap-3 align-items-center commonProductDropdownDiv">
                         <label class="font-size-16px fw-semibold min-width-30 clr-242424">Recipe</label>
                         <div class="d-flex commonProductDropdown batchDropdown position-relative">
-                            <input recipe-param param-name="Recipe" type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="Recipe" value="@(recipeTypes.Any() ? recipeTypes.First() : string.Empty)" readonly />
+                            <input recipe-param param-name="Recipe" type="text" class="form-control flex-grow-1 dropdownInput bord-D2D2D2" id="Recipe" value="@((!string.IsNullOrEmpty(parametersDict["Recipe"].Value.ToString())) ? parametersDict["Recipe"].Value.ToString() : (recipeTypes.Any() ? recipeTypes.First() : string.Empty))" readonly />
                             <button type="button" class="bgcol-215ED6 border-0 flex-shrink-0 text-white dropdown-toggle dropdown-toggle-split dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="visually-hidden">Toggle Dropdown</span>
                             </button>
@@ -184,7 +184,7 @@
                         <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Force Feeder Ratio S1</label>
                         <div class="dropdown">
                             <button recipe-param param-name="ForceFeederRatioS1" class="btn bg-white bord-D2D2D2 dropdown-toggle w-70px margin-right-45px" type="button" id="ForceFeederRatioS1" data-bs-toggle="dropdown" aria-expanded="false">
-                                @(forceFeederRatioS1Types.Any() ? forceFeederRatioS1Types.First() : string.Empty)
+                                @((!string.IsNullOrEmpty(parametersDict["ForceFeederRatioS1"].Value.ToString())) ? parametersDict["ForceFeederRatioS1"].Value.ToString() : (forceFeederRatioS1Types.Any() ? forceFeederRatioS1Types.First() : string.Empty))
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 @if (forceFeederRatioS1Types.Any())
@@ -287,7 +287,7 @@
                         <label class="font-size-16px batchLabelw-60 fw-semibold clr-242424">Force Feeder Ratio S2</label>
                         <div class="dropdown">
                             <button recipe-param param-name="ForceFeederRatioS2" class="btn bg-white bord-D2D2D2 dropdown-toggle w-70px margin-right-45px" type="button" id="ForceFeederRatioS2" data-bs-toggle="dropdown" aria-expanded="false">
-                                @(forceFeederRatioS2Types.Any() ? forceFeederRatioS2Types.First() : string.Empty)
+                                @((!string.IsNullOrEmpty(parametersDict["ForceFeederRatioS2"].Value.ToString())) ? parametersDict["ForceFeederRatioS2"].Value.ToString() : (forceFeederRatioS2Types.Any() ? forceFeederRatioS2Types.First() : string.Empty))
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                 @if (forceFeederRatioS2Types.Any())

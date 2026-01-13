@@ -12,8 +12,8 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
                         <div class="input-group input-group-sm bord-D2D2D2 bord-rad-4px overflow-hidden w-100 p-0">
-                            <input type="text" id="awcAr"
-                                   class="form-control bg-white border-0 font-size-14px col-242424 fw-normal" value="4444" readonly />
+                            <input type="text" id="awcAr" name="Code"
+                                   class="form-control bg-white border-0 font-size-14px col-242424 fw-normal" value=@Model.Code readonly />
                             <button class="btn bgcol-215ED6 text-white border-0 dropdown-toggle font-size-14px" type="button"
                                     data-bs-toggle="dropdown" aria-expanded="false"></button>
                             <ul class="dropdown-menu dropdown-menu-end font-size-14px">
@@ -23,8 +23,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end gap-2">
-                        <button class="btn col-215ED6 bord-215ED6 fw-semibold font-size-16px">Cancel</button>
-                        <button class="btn bgcol-215ED6 text-white fw-semibold font-size-16px">Save</button>
+                            <button type="button" onclick="location.href='@Url.Action("RecipeParameter")'" class="btn col-215ED6 bord-215ED6 fw-semibold font-size-16px">Cancel</button>
+                            <button type="submit" class="btn bgcol-215ED6 text-white fw-semibold font-size-16px">Save</button>
                     </div>
                 </div>
             </div>
@@ -75,3 +75,8 @@
     </div>
     </form>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/recipeJS.js"></script>
+}

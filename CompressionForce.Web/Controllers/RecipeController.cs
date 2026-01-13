@@ -597,7 +597,7 @@ namespace CompressionForce.Web.Controllers
                 var domain = RecipeViewModelsMapping.ToDomain(vm);
                 await _recipeService.UpdateAsync(domain, user: User?.Identity?.Name ?? "system");
                 TempData["Success"] = "Recipe updated successfully.";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(RecipeParameter));
             }
             catch (DomainException ex)
             {
@@ -700,20 +700,20 @@ namespace CompressionForce.Web.Controllers
         public async Task<IActionResult> Print(string code)
         {
             if (string.IsNullOrWhiteSpace(code))
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(RecipeParameter));
 
             var recipe = await _recipeService.GetByCodeAsync(code);
             if (recipe == null)
             {
                 TempData["Error"] = $"Recipe code '{code}' not found.";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(RecipeParameter));
             }
 
             var existsByName = await _recipeService.ExistsByNameAsync(recipe.Name);
             if (!existsByName)
             {
                 TempData["Error"] = $"Recipe name '{recipe.Name}' does not exist.";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(RecipeParameter));
             }
 
             var dto = RecipeViewModelsMapping.ToDto(recipe);
